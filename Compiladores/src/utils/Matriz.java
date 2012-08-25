@@ -58,6 +58,9 @@ public class Matriz {
         if (fila < this.fila & columna < this.columna) {
             this.celdas[fila][columna]=elem;
 
+        }else
+        {
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "La posicion "+fila+":"+columna+" se encuentra fuera de rango ");
         }
     }
 
