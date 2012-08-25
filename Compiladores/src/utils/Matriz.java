@@ -76,8 +76,7 @@ public class Matriz {
             int pos = (columna * (this.columna - 1) / 2) + fila;
             return this.celdas[pos];
         }
-        Logger.getLogger(getClass().getName()).log(Level.INFO, "Fuera de rango...");
-
+        Logger.getLogger(getClass().getName()).log(Level.WARNING, "Fuera de rango...");
         return null;
     }
         
