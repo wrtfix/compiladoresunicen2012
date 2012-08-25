@@ -5,6 +5,8 @@
 package utils;
 
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Esta clase permite manipular una matriz
@@ -18,7 +20,7 @@ public class Matriz {
     private int columna;
 
     /**
-     * Para la creacion de una matriz
+     * Para la creacion de una matriz se necesitan los siguientes parametros
      *
      * @param fila
      * @param columna
@@ -31,7 +33,7 @@ public class Matriz {
     }
 
     /**
-     * Para la creacion de matriz con elemento seteados
+     * Para la creacion de matriz con elemento seteados se necesitan los siguientes parametros
      *
      * @param celdas
      * @param fila
@@ -44,8 +46,8 @@ public class Matriz {
     }
 
     /**
-     * Este metodo permite setear elementos dentro de la matriz y controla que
-     * no te vayas de rango
+     * Este metodo permite setear elementos dentro de la matriz y controlar que
+     * no te vayas de rango y requiere los siguientes parametros
      *
      * @param fila
      * @param columna
@@ -62,7 +64,7 @@ public class Matriz {
 
     /**
      * Este metodo verifica que no te vayas de rango y obtiene un elemento de la
-     * matriz
+     * matriz y requiere los siguientes parametros
      *
      * @param fila
      * @param columna
@@ -74,7 +76,8 @@ public class Matriz {
             int pos = (columna * (this.columna - 1) / 2) + fila;
             return this.celdas[pos];
         }
-        System.out.println("Rango inexistente");
+        Logger.getLogger(getClass().getName()).log(Level.INFO, "Fuera de rango...");
+
         return null;
     }
         
