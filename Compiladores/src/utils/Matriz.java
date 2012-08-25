@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  */
 public class Matriz {
 
-    private Object celdas[];
+    private Object celdas[][];
     private int fila;
     private int columna;
 
@@ -28,7 +28,7 @@ public class Matriz {
     public Matriz(int fila, int columna) {
         this.fila = fila;
         this.columna = columna;
-        this.celdas = new Object[fila*columna];
+        this.celdas = new Object[fila][columna];
        
     }
 
@@ -39,7 +39,7 @@ public class Matriz {
      * @param fila
      * @param columna
      */
-    public Matriz(Object celdas[], int fila, int columna) {
+    public Matriz(Object celdas[][], int fila, int columna) {
         this.celdas = celdas;
         this.fila = fila;
         this.columna = columna;
@@ -55,9 +55,8 @@ public class Matriz {
      */
     public void set(int fila, int columna, Object elem) {
         // Verifico que no me vaya de rango
-        if (fila <= this.fila & columna <= this.columna) {
-            int pos = (columna*(this.columna - 1) / 2) + fila;
-            this.celdas[pos]=elem;
+        if (fila < this.fila & columna < this.columna) {
+            this.celdas[fila][columna]=elem;
 
         }
     }
@@ -72,11 +71,10 @@ public class Matriz {
      */
     public Object get(int fila, int columna) {
         // Verifico que no me vaya de rango
-        if (fila <= this.fila & columna <= this.columna) {
-            int pos = (columna * (this.columna - 1) / 2) + fila;
-            return this.celdas[pos];
+        if (fila < this.fila & columna < this.columna) {
+            return this.celdas[fila][columna];
         }
-        Logger.getLogger(getClass().getName()).log(Level.WARNING, "Fuera de rango...");
+        Logger.getLogger(getClass().getName()).log(Level.WARNING, "La posicion "+fila+":"+columna+" se encuentra fuera de rango ");
         return null;
     }
         
