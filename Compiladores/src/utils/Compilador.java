@@ -16,15 +16,15 @@ public class Compilador {
     public static void main(String[] args) {
         // TODO code application logic here
         Matriz a = new Matriz(2,2);
-        a.set(1, 1, 1);
-        a.set(1, 2, 2);
-        a.set(2, 1, 3);
-        a.set(2, 2, 4);
+        a.set(0, 0, 1);
+        a.set(0, 1, 2);
+        a.set(1, 0, 3);
+        a.set(1, 1, 4);
         
+        System.out.println(a.get(0, 0));
+        System.out.println(a.get(0, 1));
+        System.out.println(a.get(1, 0));
         System.out.println(a.get(1, 1));
-        System.out.println(a.get(1, 2));
-        System.out.println(a.get(2, 1));
-        System.out.println(a.get(2, 2));
         System.out.println(a.get(5, 5));
         
     }
