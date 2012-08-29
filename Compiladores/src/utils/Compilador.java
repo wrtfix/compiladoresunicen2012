@@ -29,8 +29,16 @@ public class Compilador {
         Lector l = new Lector(args[0]);
         System.out.println("Lamenla"+l.getLine());
         System.out.println("Chorpala"+l.getPos());
-        char aux = l.getCaracter();
-        System.out.print(aux);
+        System.out.print(l.getCaracter());
+        System.out.print(l.getCaracter());
+        System.out.print(l.getCaracter());
+        System.out.println("Chorpala: "+l.getPos());
+        l.retrocederPosicion();
+        
+        System.out.println("Chorpala: "+l.getPos());
+        AnalizadorLexico L = new AnalizadorLexico();
+        L.imprimir();
+        
         
         
         
