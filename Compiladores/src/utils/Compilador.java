@@ -20,12 +20,19 @@ public class Compilador {
         a.set(0, 1, 2);
         a.set(1, 0, 3);
         a.set(1, 1, 4);
-        
+         
         System.out.println(a.get(0, 0));
         System.out.println(a.get(0, 1));
         System.out.println(a.get(1, 0));
         System.out.println(a.get(1, 1));
         System.out.println(a.get(5, 5));
+        Lector l = new Lector(args[0]);
+        System.out.println("Lamenla"+l.getLine());
+        System.out.println("Chorpala"+l.getPos());
+        char aux = l.getCaracter();
+        System.out.print(aux);
+        
+        
         
     }
 }
