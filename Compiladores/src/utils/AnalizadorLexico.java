@@ -28,13 +28,12 @@ public class AnalizadorLexico {
         estados.set(0, 9, 1);
         estados.set(0, 10, 1);
         estados.set(0, 11, 1);
-        estados.set(0, 12, 15);
-        estados.set(0, 13, 15);
-        estados.set(0, 14, 6);
-        estados.set(0, 15, 8);
-        estados.set(0, 16, 12);
-        estados.set(0, 17, 8);
-        estados.set(0, 18, 15);
+        estados.set(0, 12, 15);        
+        estados.set(0, 13, 6);
+        estados.set(0, 14, 8);
+        estados.set(0, 15, 12);
+        estados.set(0, 16, 8);
+        estados.set(0, 17, 15);
         //FILA2
         estados.set(1, 0, 15);
         estados.set(1, 1, 2);
@@ -289,8 +288,6 @@ public class AnalizadorLexico {
             for(int j = 0 ; j < 18 ; j++)
                 System.out.print(estados.get(i,j));
             System.out.println("");
-        }
-            
-                
+        }                
     }
 }
