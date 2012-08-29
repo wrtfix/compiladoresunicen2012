@@ -27,7 +27,7 @@ public class Lector {
  * @author mauripiccolo
  */
      public Lector(String ruta){        
-        ArrayList<String> fuente = new ArrayList();
+        fuente = new ArrayList();
         linea = 0;
         pos = 0;  
         try {
@@ -43,9 +43,7 @@ public class Lector {
           catch (IOException ioe){ioe.printStackTrace();}			        
     }
     public char getCaracter(){
-        char c;      
-        //char[] aux = fuente.get(linea).toCharArray();
-        //c = aux[pos];         
+        char c;          
         c = fuente.get(linea).charAt(pos);
         if(c == '\n'){
             linea++;
@@ -59,9 +57,10 @@ public class Lector {
         if (pos != 0)
             pos--;
         else
-            if (linea != 0)
+            if (linea != 0){
                 linea--;
                 pos = fuente.get(linea).length()-1; 
+            }
     }
 
     public int getPos() {
