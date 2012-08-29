@@ -17,24 +17,59 @@ import java.util.ArrayList;
  * @author wrtfix
  */
 public class Lector {
+    private int linea,pos;
+    private ArrayList<String> fuente;
+
  /**
  * * Método que lee las líneas de un archivo txt una por una y las guarda en un arrayList de Strings.
  * @param  ruta Contiene la ruta en donde se encuentra el archivo txt.
  * @return Devuelve un arrayList que contine cada una de las líneas del archivo.
  * @author mauripiccolo
  */
-     public ArrayList<String> leerArchivo(String ruta){        
-        ArrayList<String> lineas = new ArrayList();
+     public Lector(String ruta){        
+        ArrayList<String> fuente = new ArrayList();
+        linea = 0;
+        pos = 0;  
         try {
             FileReader fr = new FileReader(ruta);
             BufferedReader bf = new BufferedReader(fr); 
             String sCadena = "";
             //Agrega la línea leída en el arreglo lineas
             while ((sCadena = bf.readLine())!= null) {
-                lineas.add(sCadena);                
+                System.out.println(sCadena);
+                fuente.add(sCadena);                
             } 
 	} catch (FileNotFoundException fnfe){fnfe.printStackTrace();} 
-          catch (IOException ioe){ioe.printStackTrace();}			
-        return lineas;
+          catch (IOException ioe){ioe.printStackTrace();}			        
     }
+    public char getCaracter(){
+        char c;      
+        //char[] aux = fuente.get(linea).toCharArray();
+        //c = aux[pos];         
+        c = fuente.get(linea).charAt(pos);
+        if(c == '\n'){
+            linea++;
+            pos = 0;
+        }else
+            pos++;
+        
+        return c;
+    }
+    public void retrocederPosicion(){
+        if (pos != 0)
+            pos--;
+        else
+            if (linea != 0)
+                linea--;
+                pos = fuente.get(linea).length()-1; 
+    }
+
+    public int getPos() {
+        return pos;
+    }
+
+    public int getLine() {
+        return linea;
+    }
+    
 }
