@@ -51,7 +51,8 @@ public class Lector {
         }else
             pos++;
         
-        return c;
+        return c; 
+        
     }
     public void retrocederPosicion(){
         if (pos != 0)
