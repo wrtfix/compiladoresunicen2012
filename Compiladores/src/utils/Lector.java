@@ -43,14 +43,22 @@ public class Lector {
           catch (IOException ioe){ioe.printStackTrace();}			        
     }
     public char getCaracter(){
-        char c;          
+        char c = 0;     
+        System.out.println(pos);
+        if (pos < fuente.get(linea).length()){
         c = fuente.get(linea).charAt(pos);
+        
+        System.out.println(c);
+        
         if(c == '\n'){
             linea++;
             pos = 0;
         }else
             pos++;
-        
+        }else{
+            pos = 0;
+            linea++;
+        }
         return c; 
         
     }
@@ -71,5 +79,7 @@ public class Lector {
     public int getLine() {
         return linea;
     }
-    
+    public boolean esFinal(){
+        return (linea == fuente.size() && pos == fuente.get(linea).length()-1);
+    }
 }

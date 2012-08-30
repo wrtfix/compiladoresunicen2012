@@ -4,6 +4,7 @@
  */
 package utils;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 /**
@@ -285,10 +286,23 @@ public class AnalizadorLexico {
         estados.set(13, 17, 1);
         
         //acciones semanticas
-        AccionSemantica accionSemantica1 = new AccionSemantica("");
+        AccionSemantica accionSemantica1 = null;
+        AccionSemantica accionSemantica2 = null;
+        AccionSemantica accionSemantica3 = null;
+        AccionSemantica accionSemantica4 = new AccionSemantica4("");
+        AccionSemantica accionSemantica5 = null;
+        AccionSemantica accionSemantica6 = null;
+        AccionSemantica accionSemantica7 = null;
+        AccionSemantica accionSemantica8 = null;
+        AccionSemantica accionSemantica9 = null;
+        AccionSemantica accionSemantica10 = null;
+        AccionSemantica accionSemantica11 = null;
+        AccionSemantica accionSemantica12 = null;
+        
+       /* AccionSemantica accionSemantica1 = new AccionSemantica("");
         AccionSemantica accionSemantica2 = new AccionSemantica("");
         AccionSemantica accionSemantica3 = new AccionSemantica("");
-        AccionSemantica accionSemantica4 = new AccionSemantica("");
+        AccionSemantica accionSemantica4 = new AccionSemantica4("");
         AccionSemantica accionSemantica5 = new AccionSemantica("");
         AccionSemantica accionSemantica6 = new AccionSemantica("");
         AccionSemantica accionSemantica7 = new AccionSemantica("");
@@ -297,8 +311,7 @@ public class AnalizadorLexico {
         AccionSemantica accionSemantica10 = new AccionSemantica("");
         AccionSemantica accionSemantica11 = new AccionSemantica("");
         AccionSemantica accionSemantica12 = new AccionSemantica("");
-        
-        
+        */
         //FILA1
         accionesSemanticas.set(0, 0, accionSemantica1);
         accionesSemanticas.set(0, 1, accionSemantica2);
@@ -573,10 +586,35 @@ public class AnalizadorLexico {
             System.out.println("");
         }                
     }
-    public Hashtable<String,Integer> getTokens(Lector l){
-        Hashtable<String,Integer> tablaToken = new Hashtable<String,Integer>();
+    public ArrayList<Token> getTokens(Lector l, ArrayList<Simbolo> tablaS){
+        ArrayList<Token> tablaToken = new ArrayList<Token>();
+        char Caracter= l.getCaracter();
+        String lexema = "";
+        Integer eActual = 0;
+        Integer eSiguiente = 0;
+        while (!l.esFinal()){    
+            System.out.println("Entro");
+            eActual = eSiguiente;
+            AccionSemantica acc =(AccionSemantica)accionesSemanticas.getCelda(Caracter, eActual);
+            
+            lexema  = acc.run(lexema,Caracter,tablaS);
+            eSiguiente = (Integer)estados.getCelda(Caracter, eActual);
+            
+            if (eSiguiente  == 15){
+                
+                Token t = new Token(lexema,acc.getTipo());
+                tablaToken.add(t);
+                lexema = "";
+                eSiguiente = 0;
+
+            }
+           
+            Caracter = l.getCaracter();
+        }
         
-        return null;
+        
+        return tablaToken;
     }
+    
     
 }

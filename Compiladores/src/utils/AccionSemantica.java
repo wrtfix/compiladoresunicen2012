@@ -4,13 +4,17 @@
  */
 package utils;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Mauricio
  */
-public class AccionSemantica {
+public abstract class AccionSemantica {
     protected Boolean error;
     protected String mensajeError;
+    protected String tipo;
+    
     /**
     * Metodo constructor de la clase.
     * @param mensaje contiene el mensaje de error de la acción semántica en caso de que haya uno.
@@ -20,6 +24,7 @@ public class AccionSemantica {
     public AccionSemantica(String mensaje){
         error = false;
         mensajeError = mensaje;
+        tipo = null;
     }
     /**
     * Metodo que devuelve el error correspondiente a la acción semántica si es que se produjo.
@@ -37,10 +42,20 @@ public class AccionSemantica {
     public Boolean getError(){
         return error;
     }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
     /**
     * Metodo que dispara el proceso que tiene que realizar la acción semántica, se define en 
     * cada de las mismas.    
     * @return Devuelve un String con el lexema que va formando en caso contrario lo devuelve vacío.
     * @author mauripiccolo
     */    
+    public abstract String run (String lexema,char caracter,ArrayList<Simbolo> tablaS); 
+    
 }
