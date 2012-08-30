@@ -4,6 +4,8 @@
  */
 package utils;
 
+import java.util.Hashtable;
+
 /**
  *
  * @author Mauricio
@@ -571,4 +573,10 @@ public class AnalizadorLexico {
             System.out.println("");
         }                
     }
+    public Hashtable<String,Integer> getTokens(Lector l){
+        Hashtable<String,Integer> tablaToken = new Hashtable<String,Integer>();
+        
+        return null;
+    }
+    
 }
