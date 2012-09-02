@@ -46,7 +46,7 @@ public class Matriz {
         else if (Character.isDigit(caracter))
                 return get(eActual,2);//Es un digito
         else if (caracter ==  '$')
-                return get(eActual,12);
+                return get(eActual,15);
         else 
                     switch(caracter){
                         case '+' :  celda = get(eActual,17); break;
@@ -68,12 +68,14 @@ public class Matriz {
                         case ';' :  celda = get(eActual,5); break;
                         case '\t' : celda = get(eActual,11);break;
                         case '\n' : celda = get(eActual,9); break;
-                        case '\b' : celda = get(eActual,10); break;                            
+                        case ' ' : celda = get(eActual,10); break;                            
                         case '\'' :  celda = get(eActual,14); break;
                         case 'E' :  celda = get(eActual,16); break;                        
                 }
-        if(celda == null)
-            celda = get(eActual, 0);
+//        if(celda == null)
+//            celda = get(eActual, 0);
+//        if(Character.isWhitespace(caracter))
+//            celda = get(eActual,10);
         return celda;
     }
     /**

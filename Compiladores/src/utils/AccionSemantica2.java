@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class AccionSemantica2 extends AccionSemantica{
         
     public AccionSemantica2(String m){
-        super(m);
+        super(m);        
     }
     
     @Override

@@ -17,7 +17,7 @@ public class AccionSemantica12 extends AccionSemantica{
     }
     @Override
     public String run(String lexema, char caracter, ArrayList<Simbolo> tablaS) {        
-        tipo ="Simbolo";
+        tipo ="Simbolo";                
         return lexema + caracter;
     }
     

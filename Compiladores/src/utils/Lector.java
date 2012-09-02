@@ -39,6 +39,8 @@ public class Lector {
                 System.out.println(sCadena);
                 fuente.add(sCadena);                
             } 
+//            sCadena = "$";
+//            fuente.add(sCadena);
 	} catch (FileNotFoundException fnfe){fnfe.printStackTrace();} 
           catch (IOException ioe){ioe.printStackTrace();}			        
     }
@@ -55,7 +57,7 @@ public class Lector {
             pos = 0;
         }else
             pos++;
-        }else
+       }else
             c='$';
         return c; 
         

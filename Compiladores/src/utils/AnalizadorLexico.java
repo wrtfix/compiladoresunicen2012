@@ -19,6 +19,33 @@ public class AnalizadorLexico {
         ArrayList<String> errores = new ArrayList<String>();
         estados = new Matriz(14,18);
         accionesSemanticas = new Matriz(14,18);
+        //acciones semanticas
+        AccionSemantica accionSemantica1 = new AccionSemantica1("accion1");
+        AccionSemantica accionSemantica2 = new AccionSemantica2("accion2");
+        AccionSemantica accionSemantica3 = null;
+        AccionSemantica accionSemantica4 = new AccionSemantica4("accion4");
+        AccionSemantica accionSemantica5 = new AccionSemantica5("accion5");
+        AccionSemantica accionSemantica6 = null;
+        AccionSemantica accionSemantica7 = null;
+        AccionSemantica accionSemantica8 = null;
+        AccionSemantica accionSemantica9 = null;
+        AccionSemantica accionSemantica10 = null;
+        AccionSemantica accionSemantica11 = new AccionSemantica11("accion11");
+        AccionSemantica accionSemantica12 = new AccionSemantica12("accion12");
+        
+       /* AccionSemantica accionSemantica1 = new AccionSemantica("");
+        AccionSemantica accionSemantica2 = new AccionSemantica("");
+        AccionSemantica accionSemantica3 = new AccionSemantica("");
+        AccionSemantica accionSemantica4 = new AccionSemantica4("");
+        AccionSemantica accionSemantica5 = new AccionSemantica("");
+        AccionSemantica accionSemantica6 = new AccionSemantica("");
+        AccionSemantica accionSemantica7 = new AccionSemantica("");
+        AccionSemantica accionSemantica8 = new AccionSemantica("");
+        AccionSemantica accionSemantica9 = new AccionSemantica("");
+        AccionSemantica accionSemantica10 = new AccionSemantica("");
+        AccionSemantica accionSemantica11 = new AccionSemantica("");
+        AccionSemantica accionSemantica12 = new AccionSemantica("");
+        */
         //FILA1
         estados.set(0, 0, 1);
         estados.set(0, 1, 2);
@@ -286,33 +313,6 @@ public class AnalizadorLexico {
         estados.set(13, 16, 1);
         estados.set(13, 17, 1);
         
-        //acciones semanticas
-        AccionSemantica accionSemantica1 = new AccionSemantica1("");
-        AccionSemantica accionSemantica2 = new AccionSemantica2("");
-        AccionSemantica accionSemantica3 = null;
-        AccionSemantica accionSemantica4 = new AccionSemantica4("");
-        AccionSemantica accionSemantica5 = new AccionSemantica5("");
-        AccionSemantica accionSemantica6 = null;
-        AccionSemantica accionSemantica7 = null;
-        AccionSemantica accionSemantica8 = null;
-        AccionSemantica accionSemantica9 = null;
-        AccionSemantica accionSemantica10 = null;
-        AccionSemantica accionSemantica11 = new AccionSemantica11("");
-        AccionSemantica accionSemantica12 = new AccionSemantica12("");
-        
-       /* AccionSemantica accionSemantica1 = new AccionSemantica("");
-        AccionSemantica accionSemantica2 = new AccionSemantica("");
-        AccionSemantica accionSemantica3 = new AccionSemantica("");
-        AccionSemantica accionSemantica4 = new AccionSemantica4("");
-        AccionSemantica accionSemantica5 = new AccionSemantica("");
-        AccionSemantica accionSemantica6 = new AccionSemantica("");
-        AccionSemantica accionSemantica7 = new AccionSemantica("");
-        AccionSemantica accionSemantica8 = new AccionSemantica("");
-        AccionSemantica accionSemantica9 = new AccionSemantica("");
-        AccionSemantica accionSemantica10 = new AccionSemantica("");
-        AccionSemantica accionSemantica11 = new AccionSemantica("");
-        AccionSemantica accionSemantica12 = new AccionSemantica("");
-        */
         //FILA1
         accionesSemanticas.set(0, 0, accionSemantica1);
         accionesSemanticas.set(0, 1, accionSemantica2);
@@ -562,66 +562,99 @@ public class AnalizadorLexico {
         accionesSemanticas.set(12, 17, accionSemantica1);
         //FILA14
         accionesSemanticas.set(13, 0, accionSemantica1);
-        accionesSemanticas.set(13, 1, accionSemantica2);
+        accionesSemanticas.set(13, 1, accionSemantica10);
         accionesSemanticas.set(13, 2, accionSemantica2);
         accionesSemanticas.set(13, 3, accionSemantica1);
         accionesSemanticas.set(13, 4, accionSemantica1);
-        accionesSemanticas.set(13, 5, accionSemantica4);
+        accionesSemanticas.set(13, 5, accionSemantica1);
         accionesSemanticas.set(13, 6, accionSemantica1);
-        accionesSemanticas.set(13, 7, accionSemantica2);
-        accionesSemanticas.set(13, 8, accionSemantica2);
-        accionesSemanticas.set(13, 9, accionSemantica5);
-        accionesSemanticas.set(13, 10, accionSemantica5);
-        accionesSemanticas.set(13, 11, accionSemantica5);
-        accionesSemanticas.set(13, 12, accionSemantica11);
-        accionesSemanticas.set(13, 13, accionSemantica2);
-        accionesSemanticas.set(13, 14, accionSemantica2);
-        accionesSemanticas.set(13, 15, accionSemantica2);
-        accionesSemanticas.set(13, 16, accionSemantica2);
-        accionesSemanticas.set(13, 17, accionSemantica4);
+        accionesSemanticas.set(13, 7, accionSemantica1);
+        accionesSemanticas.set(13, 8, accionSemantica1);
+        accionesSemanticas.set(13, 9, accionSemantica1);
+        accionesSemanticas.set(13, 10, accionSemantica1);
+        accionesSemanticas.set(13, 11, accionSemantica1);
+        accionesSemanticas.set(13, 12, accionSemantica1);
+        accionesSemanticas.set(13, 13, accionSemantica1);
+        accionesSemanticas.set(13, 14, accionSemantica1);
+        accionesSemanticas.set(13, 15, accionSemantica1);
+        accionesSemanticas.set(13, 16, accionSemantica1);
+        accionesSemanticas.set(13, 17, accionSemantica1);
+//        accionesSemanticas.set(13, 0, accionSemantica1);
+//        accionesSemanticas.set(13, 1, accionSemantica2);
+//        accionesSemanticas.set(13, 2, accionSemantica2);
+//        accionesSemanticas.set(13, 3, accionSemantica1);
+//        accionesSemanticas.set(13, 4, accionSemantica1);
+//        accionesSemanticas.set(13, 5, accionSemantica4);
+//        accionesSemanticas.set(13, 6, accionSemantica1);
+//        accionesSemanticas.set(13, 7, accionSemantica2);
+//        accionesSemanticas.set(13, 8, accionSemantica2);
+//        accionesSemanticas.set(13, 9, accionSemantica5);
+//        accionesSemanticas.set(13, 10, accionSemantica5);
+//        accionesSemanticas.set(13, 11, accionSemantica5);
+//        accionesSemanticas.set(13, 12, accionSemantica11);
+//        accionesSemanticas.set(13, 13, accionSemantica2);
+//        accionesSemanticas.set(13, 14, accionSemantica2);
+//        accionesSemanticas.set(13, 15, accionSemantica2);
+//        accionesSemanticas.set(13, 16, accionSemantica2);
+//        accionesSemanticas.set(13, 17, accionSemantica4);
     }
-    public void imprimir(){
+    public void imprimirEstados(){
         for(int i = 0 ; i < 14 ; i++){
+            System.out.print("F:"+ i);
             for(int j = 0 ; j < 18 ; j++)
-                System.out.print(estados.get(i,j));
+                System.out.print(" C"+ j+ ":"+estados.get(i,j));
             System.out.println("");
         }                
-    }
-    public Token getTokens(Lector l, ArrayList<Simbolo> tablaS){
-        ArrayList<Token> tablaToken = new ArrayList<Token>();
+    }    
+    public void imprimirAcciones(){
+        for(int i = 0 ; i < 14 ; i++){
+            System.out.print("F:"+ i);
+            for(int j = 0 ; j < 18 ; j++){
+                if(accionesSemanticas.get(i,j)!=null) {
+                    AccionSemantica a = (AccionSemantica)accionesSemanticas.get(i,j);
+                    System.out.print(" C:"+ j+"_"+ a.getIdentificador() );                
+                }
+                else {
+                    System.out.print(" ");
+                }
+            }
+            System.out.println("");
+        }                
+    }   
+    public Token getTokens(Lector l, ArrayList<Simbolo> tablaSimb){        
         String lexema = "";
         Integer eActual = 0;
         Integer eSiguiente = 0;
-        Token t = new Token();
+        Token token = new Token();
        
-        char Caracter;
-        while (eSiguiente != 15){    
+        char caracter = ' ';
+        while (caracter != '$' && eSiguiente != 15){    
             //System.out.println("Entro");
+            caracter = l.getCaracter();
+            AccionSemantica acc =(AccionSemantica)accionesSemanticas.getCelda(caracter, eActual);             
+            System.out.println(acc.getIdentificador());            
+            System.out.println("act:"+ eActual);            
+            lexema  = acc.run(lexema,caracter,tablaSimb);
+            eSiguiente = (Integer)estados.getCelda(caracter, eActual);
+            System.out.println("sig:"+ eSiguiente);
             eActual = eSiguiente;
-            Caracter = l.getCaracter();
-            AccionSemantica acc =(AccionSemantica)accionesSemanticas.getCelda(Caracter, eActual);
-            
-            lexema  = acc.run(lexema,Caracter,tablaS);
+            System.out.println("---------------");
             if (acc.getError()){
-//                errores.add(acc.getMensajeError());
-            }
-            
+                errores.add(acc.getMensajeError());
+            }            
             if (acc.getRetroceder()){
                 l.retrocederPosicion();
                 acc.setRetroceder(false);
-            }
-            eSiguiente = (Integer)estados.getCelda(Caracter, eActual);
-            
+            }            
             if (eSiguiente  == 15){
-                t.setLexema(lexema);
-                t.setTipo(acc.getTipo());
-                lexema = "";
-                           
+                token.setLexema(lexema);
+                token.setTipo(acc.getTipo());                
+                lexema = "";                           
             }
-           
             
+                      
         }                        
-        return t;
+        return token;
     }
     public ArrayList<String> getErrores(){
         return errores;

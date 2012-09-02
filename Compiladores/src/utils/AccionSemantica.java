@@ -15,6 +15,7 @@ public abstract class AccionSemantica {
     protected Boolean retroceder;
     protected String mensajeError;
     protected String tipo;
+    protected String identificador;
     
     /**
     * Metodo constructor de la clase.
@@ -22,12 +23,12 @@ public abstract class AccionSemantica {
     * @return Devuelve un String con error que se produce, en caso contrario lo devuelve vacío.
     * @author mauripiccolo
     */
-    public AccionSemantica(String mensaje){
+    public AccionSemantica(String accion){
         error = false;
-        mensajeError = mensaje;
+        mensajeError = "";
         tipo = null;
         retroceder = false;
-        
+        identificador = accion;
     }
     /**
     * Metodo que devuelve el error correspondiente a la acción semántica si es que se produjo.
@@ -48,6 +49,10 @@ public abstract class AccionSemantica {
 
     public String getTipo() {
         return tipo;
+    }
+    
+    public String getIdentificador(){
+        return identificador;
     }
 
     public void setTipo(String tipo) {
