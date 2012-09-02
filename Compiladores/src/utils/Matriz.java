@@ -40,10 +40,13 @@ public class Matriz {
      */
     public Object getCelda(char caracter, int eActual){                
         Object celda = null;
+        char EOF = (char)26; 
         if (Character.isLetter(caracter)&& eActual == 1 )
             return get(eActual,1);//Es una letra
         else if (Character.isDigit(caracter))
                 return get(eActual,2);//Es un digito
+        else if (caracter ==  '$')
+                return get(eActual,12);
         else 
                     switch(caracter){
                         case '+' :  celda = get(eActual,17); break;
@@ -63,9 +66,10 @@ public class Matriz {
                         case ')' :  celda = get(eActual,5); break;
                         case ',' :  celda = get(eActual,5); break;
                         case ';' :  celda = get(eActual,5); break;
-                        case '\t' : celda = get(eActual,10);break;
-                        case '\n' : celda = get(eActual,8); break;
-                        case '"' :  celda = get(eActual,14); break;
+                        case '\t' : celda = get(eActual,11);break;
+                        case '\n' : celda = get(eActual,9); break;
+                        case '\b' : celda = get(eActual,10); break;                            
+                        case '\'' :  celda = get(eActual,14); break;
                         case 'E' :  celda = get(eActual,16); break;                        
                 }
         if(celda == null)

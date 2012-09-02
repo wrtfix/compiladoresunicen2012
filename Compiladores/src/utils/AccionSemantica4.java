@@ -19,6 +19,7 @@ public class AccionSemantica4 extends AccionSemantica {
     
     @Override
     public String run(String lexema, char caracter, ArrayList<Simbolo> tablaS) {
+        retroceder = true;
         return lexema + caracter;
     }
     

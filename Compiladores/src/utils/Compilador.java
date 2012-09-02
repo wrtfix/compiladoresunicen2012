@@ -22,10 +22,17 @@ public class Compilador {
         AnalizadorLexico L = new AnalizadorLexico();
         L.imprimir();
         ArrayList<Simbolo> tablaSimbolos = new ArrayList<Simbolo>();
-        ArrayList<Token> r = L.getTokens(l, tablaSimbolos);
-        System.out.println("TOKENS: " + r.size());
-        for(int i = 0; i < r.size(); i++  )
-            System.out.println(r.get(i).getLexema());
+        Token r = L.getTokens(l, tablaSimbolos);
+        Token r2 = L.getTokens(l, tablaSimbolos);
+        Token r3 = L.getTokens(l, tablaSimbolos);
+        Token r4 = L.getTokens(l, tablaSimbolos);
+        Token r5 = L.getTokens(l, tablaSimbolos);
+        System.out.println("TOKENS: " + r.getTipo());
+        System.out.println("TOKENS: " + r2.getTipo());
+        System.out.println("TOKENS: " + r3.getLexema());
+        System.out.println("TOKENS: " + r4.getLexema());
+        System.out.println("TOKENS: " + r5.getLexema());
+        
         System.out.println("SIMBOLOS :" +tablaSimbolos.size());
         for(int i = 0; i < tablaSimbolos.size(); i++  )
             System.out.println(tablaSimbolos.get(i).getNombre());

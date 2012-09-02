@@ -19,7 +19,8 @@ public class AccionSemantica1 extends AccionSemantica{
     }
     @Override
     public String run(String lexema, char caracter, ArrayList<Simbolo> tablaS) {
-           Logger.getLogger(getClass().getName()).log(Level.WARNING, "Caracter invalido "+caracter);
+           this.mensajeError = "Caracter no valido"+caracter;
+           this.error = true;
            return lexema;
     }
     

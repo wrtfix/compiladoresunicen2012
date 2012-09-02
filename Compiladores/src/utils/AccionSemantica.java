@@ -12,6 +12,7 @@ import java.util.ArrayList;
  */
 public abstract class AccionSemantica {
     protected Boolean error;
+    protected Boolean retroceder;
     protected String mensajeError;
     protected String tipo;
     
@@ -25,6 +26,8 @@ public abstract class AccionSemantica {
         error = false;
         mensajeError = mensaje;
         tipo = null;
+        retroceder = false;
+        
     }
     /**
     * Metodo que devuelve el error correspondiente a la acción semántica si es que se produjo.
@@ -57,5 +60,11 @@ public abstract class AccionSemantica {
     * @author mauripiccolo
     */    
     public abstract String run (String lexema,char caracter,ArrayList<Simbolo> tablaS); 
+    public boolean getRetroceder(){
+        return retroceder;
+    }
+    public void setRetroceder(boolean b){
+        retroceder = b;
+    }
     
 }

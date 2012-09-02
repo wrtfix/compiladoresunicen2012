@@ -1,5 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
+/* To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package utils;
@@ -14,8 +13,10 @@ import java.util.Hashtable;
 public class AnalizadorLexico {
     private Matriz estados;
     private Matriz accionesSemanticas;
+    private ArrayList<String> errores ;
     public AnalizadorLexico()
     {
+        ArrayList<String> errores = new ArrayList<String>();
         estados = new Matriz(14,18);
         accionesSemanticas = new Matriz(14,18);
         //FILA1
@@ -286,18 +287,18 @@ public class AnalizadorLexico {
         estados.set(13, 17, 1);
         
         //acciones semanticas
-        AccionSemantica accionSemantica1 = null;
-        AccionSemantica accionSemantica2 = null;
+        AccionSemantica accionSemantica1 = new AccionSemantica1("");
+        AccionSemantica accionSemantica2 = new AccionSemantica2("");
         AccionSemantica accionSemantica3 = null;
         AccionSemantica accionSemantica4 = new AccionSemantica4("");
-        AccionSemantica accionSemantica5 = null;
+        AccionSemantica accionSemantica5 = new AccionSemantica5("");
         AccionSemantica accionSemantica6 = null;
         AccionSemantica accionSemantica7 = null;
         AccionSemantica accionSemantica8 = null;
         AccionSemantica accionSemantica9 = null;
         AccionSemantica accionSemantica10 = null;
-        AccionSemantica accionSemantica11 = null;
-        AccionSemantica accionSemantica12 = null;
+        AccionSemantica accionSemantica11 = new AccionSemantica11("");
+        AccionSemantica accionSemantica12 = new AccionSemantica12("");
         
        /* AccionSemantica accionSemantica1 = new AccionSemantica("");
         AccionSemantica accionSemantica2 = new AccionSemantica("");
@@ -318,7 +319,7 @@ public class AnalizadorLexico {
         accionesSemanticas.set(0, 2, accionSemantica2);
         accionesSemanticas.set(0, 3, accionSemantica1);
         accionesSemanticas.set(0, 4, accionSemantica1);
-        accionesSemanticas.set(0, 5, accionSemantica4);
+        accionesSemanticas.set(0, 5, accionSemantica12);
         accionesSemanticas.set(0, 6, accionSemantica1);
         accionesSemanticas.set(0, 7, accionSemantica2);
         accionesSemanticas.set(0, 8, accionSemantica2);
@@ -330,7 +331,7 @@ public class AnalizadorLexico {
         accionesSemanticas.set(0, 14, accionSemantica2);
         accionesSemanticas.set(0, 15, accionSemantica2);
         accionesSemanticas.set(0, 16, accionSemantica2);
-        accionesSemanticas.set(0, 17, accionSemantica4);
+        accionesSemanticas.set(0, 17, accionSemantica12);
         //FILA2
         accionesSemanticas.set(1, 0, accionSemantica3);
         accionesSemanticas.set(1, 1, accionSemantica2);
@@ -586,35 +587,44 @@ public class AnalizadorLexico {
             System.out.println("");
         }                
     }
-    public ArrayList<Token> getTokens(Lector l, ArrayList<Simbolo> tablaS){
+    public Token getTokens(Lector l, ArrayList<Simbolo> tablaS){
         ArrayList<Token> tablaToken = new ArrayList<Token>();
-        char Caracter= l.getCaracter();
         String lexema = "";
         Integer eActual = 0;
         Integer eSiguiente = 0;
-        while (!l.esFinal()){    
-            System.out.println("Entro");
+        Token t = new Token();
+       
+        char Caracter;
+        while (eSiguiente != 15){    
+            //System.out.println("Entro");
             eActual = eSiguiente;
+            Caracter = l.getCaracter();
             AccionSemantica acc =(AccionSemantica)accionesSemanticas.getCelda(Caracter, eActual);
             
             lexema  = acc.run(lexema,Caracter,tablaS);
+            if (acc.getError()){
+//                errores.add(acc.getMensajeError());
+            }
+            
+            if (acc.getRetroceder()){
+                l.retrocederPosicion();
+                acc.setRetroceder(false);
+            }
             eSiguiente = (Integer)estados.getCelda(Caracter, eActual);
             
             if (eSiguiente  == 15){
-                
-                Token t = new Token(lexema,acc.getTipo());
-                tablaToken.add(t);
+                t.setLexema(lexema);
+                t.setTipo(acc.getTipo());
                 lexema = "";
-                eSiguiente = 0;
-
+                           
             }
            
-            Caracter = l.getCaracter();
-        }
-        
-        
-        return tablaToken;
+            
+        }                        
+        return t;
     }
-    
+    public ArrayList<String> getErrores(){
+        return errores;
+    }
     
 }

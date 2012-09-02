@@ -55,10 +55,8 @@ public class Lector {
             pos = 0;
         }else
             pos++;
-        }else{
-            pos = 0;
-            linea++;
-        }
+        }else
+            c='$';
         return c; 
         
     }
