@@ -49,15 +49,8 @@ public class Matriz {
                 return get(eActual,15);
         else 
                     switch(caracter){
-                        case '+' :  celda = get(eActual,17); break;
-                        case '-' :  celda = get(eActual,17); break;
-                        case '*' :  celda = get(eActual,13); break;
-                        case '/' :  celda = get(eActual,6); break;
                         case ':' :  celda = get(eActual,3); break;
                         case '=' :  celda = get(eActual,4); break;
-                        case '>' :  celda = get(eActual,8); break;
-                        case '<' :  celda = get(eActual,7); break;
-                        case '.' :  celda = get(eActual,15); break;
                         case '{' :  celda = get(eActual,5); break;
                         case '}' :  celda = get(eActual,5); break;
                         case '[' :  celda = get(eActual,5); break;
@@ -66,11 +59,18 @@ public class Matriz {
                         case ')' :  celda = get(eActual,5); break;
                         case ',' :  celda = get(eActual,5); break;
                         case ';' :  celda = get(eActual,5); break;
-                        case '\t' : celda = get(eActual,11);break;
-                        case '\n' : celda = get(eActual,9); break;
-                        case ' ' : celda = get(eActual,10); break;                            
-                        case '\'' :  celda = get(eActual,14); break;
+                        case '/' :  celda = get(eActual,6); break;
+                        case '<' :  celda = get(eActual,7); break;
+                        case '>' :  celda = get(eActual,8); break;
+                        case '\n':  celda = get(eActual,9); break;                        
+                        case ' ' :  celda = get(eActual,10); break;                            
+                        case '\t':  celda = get(eActual,11);break;
+                        case '*' :  celda = get(eActual,13); break;
+                        case '\'':  celda = get(eActual,14); break;
+                        case '.' :  celda = get(eActual,15); break;
                         case 'E' :  celda = get(eActual,16); break;                        
+                        case '+' :  celda = get(eActual,17); break;
+                        case '-' :  celda = get(eActual,17); break;
                 }
 //        if(celda == null)
 //            celda = get(eActual, 0);

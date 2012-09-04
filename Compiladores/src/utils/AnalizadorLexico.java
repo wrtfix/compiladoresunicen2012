@@ -22,14 +22,14 @@ public class AnalizadorLexico {
         //acciones semanticas
         AccionSemantica accionSemantica1 = new AccionSemantica1("accion1");
         AccionSemantica accionSemantica2 = new AccionSemantica2("accion2");
-        AccionSemantica accionSemantica3 = null;
+        AccionSemantica accionSemantica3 = new AccionSemantica2("accion3");
         AccionSemantica accionSemantica4 = new AccionSemantica4("accion4");
         AccionSemantica accionSemantica5 = new AccionSemantica5("accion5");
-        AccionSemantica accionSemantica6 = null;
-        AccionSemantica accionSemantica7 = null;
-        AccionSemantica accionSemantica8 = null;
-        AccionSemantica accionSemantica9 = null;
-        AccionSemantica accionSemantica10 = null;
+        AccionSemantica accionSemantica6 = new AccionSemantica2("accion6");
+        AccionSemantica accionSemantica7 = new AccionSemantica2("accion7");
+        AccionSemantica accionSemantica8 = new AccionSemantica2("accion8");
+        AccionSemantica accionSemantica9 = new AccionSemantica2("accion9");
+        AccionSemantica accionSemantica10 = new AccionSemantica2("accion10");
         AccionSemantica accionSemantica11 = new AccionSemantica11("accion11");
         AccionSemantica accionSemantica12 = new AccionSemantica12("accion12");
         
