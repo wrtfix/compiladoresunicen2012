@@ -9,24 +9,24 @@ package utils;
  * @author Mauricio
  */
 public class Token {
-    private String lexema;
+    private Simbolo simb;
     private String tipo;
     public Token(){
         
     }
-    public Token(String l, String t){
-        lexema = l;
+    public Token(String t,Simbolo s){
+        simb = s;
         tipo = t;
     }
-    public String getLexema(){
-        return lexema;
+    public Simbolo getPuntero(){
+        return simb;
     }
     public String getTipo(){
         return tipo;
     }
 
-    public void setLexema(String lexema) {
-        this.lexema = lexema;
+    public void setPuntero(Simbolo s) {
+        this.simb = s;
     }
 
     public void setTipo(String tipo) {

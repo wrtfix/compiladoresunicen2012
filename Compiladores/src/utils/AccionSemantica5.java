@@ -7,7 +7,7 @@ package utils;
 import java.util.ArrayList;
 
 /**
- *
+ * Esta accion semantica identifica elementos dentro de un comentario los cuales no seran considerados.
  * @author Mauricio
  */
 public class AccionSemantica5 extends AccionSemantica{
@@ -16,8 +16,8 @@ public class AccionSemantica5 extends AccionSemantica{
         super(m);
     }
     @Override
-    public String run(String lexema, char caracter, ArrayList<Simbolo> tablaS) {
-        return lexema;
+    public Token run(String lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
+        return null;
     }
     
 }

@@ -7,19 +7,17 @@ package utils;
 import java.util.ArrayList;
 
 /**
- * Agregar un caracter leido al lexema
+ * Este accion semantica vacia el string en donde se fue formando el lexema
  * @author wrtfix
  */
-public class AccionSemantica2 extends AccionSemantica{
-        
-    public AccionSemantica2(String m){
-        super(m);        
+public class AccionSemantica8 extends AccionSemantica {
+    public AccionSemantica8(String m){
+        super(m);
     }
-    
     @Override
     public Token run(String lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
-        lexema = lexema+caracter;
-            return null;
+        lexema = "";
+        return null;
     }
     
 }

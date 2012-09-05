@@ -18,6 +18,7 @@ public class Compilador {
     public static void main(String[] args) {
         // TODO code application logic here
         //Abrimos el codigo fuente
+      
         Lector l = new Lector(args[0]);
         AnalizadorLexico analizadorL = new AnalizadorLexico();
         System.out.println("Estados");
@@ -30,14 +31,21 @@ public class Compilador {
         Token r3 = analizadorL.getTokens(l, tablaSimbolos);
         Token r4 = analizadorL.getTokens(l, tablaSimbolos);
         Token r5 = analizadorL.getTokens(l, tablaSimbolos);
-        System.out.println("TOKEN: " + r.getTipo()+" "+ r.getLexema());
-        System.out.println("TOKEN: " + r2.getTipo()+" "+ r2.getLexema());
-        System.out.println("TOKEN: " + r3.getTipo()+" "+ r3.getLexema());
-        System.out.println("TOKEN: " + r4.getTipo()+" "+ r4.getLexema());
-        System.out.println("TOKEN: " + r5.getTipo()+" "+ r5.getLexema());
+        Token r6 = analizadorL.getTokens(l, tablaSimbolos);
+        Token r7 = analizadorL.getTokens(l, tablaSimbolos);
+        Token r8 = analizadorL.getTokens(l, tablaSimbolos);
+        System.out.println("TOKEN: " + r.getPuntero().getValor());
+        System.out.println("TOKEN: " + r2.getTipo());
+        System.out.println("TOKEN: " + r3.getTipo());
+        System.out.println("TOKEN: " + r4.getTipo());
+        System.out.println("TOKEN: " + r5.getTipo());
+        System.out.println("TOKEN: " + r6.getTipo());
+        System.out.println("TOKEN: " + r7.getTipo());
+        System.out.println("TOKEN: " + r8.getTipo());
         
         System.out.println("SIMBOLOS :" +tablaSimbolos.size());
         for(int i = 0; i < tablaSimbolos.size(); i++  )
-            System.out.println(tablaSimbolos.get(i).getNombre());
+            System.out.println(tablaSimbolos.get(i).getTipo());
+        
     }
 }

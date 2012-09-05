@@ -16,9 +16,12 @@ public class AccionSemantica12 extends AccionSemantica{
         super(m);
     }
     @Override
-    public String run(String lexema, char caracter, ArrayList<Simbolo> tablaS) {        
-        tipo ="Simbolo";                
-        return lexema + caracter;
+    public Token run(String lexema, char caracter, ArrayList<Simbolo> tablaS, int linea) {        
+        Simbolo s = new Simbolo(lexema+caracter,null);
+        Token t = new Token(s.getTipo(),s);
+        tablaS.add(s);
+        retroceder = true;
+        return t;
     }
     
 }

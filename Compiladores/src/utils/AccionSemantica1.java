@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Informa que se encontro un caracter no valido en el codigo
  * @author wrtfix
  */
 public class AccionSemantica1 extends AccionSemantica{
@@ -18,10 +18,10 @@ public class AccionSemantica1 extends AccionSemantica{
         
     }
     @Override
-    public String run(String lexema, char caracter, ArrayList<Simbolo> tablaS) {
-           this.mensajeError = "Caracter no valido"+caracter;
+    public Token run(String lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
+           this.mensajeError = "Error "+linea+" caracter no valido "+caracter;
            this.error = true;
-           return lexema;
+           return null;
     }
     
 }

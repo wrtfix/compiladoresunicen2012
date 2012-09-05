@@ -4,23 +4,20 @@
  */
 package utils;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Mauricio
  */
 public class Simbolo {
-    private String nombre;
+    private String valor;
     private String tipo;
-    private Object valor;
     
-    public Simbolo(String n, String t,Object v){
-        nombre = n;
-        tipo = t ;
+    
+    public Simbolo(String v, String t){
         valor = v;
-    }
-
-    public String getNombre() {
-        return nombre;
+        tipo = t ;
     }
 
     public String getTipo() {
@@ -34,9 +31,8 @@ public class Simbolo {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
-
-    public void setValor(Object valor) {
-        this.valor = valor;
+    public boolean equals(Simbolo s){
+        return s.valor.equals(valor);
     }
-    
+
 }
