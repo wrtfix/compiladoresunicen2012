@@ -35,17 +35,17 @@ public class Compilador {
         Token r7 = analizadorL.getTokens(l, tablaSimbolos);
         Token r8 = analizadorL.getTokens(l, tablaSimbolos);
         System.out.println("TOKEN: " + r.getPuntero().getValor());
-        System.out.println("TOKEN: " + r2.getTipo());
-        System.out.println("TOKEN: " + r3.getTipo());
-        System.out.println("TOKEN: " + r4.getTipo());
-        System.out.println("TOKEN: " + r5.getTipo());
-        System.out.println("TOKEN: " + r6.getTipo());
-        System.out.println("TOKEN: " + r7.getTipo());
-        System.out.println("TOKEN: " + r8.getTipo());
-        
-        System.out.println("SIMBOLOS :" +tablaSimbolos.size());
+        System.out.println("TOKEN: " + r2.getPuntero().getValor());
+        System.out.println("TOKEN: " + r3.getPuntero().getValor());
+        System.out.println("TOKEN: " + r4.getPuntero().getValor());
+        System.out.println("TOKEN: " + r5.getPuntero().getValor());
+        System.out.println("TOKEN: " + r6.getPuntero().getValor());
+        System.out.println("TOKEN: " + r7.getPuntero().getValor());
+        System.out.println("TOKEN: " + r8.getPuntero().getValor());       
+        System.out.println("# SIMBOLOS :" +tablaSimbolos.size());
+        System.out.println("TABLA SIMBOLOS :");
         for(int i = 0; i < tablaSimbolos.size(); i++  )
-            System.out.println(tablaSimbolos.get(i).getTipo());
+            System.out.println(tablaSimbolos.get(i).getValor());
         
     }
 }

@@ -321,7 +321,8 @@ public class AnalizadorLexico {
         accionesSemanticas.set(0, 2, accionSemantica2);
         accionesSemanticas.set(0, 3, accionSemantica1);
         accionesSemanticas.set(0, 4, accionSemantica1);
-        accionesSemanticas.set(0, 5, accionSemantica12);
+//        accionesSemanticas.set(0, 5, accionSemantica12);
+        accionesSemanticas.set(0, 5, accionSemantica4);
         accionesSemanticas.set(0, 6, accionSemantica1);
         accionesSemanticas.set(0, 7, accionSemantica2);
         accionesSemanticas.set(0, 8, accionSemantica2);
@@ -333,7 +334,8 @@ public class AnalizadorLexico {
         accionesSemanticas.set(0, 14, accionSemantica2);
         accionesSemanticas.set(0, 15, accionSemantica2);
         accionesSemanticas.set(0, 16, accionSemantica2);
-        accionesSemanticas.set(0, 17, accionSemantica12);
+        accionesSemanticas.set(0, 17, accionSemantica4);
+//        accionesSemanticas.set(0, 17, accionSemantica12);
         //FILA2
         accionesSemanticas.set(1, 0, accionSemantica3);
         accionesSemanticas.set(1, 1, accionSemantica2);
@@ -623,6 +625,42 @@ public class AnalizadorLexico {
             System.out.println("");
         }                
     }   
+//    public Token getTokens(Lector l, ArrayList<Simbolo> tablaSimb){        
+//        String lexema = "";
+//        Integer eActual = 0;
+//        Integer eSiguiente = 0;
+//        Token token = new Token();
+//       
+//        char caracter = ' ';
+//        while (caracter != '$' && eSiguiente != 14){    
+//            //System.out.println("Entro");
+//            caracter = l.getCaracter();
+//            AccionSemantica acc =(AccionSemantica)accionesSemanticas.getCelda(caracter, eActual);             
+//            System.out.println(acc.getIdentificador());            
+//            System.out.println("act:"+ eActual);   
+//            
+//            token = acc.run(lexema,caracter,tablaSimb,l.getLine());
+//            
+//            eSiguiente = (Integer)estados.getCelda(caracter, eActual);
+//            System.out.println("sig:"+ eSiguiente);
+//            eActual = eSiguiente;
+//            System.out.println("---------------");
+//           
+//            if (acc.getError()){
+//                errores.add(acc.getMensajeError());
+//            }            
+//
+//            
+//            if (acc.getRetroceder()){
+//                l.retrocederPosicion();
+//                acc.setRetroceder(false);
+//            }            
+//            
+//             
+//                      
+//        }                        
+//        return token;
+//    }
     public Token getTokens(Lector l, ArrayList<Simbolo> tablaSimb){        
         String lexema = "";
         Integer eActual = 0;
@@ -633,32 +671,29 @@ public class AnalizadorLexico {
         while (caracter != '$' && eSiguiente != 14){    
             //System.out.println("Entro");
             caracter = l.getCaracter();
-            AccionSemantica acc =(AccionSemantica)accionesSemanticas.getCelda(caracter, eActual);             
-//            System.out.println(acc.getIdentificador());            
-            System.out.println("act:"+ eActual);   
-            
-            token = acc.run(lexema,caracter,tablaSimb,l.getLine());
-            
+            AccionSemantica acc =(AccionSemantica)accionesSemanticas.getCelda(caracter, eActual);  
             eSiguiente = (Integer)estados.getCelda(caracter, eActual);
+            System.out.println(acc.getIdentificador());            
+            System.out.println("act:"+ eActual);       
             System.out.println("sig:"+ eSiguiente);
+            token = acc.run(lexema,caracter,tablaSimb,l.getLine());
+            System.out.println("token"+ token.getPuntero().getValor());
+            
             eActual = eSiguiente;
             System.out.println("---------------");
            
             if (acc.getError()){
                 errores.add(acc.getMensajeError());
             }            
-
-            
             if (acc.getRetroceder()){
                 l.retrocederPosicion();
                 acc.setRetroceder(false);
             }            
-            
-             
-                      
+    
         }                        
         return token;
     }
+    
     public ArrayList<String> getErrores(){
         return errores;
     }
