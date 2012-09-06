@@ -41,7 +41,7 @@ public class Matriz {
     public Object getCelda(char caracter, int eActual){                
         Object celda = null;
         char EOF = (char)26; 
-        if (Character.isLetter(caracter)&& eActual == 1 )
+        if (Character.isLetter(caracter)&& (eActual == 1 || eActual ==0))
             return get(eActual,1);//Es una letra
         else if (Character.isDigit(caracter))
                 return get(eActual,2);//Es un digito

@@ -35,33 +35,37 @@ public class AccionSemantica3 extends AccionSemantica {
     }
     
     public Token run(String lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
-        String aux = "";
+        
         //verificamos si es una palabra reservada
         Simbolo s = null;
         if (this.palabras.contains(lexema)){
             s = new Simbolo(lexema,"Palabra Reservada");
-            aux = lexema;
             if(!tablaS.contains(s))
                 tablaS.add(s);
                 
-         }else{           
-            if (lexema.length() >12){
-                aux = lexema.substring(0, 11); // trunco el string
-                s = new Simbolo(aux,"Identificador");
-                if(!tablaS.contains(s))
-                    tablaS.add(s);
-                else
-                {
-                    Iterator<Simbolo> it = tablaS.iterator();
-                    Simbolo  a = null;
-                    while(it.hasNext() && !a.equals(s))
-                        a = it.next();
-                    s = a;
+         } 
+        else 
+        {
+            if (lexema.length() > 12) {
+                lexema = lexema.substring(0, 11); // trunco el string
+            }
+            s = new Simbolo(lexema, "Identificador");
+
+            if (!tablaS.contains(s)) {
+                tablaS.add(s);
+            } else {
+
+                Iterator<Simbolo> it = tablaS.iterator();
+                Simbolo a = null;
+
+                while (it.hasNext() && !a.equals(s)) {
+                    a = it.next();
                 }
-                
+                s = a;
             }
         }
         Token t = new Token(s.getTipo(),s);
+        System.out.println("entro");
         return t;
     }
     public void palabrasReservadas(ArrayList<String> palabras){

@@ -18,8 +18,9 @@ public class AccionSemantica2 extends AccionSemantica{
     
     @Override
     public Token run(String lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
-        lexema = lexema+caracter;
-            return null;
+        String aux = lexema;
+        lexema = aux + caracter;
+        return null;
     }
     
 }

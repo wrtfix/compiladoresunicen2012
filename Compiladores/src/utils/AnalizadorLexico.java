@@ -677,7 +677,8 @@ public class AnalizadorLexico {
             System.out.println("act:"+ eActual);       
             System.out.println("sig:"+ eSiguiente);
             token = acc.run(lexema,caracter,tablaSimb,l.getLine());
-            System.out.println("token"+ token.getPuntero().getValor());
+            if(token != null)
+                System.out.println("token"+ token.getPuntero().getValor());
             
             eActual = eSiguiente;
             System.out.println("---------------");
