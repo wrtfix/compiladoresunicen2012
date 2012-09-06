@@ -72,8 +72,8 @@ public class Matriz {
                         case '+' :  celda = get(eActual,17); break;
                         case '-' :  celda = get(eActual,17); break;
                 }
-//        if(celda == null)
-//            celda = get(eActual, 0);
+        if(celda == null)
+            celda = get(eActual, 0);
 //        if(Character.isWhitespace(caracter))
 //            celda = get(eActual,10);
         return celda;

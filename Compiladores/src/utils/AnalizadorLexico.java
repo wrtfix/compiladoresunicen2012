@@ -675,10 +675,9 @@ public class AnalizadorLexico {
             eSiguiente = (Integer)estados.getCelda(caracter, eActual);
             System.out.println(acc.getIdentificador());            
             System.out.println("act:"+ eActual);       
-            System.out.println("sig:"+ eSiguiente);
-            token = acc.run(lexema,caracter,tablaSimb,l.getLine());
-            if(token != null)
-                System.out.println("token"+ token.getPuntero().getValor());
+            System.out.println("sig:"+ eSiguiente);            
+            lexema = acc.run(lexema,caracter,tablaSimb,l.getLine());            
+            System.out.println("lexema "+ lexema);
             
             eActual = eSiguiente;
             System.out.println("---------------");
@@ -690,8 +689,12 @@ public class AnalizadorLexico {
                 l.retrocederPosicion();
                 acc.setRetroceder(false);
             }            
-    
+            if( eActual == 14){
+            Simbolo s = new Simbolo(lexema,null);
+            token = new Token(s.getTipo(),s);            
+            }
         }                        
+        
         return token;
     }
     

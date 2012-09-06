@@ -14,10 +14,10 @@ public class AccionSemantica8 extends AccionSemantica {
     public AccionSemantica8(String m){
         super(m);
     }
-    @Override
-    public Token run(String lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
+
+    public String run(String lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
         lexema = "";
-        return null;
+        return lexema;
     }
     
 }

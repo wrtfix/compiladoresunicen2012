@@ -45,7 +45,8 @@ public class Compilador {
         System.out.println("# SIMBOLOS :" +tablaSimbolos.size());
         System.out.println("TABLA SIMBOLOS :");
         for(int i = 0; i < tablaSimbolos.size(); i++  )
-            System.out.println(tablaSimbolos.get(i).getValor());
+            System.out.println(tablaSimbolos.get(i).getTipo() + " "+ tablaSimbolos.get(i).getValor() );
+            
         
     }
 }

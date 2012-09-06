@@ -16,11 +16,10 @@ public class AccionSemantica2 extends AccionSemantica{
         super(m);        
     }
     
-    @Override
-    public Token run(String lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
-        String aux = lexema;
-        lexema = aux + caracter;
-        return null;
+    public String run(String lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
+        //String aux = lexema + caracter;
+        lexema = lexema + caracter;
+        return lexema;
     }
     
 }

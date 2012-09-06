@@ -15,11 +15,11 @@ public class AccionSemantica7 extends AccionSemantica{
     public AccionSemantica7(String m){
         super(m);
     }
-    @Override
-    public Token run(String lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
+    
+    public String run(String lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
         this.mensajeError = "Error "+linea+" caracter no valido "+caracter;
         this.error = true;
-        return null;
+        return lexema;
     }
     
 }

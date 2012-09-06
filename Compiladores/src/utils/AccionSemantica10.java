@@ -16,10 +16,8 @@ import java.util.ArrayList;
 public class AccionSemantica10 extends AccionSemantica{
     public AccionSemantica10(String m){
         super(m);
-    }
-    @Override
-    public Token run(String lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
-        Float a;
+    }    
+    public String run(String lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {        
         Token t = null;
         float f = Float.valueOf(lexema.trim()).floatValue();
         if (f>1.17549435e-38 && f<3.40282347e38){
@@ -31,8 +29,9 @@ public class AccionSemantica10 extends AccionSemantica{
             Simbolo s = new Simbolo(lexema,"Float");
             t = new Token(s.getTipo(),s);
             tablaS.add(s);
+            lexema = "";
         }
-        return t;
+        return lexema;
     }
     
 }

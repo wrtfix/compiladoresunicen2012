@@ -34,15 +34,14 @@ public class AccionSemantica3 extends AccionSemantica {
         
     }
     
-    public Token run(String lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
+    public String run(String lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
         
         //verificamos si es una palabra reservada
-        Simbolo s = null;
+        Simbolo s = null;       
         if (this.palabras.contains(lexema)){
             s = new Simbolo(lexema,"Palabra Reservada");
             if(!tablaS.contains(s))
-                tablaS.add(s);
-                
+                tablaS.add(s);      
          } 
         else 
         {
@@ -64,9 +63,10 @@ public class AccionSemantica3 extends AccionSemantica {
                 s = a;
             }
         }
-        Token t = new Token(s.getTipo(),s);
-        System.out.println("entro");
-        return t;
+        //Token t = new Token(s.getTipo(),s);
+        retroceder = true;
+//        lexema = "";
+        return lexema;
     }
     public void palabrasReservadas(ArrayList<String> palabras){
         this.palabras = palabras;

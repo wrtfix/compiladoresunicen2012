@@ -15,13 +15,15 @@ public class AccionSemantica12 extends AccionSemantica{
     public AccionSemantica12(String m ){
         super(m);
     }
-    @Override
-    public Token run(String lexema, char caracter, ArrayList<Simbolo> tablaS, int linea) {        
-        Simbolo s = new Simbolo(lexema+caracter,null);
-        Token t = new Token(s.getTipo(),s);
+    
+    public String run(String lexema, char caracter, ArrayList<Simbolo> tablaS, int linea) {        
+        lexema = lexema + caracter;
+        Simbolo s = new Simbolo(lexema,null);
+        //Token t = new Token(s.getTipo(),s);
         tablaS.add(s);
         retroceder = true;
-        return t;
+        lexema = "";
+        return lexema;
     }
     
 }
