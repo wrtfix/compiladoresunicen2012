@@ -41,12 +41,13 @@ public class Matriz {
     public Object getCelda(char caracter, int eActual){                
         Object celda = null;
         char EOF = (char)26; 
-        if (Character.isLetter(caracter)&& (eActual == 1 || eActual ==0))
+        
+        if (Character.isLetter(caracter)&& (eActual == 1 || eActual ==0) && (eActual !=5) )
             return get(eActual,1);//Es una letra
-        else if (Character.isDigit(caracter))
+        else if (Character.isDigit(caracter) && (eActual !=5))
                 return get(eActual,2);//Es un digito
         else if (caracter ==  '$')
-                return get(eActual,15);
+                return get(eActual,12);
         else 
                     switch(caracter){
                         case ':' :  celda = get(eActual,3); break;
@@ -75,7 +76,7 @@ public class Matriz {
         if(celda == null)
             celda = get(eActual, 0);
 //        if(Character.isWhitespace(caracter))
-//            celda = get(eActual,10);
+  //          celda = get(eActual,10);
         return celda;
     }
     /**

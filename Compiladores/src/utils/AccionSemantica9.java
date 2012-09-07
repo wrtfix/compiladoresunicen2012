@@ -18,14 +18,12 @@ public class AccionSemantica9 extends AccionSemantica{
         super(m);
     }
     
-    public String run(String lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
-        lexema = lexema + caracter;
-        Simbolo s = new Simbolo(lexema, "Cadena");
+    public Token run(StringBuffer lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
+        Simbolo s = new Simbolo(lexema.append(caracter), "Cadena");
         if (!tablaS.contains(s))
            tablaS.add(s);
-        //Token t = new Token(s.getTipo(),s);
-        lexema = "";
-        return lexema;
+        Token t = new Token(s.getTipo(),s);
+        return t;
     }
     
     

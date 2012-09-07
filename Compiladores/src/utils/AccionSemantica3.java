@@ -31,25 +31,26 @@ public class AccionSemantica3 extends AccionSemantica {
         palabras.add("print");
         palabras.add("float");
         palabras.add("array");
-        
     }
     
-    public String run(String lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
+    public Token run(StringBuffer lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
         
         //verificamos si es una palabra reservada
-        Simbolo s = null;       
-        if (this.palabras.contains(lexema)){
+        Simbolo s = null;
+        
+        if (this.palabras.contains(lexema.toString())){
             s = new Simbolo(lexema,"Palabra Reservada");
             if(!tablaS.contains(s))
-                tablaS.add(s);      
+                tablaS.add(s);
+                
          } 
         else 
         {
             if (lexema.length() > 12) {
-                lexema = lexema.substring(0, 11); // trunco el string
+                lexema = lexema.delete(12, lexema.length()); // trunco el string
             }
             s = new Simbolo(lexema, "Identificador");
-
+            System.out.println();
             if (!tablaS.contains(s)) {
                 tablaS.add(s);
             } else {
@@ -63,14 +64,11 @@ public class AccionSemantica3 extends AccionSemantica {
                 s = a;
             }
         }
-        //Token t = new Token(s.getTipo(),s);
-        retroceder = true;
-//        lexema = "";
-        return lexema;
+        Token t = new Token(s.getTipo(),s);
+        
+        return t;
     }
-    public void palabrasReservadas(ArrayList<String> palabras){
-        this.palabras = palabras;
-    }
+    
     
     
 }

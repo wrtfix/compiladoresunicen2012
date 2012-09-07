@@ -11,12 +11,13 @@ import java.util.ArrayList;
  * @author Mauricio
  */
 public class Simbolo {
-    private String valor;
+    private StringBuffer valor;
     private String tipo;
     
     
-    public Simbolo(String v, String t){
-        valor = v;
+    public Simbolo(StringBuffer v, String t){
+        this.valor = new StringBuffer();
+        this.valor.append(v);
         tipo = t ;
     }
 
@@ -24,7 +25,7 @@ public class Simbolo {
         return tipo;
     }
 
-    public Object getValor() {
+    public StringBuffer getValor() {
         return valor;
     }
 
@@ -32,7 +33,8 @@ public class Simbolo {
         this.tipo = tipo;
     }
     public boolean equals(Simbolo s){
-        return s.valor.equals(valor);
+        System.out.println("valor"+s.getValor().toString());
+        return valor.equals(s.getValor());
     }
 
 }

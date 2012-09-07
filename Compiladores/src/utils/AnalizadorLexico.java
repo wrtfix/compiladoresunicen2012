@@ -106,24 +106,24 @@ public class AnalizadorLexico {
         estados.set(2, 16, 0);
         estados.set(2, 17, 0);
         //FILA4
-        estados.set(3, 0, 0);
-        estados.set(3, 1, 0);
-        estados.set(3, 2, 0);
-        estados.set(3, 3, 0);
-        estados.set(3, 4, 0);
+        estados.set(3, 0, 14);
+        estados.set(3, 1, 14);
+        estados.set(3, 2, 14);
+        estados.set(3, 3, 14);
+        estados.set(3, 4, 14);
         estados.set(3, 5, 14);
-        estados.set(3, 6, 0);
-        estados.set(3, 7, 0);
-        estados.set(3, 8, 0);
-        estados.set(3, 9, 0);
-        estados.set(3, 10, 0);
-        estados.set(3, 11, 0);
-        estados.set(3, 12, 0);
-        estados.set(3, 13, 0);
-        estados.set(3, 14, 0);
-        estados.set(3, 15, 0);
-        estados.set(3, 16, 0);
-        estados.set(3, 17, 0);
+        estados.set(3, 6, 14);
+        estados.set(3, 7, 14);
+        estados.set(3, 8, 14);
+        estados.set(3, 9, 14);
+        estados.set(3, 10, 14);
+        estados.set(3, 11, 14);
+        estados.set(3, 12, 14);
+        estados.set(3, 13, 14);
+        estados.set(3, 14, 14);
+        estados.set(3, 15, 14);
+        estados.set(3, 16, 14);
+        estados.set(3, 17, 14);
         //e5
         estados.set(4, 0, 14);
         estados.set(4, 1, 14);
@@ -143,7 +143,7 @@ public class AnalizadorLexico {
         estados.set(4, 15, 14);
         estados.set(4, 16, 14);
         estados.set(4, 17, 14);        
-        //FILA6
+        //FILA5
         estados.set(5, 0, 14);
         estados.set(5, 1, 14);
         estados.set(5, 2, 14);
@@ -162,7 +162,7 @@ public class AnalizadorLexico {
         estados.set(5, 15, 14);
         estados.set(5, 16, 14);
         estados.set(5, 17, 14);
-        //FILA7
+        //FILA6
         estados.set(6, 0, 6);
         estados.set(6, 1, 6);
         estados.set(6, 2, 6);
@@ -181,7 +181,7 @@ public class AnalizadorLexico {
         estados.set(6, 15, 6);
         estados.set(6, 16, 6);
         estados.set(6, 17, 6);
-        //e8
+        //e7
         estados.set(7, 0, 7);
         estados.set(7, 1, 7);
         estados.set(7, 2, 7);
@@ -200,7 +200,7 @@ public class AnalizadorLexico {
         estados.set(7, 15, 7);
         estados.set(7, 16, 7);
         estados.set(7, 17, 7);        
-        //FILA9
+        //FILA8
         estados.set(8, 0, 8);
         estados.set(8, 1, 8);
         estados.set(8, 2, 8);
@@ -219,7 +219,7 @@ public class AnalizadorLexico {
         estados.set(8, 15, 8);
         estados.set(8, 16, 8);
         estados.set(8, 17, 8);
-        //FILA10
+        //FILA9
         estados.set(9, 0, 0);
         estados.set(9, 1, 0);
         estados.set(9, 2, 9);
@@ -238,7 +238,7 @@ public class AnalizadorLexico {
         estados.set(9, 15, 12);
         estados.set(9, 16, 10);
         estados.set(9, 17, 0);
-        //FILA11
+        //FILA10
         estados.set(10, 0, 0);
         estados.set(10, 1, 0);
         estados.set(10, 2, 13);
@@ -257,7 +257,7 @@ public class AnalizadorLexico {
         estados.set(10, 15, 0);
         estados.set(10, 16, 0);
         estados.set(10, 17, 13);
-        //FILA12
+        //FILA11
         estados.set(11, 0, 0);
         estados.set(11, 1, 0);
         estados.set(11, 2, 12);
@@ -276,7 +276,7 @@ public class AnalizadorLexico {
         estados.set(11, 15, 0);
         estados.set(11, 16, 0);
         estados.set(11, 17, 0);
-        //FILA13
+        //FILA12
         estados.set(12, 0, 0);
         estados.set(12, 1, 0);
         estados.set(12, 2, 12);
@@ -319,7 +319,7 @@ public class AnalizadorLexico {
         accionesSemanticas.set(0, 0, accionSemantica1);
         accionesSemanticas.set(0, 1, accionSemantica2);
         accionesSemanticas.set(0, 2, accionSemantica2);
-        accionesSemanticas.set(0, 3, accionSemantica1);
+        accionesSemanticas.set(0, 3, accionSemantica2);
         accionesSemanticas.set(0, 4, accionSemantica1);
 //        accionesSemanticas.set(0, 5, accionSemantica12);
         accionesSemanticas.set(0, 5, accionSemantica4);
@@ -394,25 +394,25 @@ public class AnalizadorLexico {
         accionesSemanticas.set(3, 16, accionSemantica5);
         accionesSemanticas.set(3, 17, accionSemantica5);
         //FILA5
-        accionesSemanticas.set(4, 0, accionSemantica5);
-        accionesSemanticas.set(4, 1, accionSemantica5);
-        accionesSemanticas.set(4, 2, accionSemantica5);
-        accionesSemanticas.set(4, 3, accionSemantica5);
+        accionesSemanticas.set(4, 0, accionSemantica12);
+        accionesSemanticas.set(4, 1, accionSemantica12);
+        accionesSemanticas.set(4, 2, accionSemantica12);
+        accionesSemanticas.set(4, 3, accionSemantica12);
         accionesSemanticas.set(4, 4, accionSemantica6);
-        accionesSemanticas.set(4, 5, accionSemantica5);
-        accionesSemanticas.set(4, 6, accionSemantica5);
-        accionesSemanticas.set(4, 7, accionSemantica5);
-        accionesSemanticas.set(4, 8, accionSemantica5);
-        accionesSemanticas.set(4, 9, accionSemantica5);
-        accionesSemanticas.set(4, 10, accionSemantica5);
-        accionesSemanticas.set(4, 11, accionSemantica5);
-        accionesSemanticas.set(4, 12, accionSemantica5);
-        accionesSemanticas.set(4, 13, accionSemantica5);
-        accionesSemanticas.set(4, 14, accionSemantica5);
-        accionesSemanticas.set(4, 15, accionSemantica5);
-        accionesSemanticas.set(4, 16, accionSemantica5);
-        accionesSemanticas.set(4, 17, accionSemantica5);
-        //FILA6
+        accionesSemanticas.set(4, 5, accionSemantica12);
+        accionesSemanticas.set(4, 6, accionSemantica12);
+        accionesSemanticas.set(4, 7, accionSemantica12);
+        accionesSemanticas.set(4, 8, accionSemantica12);
+        accionesSemanticas.set(4, 9, accionSemantica12);
+        accionesSemanticas.set(4, 10, accionSemantica12);
+        accionesSemanticas.set(4, 11, accionSemantica12);
+        accionesSemanticas.set(4, 12, accionSemantica12);
+        accionesSemanticas.set(4, 13, accionSemantica12);
+        accionesSemanticas.set(4, 14, accionSemantica12);
+        accionesSemanticas.set(4, 15, accionSemantica12);
+        accionesSemanticas.set(4, 16, accionSemantica12);
+        accionesSemanticas.set(4, 17, accionSemantica12);
+        
         accionesSemanticas.set(5, 0, accionSemantica4);
         accionesSemanticas.set(5, 1, accionSemantica4);
         accionesSemanticas.set(5, 2, accionSemantica4);
@@ -426,12 +426,12 @@ public class AnalizadorLexico {
         accionesSemanticas.set(5, 10, accionSemantica4);
         accionesSemanticas.set(5, 11, accionSemantica4);
         accionesSemanticas.set(5, 12, accionSemantica4);
-        accionesSemanticas.set(5, 13, accionSemantica8);
+        accionesSemanticas.set(5, 13, accionSemantica5);
         accionesSemanticas.set(5, 14, accionSemantica4);
         accionesSemanticas.set(5, 15, accionSemantica4);
         accionesSemanticas.set(5, 16, accionSemantica4);
         accionesSemanticas.set(5, 17, accionSemantica4);
-        //FILA7
+        
         accionesSemanticas.set(6, 0, accionSemantica5);
         accionesSemanticas.set(6, 1, accionSemantica5);
         accionesSemanticas.set(6, 2, accionSemantica5);
@@ -662,11 +662,10 @@ public class AnalizadorLexico {
 //        return token;
 //    }
     public Token getTokens(Lector l, ArrayList<Simbolo> tablaSimb){        
-        String lexema = "";
+        StringBuffer lexema = new StringBuffer();
         Integer eActual = 0;
         Integer eSiguiente = 0;
         Token token = new Token();
-       
         char caracter = ' ';
         while (caracter != '$' && eSiguiente != 14){    
             //System.out.println("Entro");
@@ -675,26 +674,27 @@ public class AnalizadorLexico {
             eSiguiente = (Integer)estados.getCelda(caracter, eActual);
             System.out.println(acc.getIdentificador());            
             System.out.println("act:"+ eActual);       
-            System.out.println("sig:"+ eSiguiente);            
-            lexema = acc.run(lexema,caracter,tablaSimb,l.getLine());            
-            System.out.println("lexema "+ lexema);
             
-            eActual = eSiguiente;
+            
+            token = acc.run(lexema,caracter,tablaSimb,l.getLine());
+            
+           // if(token != null)
+             //   System.out.println("token"+ token.getPuntero().getValor());
+            
             System.out.println("---------------");
-           
+            
+
             if (acc.getError()){
                 errores.add(acc.getMensajeError());
             }            
             if (acc.getRetroceder()){
                 l.retrocederPosicion();
                 acc.setRetroceder(false);
-            }            
-            if( eActual == 14){
-            Simbolo s = new Simbolo(lexema,null);
-            token = new Token(s.getTipo(),s);            
+                eSiguiente = (Integer)estados.getCelda(caracter, eActual);
             }
+            eActual = eSiguiente;
+            System.out.println("sig:"+ eSiguiente);
         }                        
-        
         return token;
     }
     

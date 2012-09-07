@@ -5,6 +5,7 @@
 package utils;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Agregar un caracter leido al lexema
@@ -16,10 +17,11 @@ public class AccionSemantica2 extends AccionSemantica{
         super(m);        
     }
     
-    public String run(String lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
-        //String aux = lexema + caracter;
-        lexema = lexema + caracter;
-        return lexema;
+    @Override
+    public Token run(StringBuffer lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
+    lexema.append(caracter);
+      
+        return null;
     }
     
 }

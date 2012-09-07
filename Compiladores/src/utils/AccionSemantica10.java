@@ -16,10 +16,13 @@ import java.util.ArrayList;
 public class AccionSemantica10 extends AccionSemantica{
     public AccionSemantica10(String m){
         super(m);
-    }    
-    public String run(String lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {        
+    }
+    @Override
+    public Token run(StringBuffer lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
+        System.out.println("lexema"+lexema);
+        Float a;
         Token t = null;
-        float f = Float.valueOf(lexema.trim()).floatValue();
+        float f = Float.valueOf(lexema.toString()).floatValue();
         if (f>1.17549435e-38 && f<3.40282347e38){
             this.error = true;
             this.mensajeError = "ERROR fuera de rango linea"+linea;
@@ -29,9 +32,8 @@ public class AccionSemantica10 extends AccionSemantica{
             Simbolo s = new Simbolo(lexema,"Float");
             t = new Token(s.getTipo(),s);
             tablaS.add(s);
-            lexema = "";
         }
-        return lexema;
+        return t;
     }
     
 }

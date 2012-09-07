@@ -38,15 +38,15 @@ public class Compilador {
         System.out.println("TOKEN: " + r2.getPuntero().getValor());
         System.out.println("TOKEN: " + r3.getPuntero().getValor());
         System.out.println("TOKEN: " + r4.getPuntero().getValor());
-        System.out.println("TOKEN: " + r5.getPuntero().getValor());
+/*        System.out.println("TOKEN: " + r5.getPuntero().getValor());
         System.out.println("TOKEN: " + r6.getPuntero().getValor());
         System.out.println("TOKEN: " + r7.getPuntero().getValor());
-        System.out.println("TOKEN: " + r8.getPuntero().getValor());       
+        System.out.println("TOKEN: " + r8.getPuntero().getValor());       */
         System.out.println("# SIMBOLOS :" +tablaSimbolos.size());
         System.out.println("TABLA SIMBOLOS :");
         for(int i = 0; i < tablaSimbolos.size(); i++  )
-            System.out.println(tablaSimbolos.get(i).getTipo() + " "+ tablaSimbolos.get(i).getValor() );
-            
+            System.out.println(tablaSimbolos.get(i).getTipo()+":"+tablaSimbolos.get(i).getValor());
+        
         
     }
 }

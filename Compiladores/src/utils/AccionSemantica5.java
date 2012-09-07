@@ -15,9 +15,10 @@ public class AccionSemantica5 extends AccionSemantica{
     public AccionSemantica5(String m){
         super(m);
     }
-    
-    public String run(String lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
-        return lexema;
+    @Override
+    public Token run(StringBuffer lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
+        
+        return null;
     }
     
 }
