@@ -39,45 +39,50 @@ public class Lector {
             //Agrega la línea leída en el arreglo lineas
             while ((sCadena = bf.readLine())!= null) {
                 
-                sCadena = sCadena + "\n";
-                System.out.println(sCadena);
+                //sCadena = sCadena + "\n";
+                //System.out.println(sCadena);
                 fuente.add(sCadena); 
                 //l = bf.readLine();
                 
             } 
-            //sCadena = "$";
-            //fuente.add(sCadena); 
+            sCadena = "$";
+            fuente.add(sCadena); 
             
 //            fuente.add(sCadena);
 	} catch (FileNotFoundException fnfe){fnfe.printStackTrace();} 
           catch (IOException ioe){ioe.printStackTrace();}			        
     }
+     
     public char getCaracter(){
         char c = 0;     
-        System.out.println(pos);
-        if (pos < fuente.get(linea).length()){
-        c = fuente.get(linea).charAt(pos);
+        System.out.println("Posicion:"+ pos);
+        if (linea < fuente.size()){
+            
+            if (pos < fuente.get(linea).length()){
+                c = fuente.get(linea).charAt(pos);
+                pos++;
+            }else{
+                c = '\n';
+                linea++;
+                pos = 0;
+                }
+       }
+       else
+           c='$';
         
         System.out.println(c);
-        
-        if(c == '\n'){
-            linea++;
-            pos = 0;
-        }else
-            pos++;
-       }else
-            c='$';
         return c; 
-        
     }
-    public void retrocederPosicion(){
+    
+public void retrocederPosicion(){
         if (pos != 0)
-            pos--;
-        else
+            pos = pos -1;
+        else{
             if (linea != 0){
-                linea--;
-                pos = fuente.get(linea).length()-1; 
+                linea = linea - 1;
+                pos = fuente.get(linea).length(); 
             }
+        }
     }
 
     public int getPos() {
@@ -88,6 +93,6 @@ public class Lector {
         return linea;
     }
     public boolean esFinal(){
-        return (linea == fuente.size() && pos == fuente.get(linea).length()-1);
+        return (linea == fuente.size()-1 && pos == fuente.get(linea).length());
     }
 }

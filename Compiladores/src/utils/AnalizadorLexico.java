@@ -80,7 +80,7 @@ public class AnalizadorLexico {
         estados.set(1, 9, 14);
         estados.set(1, 10, 14);
         estados.set(1, 11, 14);
-        estados.set(1, 12, 14);
+        estados.set(1, 12,  14);
         estados.set(1, 13, 14);
         estados.set(1, 14, 14);
         estados.set(1, 15, 14);
@@ -287,7 +287,7 @@ public class AnalizadorLexico {
         estados.set(12, 7, 0);
         estados.set(12, 8, 0);
         estados.set(12, 9, 0);
-        estados.set(12, 10, 0);
+        estados.set(12, 10, 14);
         estados.set(12, 11, 0);
         estados.set(12, 12, 0);
         estados.set(12, 13, 0);
@@ -306,7 +306,7 @@ public class AnalizadorLexico {
         estados.set(13, 7, 0);
         estados.set(13, 8, 0);
         estados.set(13, 9, 0);
-        estados.set(13, 10,0);
+        estados.set(13, 10,14);
         estados.set(13, 11, 0);
         estados.set(13, 12, 0);
         estados.set(13, 13, 0);
@@ -556,9 +556,9 @@ public class AnalizadorLexico {
         accionesSemanticas.set(12, 7, accionSemantica1);
         accionesSemanticas.set(12, 8, accionSemantica1);
         accionesSemanticas.set(12, 9, accionSemantica1);
-        accionesSemanticas.set(12, 10, accionSemantica1);
-        accionesSemanticas.set(12, 11, accionSemantica1);
-        accionesSemanticas.set(12, 12, accionSemantica1);
+        accionesSemanticas.set(12, 10, accionSemantica10);
+        accionesSemanticas.set(12, 11, accionSemantica10);
+        accionesSemanticas.set(12, 12, accionSemantica10);
         accionesSemanticas.set(12, 13, accionSemantica1);
         accionesSemanticas.set(12, 14, accionSemantica1);
         accionesSemanticas.set(12, 15, accionSemantica1);
@@ -575,9 +575,9 @@ public class AnalizadorLexico {
         accionesSemanticas.set(13, 7, accionSemantica1);
         accionesSemanticas.set(13, 8, accionSemantica1);
         accionesSemanticas.set(13, 9, accionSemantica1);
-        accionesSemanticas.set(13, 10, accionSemantica1);
+        accionesSemanticas.set(13, 10, accionSemantica10);
         accionesSemanticas.set(13, 11, accionSemantica1);
-        accionesSemanticas.set(13, 12, accionSemantica1);
+        accionesSemanticas.set(13, 12, accionSemantica10);
         accionesSemanticas.set(13, 13, accionSemantica1);
         accionesSemanticas.set(13, 14, accionSemantica1);
         accionesSemanticas.set(13, 15, accionSemantica1);
@@ -679,7 +679,7 @@ public class AnalizadorLexico {
             token = acc.run(lexema,caracter,tablaSimb,l.getLine());
             
            // if(token != null)
-             //   System.out.println("token"+ token.getPuntero().getValor());
+             System.out.println("Caracter: "+caracter);
             
             System.out.println("---------------");
             

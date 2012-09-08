@@ -27,17 +27,21 @@ public class Compilador {
         analizadorL.imprimirAcciones();
         ArrayList<Simbolo> tablaSimbolos = new ArrayList<Simbolo>();
         
-//        Token r = null;
-//        ArrayList<Token> lista = new ArrayList<Token>();
-//        while (!l.esFinal()){
-//            lista.add(r = analizadorL.getTokens(l, tablaSimbolos));
-//       }
-//
-//        for (int i = 0; i<lista.size();i++)
-//            System.out.println("TOKEN: "+ lista.get(i).getTipo());
-//       
+        //System.out.println("El tamañano"+l.cantLineas());
+        ArrayList<Token> lista = new ArrayList<Token>();
+//        for (int i =0; i<l.cantLineas();i++){
+        while (!l.esFinal()){
+            System.out.println("esfinal"+l.esFinal()+":"+l.getLine());
+            
+            Token r = analizadorL.getTokens(l, tablaSimbolos);
+            lista.add(r);
+       }
+
+        for (int i = 0; i<lista.size();i++)
+            System.out.println("TOKEN: "+ lista.get(i).getTipo());
+       
         
-        Token r = analizadorL.getTokens(l, tablaSimbolos);        
+/*        Token r = analizadorL.getTokens(l, tablaSimbolos);        
         Token r2 = analizadorL.getTokens(l, tablaSimbolos);        
         Token r3 = analizadorL.getTokens(l, tablaSimbolos);
         Token r4 = analizadorL.getTokens(l, tablaSimbolos);
@@ -62,7 +66,7 @@ public class Compilador {
         System.out.println("TOKEN: " + r10.getPuntero().getValor());
         System.out.println("TOKEN: " + r11.getPuntero().getValor());
         System.out.println("TOKEN: " + r12.getPuntero().getValor());  
-        System.out.println("TOKEN: " + r13.getPuntero().getValor());  
+        System.out.println("TOKEN: " + r13.getPuntero().getValor());  */
         
         System.out.println("# SIMBOLOS :" +tablaSimbolos.size());
         System.out.println("TABLA SIMBOLOS :");

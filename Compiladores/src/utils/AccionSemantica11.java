@@ -7,7 +7,7 @@ package utils;
 import java.util.ArrayList;
 
 /**
- * Esta accion semanrica identifica el final de un archivo.
+ * Esta accion semantica identifica el final de un archivo.
  * @author Mauricio
  */
 public class AccionSemantica11 extends AccionSemantica{
@@ -17,7 +17,7 @@ public class AccionSemantica11 extends AccionSemantica{
     }
     @Override
     public Token run(StringBuffer lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
-        Simbolo s = new Simbolo(lexema,"fin");
+        Simbolo s = new Simbolo(lexema,"FIN");
         Token t = new Token(s.getTipo(),s);
         return t;
         
