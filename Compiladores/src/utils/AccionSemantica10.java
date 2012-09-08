@@ -22,17 +22,27 @@ public class AccionSemantica10 extends AccionSemantica{
         System.out.println("lexema"+lexema);
         Float a;
         Token t = null;
-        float f = Float.valueOf(lexema.toString()).floatValue();
-        if (f>1.17549435e-38 && f<3.40282347e38){
+        Float f = Float.valueOf(lexema.toString()).floatValue();
+        
+        if (f.compareTo(new Float(1.17549435e-38))== -1 || f.compareTo(new Float(3.40282347e+38)) == 1){
             this.error = true;
             this.mensajeError = "ERROR fuera de rango linea"+linea;
+            //lexema = new StringBuffer();
+
+            
         }
         else
         {
             Simbolo s = new Simbolo(lexema,"Float");
             t = new Token(s.getTipo(),s);
             tablaS.add(s);
+            
         }
+        lexema = new StringBuffer();               
+        retroceder = true;
+            
+        //    lexema.setLength(0);
+//            lexema.delete(0, lexema.length());
         return t;
     }
     

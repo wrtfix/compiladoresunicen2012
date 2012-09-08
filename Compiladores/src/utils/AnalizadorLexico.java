@@ -32,7 +32,7 @@ public class AnalizadorLexico {
         AccionSemantica accionSemantica10 = new AccionSemantica10("accion10");
         AccionSemantica accionSemantica11 = new AccionSemantica11("accion11");
         AccionSemantica accionSemantica12 = new AccionSemantica12("accion12");
-        
+        AccionSemantica accionSemantica13 = new AccionSemantica13("accion13");
         
         
        /* AccionSemantica accionSemantica1 = new AccionSemantica("");
@@ -278,42 +278,42 @@ public class AnalizadorLexico {
         estados.set(11, 17, 0);
         //FILA12
         estados.set(12, 0, 0);
-        estados.set(12, 1, 0);
+        estados.set(12, 1, 14);
         estados.set(12, 2, 12);
-        estados.set(12, 3, 0);
-        estados.set(12, 4, 0);
-        estados.set(12, 5, 0);
-        estados.set(12, 6, 0);
-        estados.set(12, 7, 0);
-        estados.set(12, 8, 0);
-        estados.set(12, 9, 0);
+        estados.set(12, 3, 14);
+        estados.set(12, 4, 14);
+        estados.set(12, 5, 14);
+        estados.set(12, 6, 14);
+        estados.set(12, 7, 14);
+        estados.set(12, 8, 14);
+        estados.set(12, 9, 14);
         estados.set(12, 10, 14);
-        estados.set(12, 11, 0);
-        estados.set(12, 12, 0);
-        estados.set(12, 13, 0);
-        estados.set(12, 14, 0);
-        estados.set(12, 15, 0);
+        estados.set(12, 11, 14);
+        estados.set(12, 12, 14);
+        estados.set(12, 13, 14);
+        estados.set(12, 14, 14);
+        estados.set(12, 15, 14);
         estados.set(12, 16, 10);
-        estados.set(12, 17, 0);
+        estados.set(12, 17, 14);
         //FILA13
-        estados.set(13, 0, 0);
+        estados.set(13, 0, 14);
         estados.set(13, 1, 14);
         estados.set(13, 2, 13);
-        estados.set(13, 3, 0);
-        estados.set(13, 4, 0);
-        estados.set(13, 5, 0);
-        estados.set(13, 6, 0);
-        estados.set(13, 7, 0);
-        estados.set(13, 8, 0);
-        estados.set(13, 9, 0);
+        estados.set(13, 3, 14);
+        estados.set(13, 4, 14);
+        estados.set(13, 5, 14);
+        estados.set(13, 6, 14);
+        estados.set(13, 7, 14);
+        estados.set(13, 8, 14);
+        estados.set(13, 9, 14);
         estados.set(13, 10,14);
-        estados.set(13, 11, 0);
-        estados.set(13, 12, 0);
-        estados.set(13, 13, 0);
-        estados.set(13, 14, 0);
-        estados.set(13, 15, 0);
-        estados.set(13, 16, 0);
-        estados.set(13, 17, 0);
+        estados.set(13, 11, 14);
+        estados.set(13, 12, 14);
+        estados.set(13, 13, 14);
+        estados.set(13, 14, 14);
+        estados.set(13, 15, 14);
+        estados.set(13, 16, 14);
+        estados.set(13, 17, 14);
         
         //FILA1
         accionesSemanticas.set(0, 0, accionSemantica1);
@@ -527,62 +527,62 @@ public class AnalizadorLexico {
         accionesSemanticas.set(10, 16, accionSemantica1);
         accionesSemanticas.set(10, 17, accionSemantica2);
         //FILA12
-        accionesSemanticas.set(11, 0, accionSemantica1);
-        accionesSemanticas.set(11, 1, accionSemantica1);
-        accionesSemanticas.set(11, 2, accionSemantica1);
-        accionesSemanticas.set(11, 3, accionSemantica1);
-        accionesSemanticas.set(11, 4, accionSemantica1);
-        accionesSemanticas.set(11, 5, accionSemantica1);
-        accionesSemanticas.set(11, 6, accionSemantica1);
-        accionesSemanticas.set(11, 7, accionSemantica1);
-        accionesSemanticas.set(11, 8, accionSemantica1);
-        accionesSemanticas.set(11, 9, accionSemantica1);
-        accionesSemanticas.set(11, 10, accionSemantica1);
-        accionesSemanticas.set(11, 11, accionSemantica1);
-        accionesSemanticas.set(11, 12, accionSemantica1);
-        accionesSemanticas.set(11, 13, accionSemantica1);
-        accionesSemanticas.set(11, 14, accionSemantica1);
-        accionesSemanticas.set(11, 15, accionSemantica2);
-        accionesSemanticas.set(11, 16, accionSemantica1);
-        accionesSemanticas.set(11, 17, accionSemantica1);
+        accionesSemanticas.set(11, 0, accionSemantica13);
+        accionesSemanticas.set(11, 1, accionSemantica13);
+        accionesSemanticas.set(11, 2, accionSemantica2);
+        accionesSemanticas.set(11, 3, accionSemantica13);
+        accionesSemanticas.set(11, 4, accionSemantica13);
+        accionesSemanticas.set(11, 5, accionSemantica13);
+        accionesSemanticas.set(11, 6, accionSemantica13);
+        accionesSemanticas.set(11, 7, accionSemantica13);
+        accionesSemanticas.set(11, 8, accionSemantica13);
+        accionesSemanticas.set(11, 9, accionSemantica13);
+        accionesSemanticas.set(11, 10, accionSemantica13);
+        accionesSemanticas.set(11, 11, accionSemantica13);
+        accionesSemanticas.set(11, 12, accionSemantica13);
+        accionesSemanticas.set(11, 13, accionSemantica13);
+        accionesSemanticas.set(11, 14, accionSemantica13);
+        accionesSemanticas.set(11, 15, accionSemantica13);
+        accionesSemanticas.set(11, 16, accionSemantica13);
+        accionesSemanticas.set(11, 17, accionSemantica13);
         //FILA13
         accionesSemanticas.set(12, 0, accionSemantica1);
-        accionesSemanticas.set(12, 1, accionSemantica1);
+        accionesSemanticas.set(12, 1, accionSemantica10);
         accionesSemanticas.set(12, 2, accionSemantica2);
-        accionesSemanticas.set(12, 3, accionSemantica1);
-        accionesSemanticas.set(12, 4, accionSemantica1);
-        accionesSemanticas.set(12, 5, accionSemantica1);
-        accionesSemanticas.set(12, 6, accionSemantica1);
-        accionesSemanticas.set(12, 7, accionSemantica1);
-        accionesSemanticas.set(12, 8, accionSemantica1);
-        accionesSemanticas.set(12, 9, accionSemantica1);
+        accionesSemanticas.set(12, 3, accionSemantica10);
+        accionesSemanticas.set(12, 4, accionSemantica10);
+        accionesSemanticas.set(12, 5, accionSemantica10);
+        accionesSemanticas.set(12, 6, accionSemantica10);
+        accionesSemanticas.set(12, 7, accionSemantica10);
+        accionesSemanticas.set(12, 8, accionSemantica10);
+        accionesSemanticas.set(12, 9, accionSemantica10);
         accionesSemanticas.set(12, 10, accionSemantica10);
         accionesSemanticas.set(12, 11, accionSemantica10);
         accionesSemanticas.set(12, 12, accionSemantica10);
-        accionesSemanticas.set(12, 13, accionSemantica1);
-        accionesSemanticas.set(12, 14, accionSemantica1);
-        accionesSemanticas.set(12, 15, accionSemantica1);
+        accionesSemanticas.set(12, 13, accionSemantica10);
+        accionesSemanticas.set(12, 14, accionSemantica10);
+        accionesSemanticas.set(12, 15, accionSemantica10);
         accionesSemanticas.set(12, 16, accionSemantica2);
-        accionesSemanticas.set(12, 17, accionSemantica1);
+        accionesSemanticas.set(12, 17, accionSemantica10);
         //FILA14
-        accionesSemanticas.set(13, 0, accionSemantica1);
+        accionesSemanticas.set(13, 0, accionSemantica10);
         accionesSemanticas.set(13, 1, accionSemantica10);
         accionesSemanticas.set(13, 2, accionSemantica2);
-        accionesSemanticas.set(13, 3, accionSemantica1);
-        accionesSemanticas.set(13, 4, accionSemantica1);
-        accionesSemanticas.set(13, 5, accionSemantica1);
-        accionesSemanticas.set(13, 6, accionSemantica1);
-        accionesSemanticas.set(13, 7, accionSemantica1);
-        accionesSemanticas.set(13, 8, accionSemantica1);
-        accionesSemanticas.set(13, 9, accionSemantica1);
+        accionesSemanticas.set(13, 3, accionSemantica10);
+        accionesSemanticas.set(13, 4, accionSemantica10);
+        accionesSemanticas.set(13, 5, accionSemantica10);
+        accionesSemanticas.set(13, 6, accionSemantica10);
+        accionesSemanticas.set(13, 7, accionSemantica10);
+        accionesSemanticas.set(13, 8, accionSemantica10);
+        accionesSemanticas.set(13, 9, accionSemantica10);
         accionesSemanticas.set(13, 10, accionSemantica10);
-        accionesSemanticas.set(13, 11, accionSemantica1);
+        accionesSemanticas.set(13, 11, accionSemantica10);
         accionesSemanticas.set(13, 12, accionSemantica10);
-        accionesSemanticas.set(13, 13, accionSemantica1);
-        accionesSemanticas.set(13, 14, accionSemantica1);
-        accionesSemanticas.set(13, 15, accionSemantica1);
-        accionesSemanticas.set(13, 16, accionSemantica1);
-        accionesSemanticas.set(13, 17, accionSemantica1);
+        accionesSemanticas.set(13, 13, accionSemantica10);
+        accionesSemanticas.set(13, 14, accionSemantica10);
+        accionesSemanticas.set(13, 15, accionSemantica10);
+        accionesSemanticas.set(13, 16, accionSemantica10);
+        accionesSemanticas.set(13, 17, accionSemantica10);
 //        accionesSemanticas.set(13, 0, accionSemantica1);
 //        accionesSemanticas.set(13, 1, accionSemantica2);
 //        accionesSemanticas.set(13, 2, accionSemantica2);
@@ -681,11 +681,12 @@ public class AnalizadorLexico {
            // if(token != null)
              System.out.println("Caracter: "+caracter);
             
-            System.out.println("---------------");
+            
             
 
             if (acc.getError()== true){
                 errores.add(acc.getMensajeError());
+                acc.setError(false);
             }            
             if (acc.getRetroceder()){
                 l.retrocederPosicion();
@@ -694,6 +695,9 @@ public class AnalizadorLexico {
             }
             eActual = eSiguiente;
             System.out.println("sig:"+ eSiguiente);
+            System.out.println("---------------");
+            if(eActual == 14)
+                lexema = new StringBuffer().append("");
         }                        
         return token;
     }

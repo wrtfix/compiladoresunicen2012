@@ -21,10 +21,10 @@ public class Compilador {
       
         Lector l = new Lector(args[0]);
         AnalizadorLexico analizadorL = new AnalizadorLexico();
-        System.out.println("Estados");
-        analizadorL.imprimirEstados();
-        System.out.println("Acciones");
-        analizadorL.imprimirAcciones();
+        //System.out.println("Estados");
+        //analizadorL.imprimirEstados();
+        //System.out.println("Acciones");
+        //analizadorL.imprimirAcciones();
         ArrayList<Simbolo> tablaSimbolos = new ArrayList<Simbolo>();
         
         //System.out.println("El tamañano"+l.cantLineas());

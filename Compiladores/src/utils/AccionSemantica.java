@@ -71,5 +71,9 @@ public abstract class AccionSemantica {
     public void setRetroceder(boolean b){
         retroceder = b;
     }
+
+    void setError(boolean b) {
+        error = b;
+    }
     
 }
