@@ -31,10 +31,11 @@ public class Compilador {
         ArrayList<Token> lista = new ArrayList<Token>();
 //        for (int i =0; i<l.cantLineas();i++){
         while (!l.esFinal()){
-            System.out.println("esfinal"+l.esFinal()+":"+l.getLine());
+            //System.out.println("esfinal"+l.esFinal()+":"+l.getLine());
             
             Token r = analizadorL.getTokens(l, tablaSimbolos);
-            lista.add(r);
+            if(r != null)
+                lista.add(r);
        }
 
         for (int i = 0; i<lista.size();i++)
