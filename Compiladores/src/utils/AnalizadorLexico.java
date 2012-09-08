@@ -157,7 +157,7 @@ public class AnalizadorLexico {
         estados.set(5, 10, 14);
         estados.set(5, 11, 14);
         estados.set(5, 12, 14);
-        estados.set(5, 13, 14);
+        estados.set(5, 13, 6);
         estados.set(5, 14, 14);
         estados.set(5, 15, 14);
         estados.set(5, 16, 14);
@@ -534,13 +534,13 @@ public class AnalizadorLexico {
         accionesSemanticas.set(11, 4, accionSemantica13);
         accionesSemanticas.set(11, 5, accionSemantica13);
         accionesSemanticas.set(11, 6, accionSemantica13);
-        accionesSemanticas.set(11, 7, accionSemantica13);
-        accionesSemanticas.set(11, 8, accionSemantica13);
+        accionesSemanticas.set(11, 7, accionSemantica1); 
+        accionesSemanticas.set(11, 8, accionSemantica1);
         accionesSemanticas.set(11, 9, accionSemantica13);
         accionesSemanticas.set(11, 10, accionSemantica13);
         accionesSemanticas.set(11, 11, accionSemantica13);
         accionesSemanticas.set(11, 12, accionSemantica13);
-        accionesSemanticas.set(11, 13, accionSemantica13);
+        accionesSemanticas.set(11, 13, accionSemantica1);
         accionesSemanticas.set(11, 14, accionSemantica13);
         accionesSemanticas.set(11, 15, accionSemantica13);
         accionesSemanticas.set(11, 16, accionSemantica13);
@@ -694,9 +694,10 @@ public class AnalizadorLexico {
                 eSiguiente = (Integer)estados.getCelda(caracter, eActual);
             }
             eActual = eSiguiente;
+            
             System.out.println("sig:"+ eSiguiente);
             System.out.println("---------------");
-            if(eActual == 14)
+            if(eActual == 14 )
                 lexema = new StringBuffer().append("");
         }                        
         return token;

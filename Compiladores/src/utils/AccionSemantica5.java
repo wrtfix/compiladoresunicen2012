@@ -17,7 +17,7 @@ public class AccionSemantica5 extends AccionSemantica{
     }
     @Override
     public Token run(StringBuffer lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
-        lexema.delete(0, lexema.length());
+            lexema.delete(0, lexema.length());
         return null;
     }
     

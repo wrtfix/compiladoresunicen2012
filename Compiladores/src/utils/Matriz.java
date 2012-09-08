@@ -51,7 +51,7 @@ public class Matriz {
         else 
                     switch(caracter){
                         case ':' :  celda = get(eActual,3); break;
-                        case '=' :  celda = get(eActual,4); break;
+                        case '=' :  celda = get(eActual,5); break;
                         case '{' :  celda = get(eActual,5); break;
                         case '}' :  celda = get(eActual,5); break;
                         case '[' :  celda = get(eActual,5); break;
