@@ -16,7 +16,7 @@ public class AnalizadorLexico {
     private ArrayList<String> errores ;
     public AnalizadorLexico()
     {
-        ArrayList<String> errores = new ArrayList<String>();
+        errores = new ArrayList<String>();
         estados = new Matriz(14,18);
         accionesSemanticas = new Matriz(14,18);
         //acciones semanticas
@@ -684,7 +684,7 @@ public class AnalizadorLexico {
             System.out.println("---------------");
             
 
-            if (acc.getError()){
+            if (acc.getError()== true){
                 errores.add(acc.getMensajeError());
             }            
             if (acc.getRetroceder()){

@@ -65,7 +65,7 @@ public class AccionSemantica3 extends AccionSemantica {
             }
         }
         Token t = new Token(s.getTipo(),s);
-        
+        retroceder = true;
         return t;
     }
     

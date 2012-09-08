@@ -30,16 +30,24 @@ public class Lector {
         fuente = new ArrayList();
         linea = 0;
         pos = 0;  
+        
         try {
+            String l= "";
             FileReader fr = new FileReader(ruta);
             BufferedReader bf = new BufferedReader(fr); 
             String sCadena = "";
             //Agrega la línea leída en el arreglo lineas
             while ((sCadena = bf.readLine())!= null) {
+                
+                sCadena = sCadena + "\n";
                 System.out.println(sCadena);
-                fuente.add(sCadena);                
+                fuente.add(sCadena); 
+                //l = bf.readLine();
+                
             } 
-//            sCadena = "$";
+            //sCadena = "$";
+            //fuente.add(sCadena); 
+            
 //            fuente.add(sCadena);
 	} catch (FileNotFoundException fnfe){fnfe.printStackTrace();} 
           catch (IOException ioe){ioe.printStackTrace();}			        
