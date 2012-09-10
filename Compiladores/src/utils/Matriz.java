@@ -69,7 +69,8 @@ public class Matriz {
                         case '*' :  celda = get(eActual,13); break;
                         case '\'':  celda = get(eActual,14); break;
                         case '.' :  celda = get(eActual,15); break;
-                        case 'E' :  celda = get(eActual,16); break;                        
+                        case 'E' :  celda = get(eActual,16); break; 
+                        case 'e' :  celda = get(eActual,16); break;                        
                         case '+' :  celda = get(eActual,17); break;
                         case '-' :  celda = get(eActual,17); break;
                 }
