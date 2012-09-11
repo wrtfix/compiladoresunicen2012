@@ -29,18 +29,18 @@ public class Compilador {
             if(r != null)
                 lista.add(r);
        }
-        System.out.println("# TOKEN :"+ lista.size());
+        System.out.println("# TOKEN "+ lista.size());
         for (int i = 0; i<lista.size();i++)
-            System.out.println("TOKEN: "+ lista.get(i).getTipo()+":"+lista.get(i).getPuntero().getValor());
+            System.out.println("TOKEN "+ lista.get(i).getTipo()+":"+lista.get(i).getPuntero().getValor());
        
        
-        System.out.println("# SIMBOLOS :" +tablaSimbolos.size());
-        System.out.println("TABLA SIMBOLOS :");
+        System.out.println("# SIMBOLOS " +tablaSimbolos.size());
+        System.out.println("TABLA SIMBOLOS ");
         for(int i = 0; i < tablaSimbolos.size(); i++  )
-            System.out.println(tablaSimbolos.get(i).getTipo()+":"+tablaSimbolos.get(i).getValor());
+            System.out.println(tablaSimbolos.get(i).getTipo()+"  "+tablaSimbolos.get(i).getValor());
         
         ArrayList errores = analizadorL.getErrores();
-        System.out.println("ERRORES:");
+        System.out.println("ERRORES");
         for(int i = 0;i < errores.size() ;i++)
             System.out.println(errores.get(i));
         

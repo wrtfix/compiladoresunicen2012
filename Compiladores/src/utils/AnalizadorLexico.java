@@ -158,7 +158,7 @@ public class AnalizadorLexico {
         estados.set(5, 10, 14);
         estados.set(5, 11, 14);
         estados.set(5, 12, 14);
-        estados.set(5, 13, 14);
+        estados.set(5, 13, 6);
         estados.set(5, 14, 14);
         estados.set(5, 15, 14);
         estados.set(5, 16, 14);

@@ -20,6 +20,7 @@ public class AccionSemantica7 extends AccionSemantica{
         linea++;
         this.mensajeError = "Error linea "+ linea +" caracter no valido "+caracter;
         this.error = true;
+        lexema.deleteCharAt(0);        
         return null;
     }
     

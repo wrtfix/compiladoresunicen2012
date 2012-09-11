@@ -41,7 +41,7 @@ public class Lector {
                 
                 //sCadena = sCadena + "\n";
                 //System.out.println(sCadena);
-                fuente.add(sCadena); 
+                fuente.add(sCadena + "@"); 
                 //l = bf.readLine();                
             } 
             sCadena = "$";
