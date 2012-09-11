@@ -19,7 +19,8 @@ public class AccionSemantica13 extends AccionSemantica{
     public Token run(StringBuffer lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
         //lexema = new StringBuffer();  
         lexema.deleteCharAt(0);
-        this.mensajeError = "Error en linea"+linea+" caracter no valido '.'";
+        linea++;
+        this.mensajeError = "Error en linea "+linea+" caracter no valido '.'";
            this.error = true;
            this.retroceder = true;
            

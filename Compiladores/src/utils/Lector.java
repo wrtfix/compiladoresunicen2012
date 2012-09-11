@@ -61,7 +61,7 @@ public class Lector {
                 c = fuente.get(linea).charAt(pos);
                 pos++;
             }else{
-                c = '\n';
+                c = '@';
                 linea++;
                 pos = 0;
                 }

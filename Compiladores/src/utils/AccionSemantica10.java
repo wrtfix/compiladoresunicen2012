@@ -26,7 +26,8 @@ public class AccionSemantica10 extends AccionSemantica{
         
         if (f.compareTo(new Float(1.17549435e-38))== -1 || f.compareTo(new Float(3.40282347e+38)) == 1){
             this.error = true;
-            this.mensajeError = "ERROR fuera de rango linea"+linea;
+            linea++;
+            this.mensajeError = "ERROR fuera de rango linea "+linea;
             //lexema = new StringBuffer();
 
             
