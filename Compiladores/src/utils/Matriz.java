@@ -60,7 +60,7 @@ public class Matriz {
                         case ')' :  celda = get(eActual,5); break;
                         case ',' :  celda = get(eActual,5); break;
                         case ';' :  celda = get(eActual,5); break;
-                        case '/' :  celda = get(eActual,6); break;
+                        case '\\' :  celda = get(eActual,6); break;
                         case '<' :  celda = get(eActual,7); break;
                         case '>' :  celda = get(eActual,8); break;
                         case '@':  celda = get(eActual,9); break;                        
@@ -73,6 +73,7 @@ public class Matriz {
                         case 'e' :  celda = get(eActual,16); break;                        
                         case '+' :  celda = get(eActual,17); break;
                         case '-' :  celda = get(eActual,17); break;
+                        case '/' :  celda = get(eActual,5); break;
                 }
         if(celda == null)
             celda = get(eActual, 0);
