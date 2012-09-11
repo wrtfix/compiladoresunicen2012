@@ -656,8 +656,9 @@ public class AnalizadorLexico {
             caracter = l.getCaracter();
             AccionSemantica acc =(AccionSemantica)accionesSemanticas.getCelda(caracter, eActual);  
             eSiguiente = (Integer)estados.getCelda(caracter, eActual);
+            System.out.println("act:"+ eActual);
             System.out.println(acc.getIdentificador());            
-            System.out.println("act:"+ eActual);       
+                   
             
             
             token = acc.run(lexema,caracter,tablaSimb,l.getLine());

@@ -17,7 +17,13 @@ public class AccionSemantica4 extends AccionSemantica {
     }
     @Override
     public Token run(StringBuffer lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
-        Simbolo s = new Simbolo(lexema.append(caracter),null);
+        Simbolo s = null;
+        if(lexema.length() != 0){  
+            retroceder = true;
+            s = new Simbolo(lexema,null);        
+        }
+        else
+            s = new Simbolo(lexema.append(caracter),null);        
         Token t = new Token(s.getTipo(),s);
         tablaS.add(s);
         lexema = new StringBuffer();
