@@ -39,7 +39,7 @@ public class AccionSemantica3 extends AccionSemantica {
         Simbolo s = null;
         
         if (this.palabras.contains(lexema.toString())){
-            s = new Simbolo(lexema,"Palabra Reservada");
+            s = new Simbolo(lexema,lexema.toString().toUpperCase());
             if(!tablaS.contains(s))
                 tablaS.add(s);
                 
@@ -49,7 +49,7 @@ public class AccionSemantica3 extends AccionSemantica {
             if (lexema.length() > 12) {
                 lexema = lexema.delete(12, lexema.length()); // trunco el string
             }
-            s = new Simbolo(lexema, "Identificador");
+            s = new Simbolo(lexema, "IDENTIFICADOR");
             System.out.println();
             if (!tablaS.contains(s)) {
                 tablaS.add(s);

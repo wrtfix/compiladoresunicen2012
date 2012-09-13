@@ -31,7 +31,7 @@ public class Compilador {
        }
         System.out.println("# TOKEN "+ lista.size());
         for (int i = 0; i<lista.size();i++)
-            System.out.println("TOKEN "+ lista.get(i).getTipo()+":"+lista.get(i).getPuntero().getValor());
+            System.out.println("TOKEN "+ lista.get(i).getTipo()+" "+lista.get(i).getPuntero().getValor());
        
        
         System.out.println("# SIMBOLOS " +tablaSimbolos.size());

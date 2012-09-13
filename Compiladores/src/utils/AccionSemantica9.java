@@ -19,7 +19,7 @@ public class AccionSemantica9 extends AccionSemantica{
     }
     
     public Token run(StringBuffer lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
-        Simbolo s = new Simbolo(lexema.append(caracter), "Cadena");
+        Simbolo s = new Simbolo(lexema.append(caracter), "CADENA");
         if (!tablaS.contains(s))
            tablaS.add(s);
         Token t = new Token(s.getTipo(),s);

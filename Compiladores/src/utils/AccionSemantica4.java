@@ -20,10 +20,12 @@ public class AccionSemantica4 extends AccionSemantica {
         Simbolo s = null;
         if(lexema.length() != 0){  
             retroceder = true;
-            s = new Simbolo(lexema,null);        
+            s = new Simbolo(lexema,lexema.toString());        
+            
         }
-        else
-            s = new Simbolo(lexema.append(caracter),null);        
+        else{
+            s = new Simbolo(lexema.append(caracter),lexema.toString());        
+        }
         Token t = new Token(s.getTipo(),s);
         tablaS.add(s);
         lexema = new StringBuffer();

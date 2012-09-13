@@ -34,7 +34,7 @@ public class AccionSemantica10 extends AccionSemantica{
         }
         else
         {
-            Simbolo s = new Simbolo(lexema,"Float");
+            Simbolo s = new Simbolo(lexema,"FLOAT");
             t = new Token(s.getTipo(),s);
             tablaS.add(s);
             

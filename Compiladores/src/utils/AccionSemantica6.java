@@ -17,9 +17,21 @@ public class AccionSemantica6 extends AccionSemantica{
     }
     @Override
     public Token run(StringBuffer lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
-        // tipo = lexema :=
-        // valor = null
-        Simbolo s = new Simbolo(lexema.append(caracter),null);
+
+        String tipo = "";
+        lexema.append(caracter);
+        if (lexema.toString().equals(">=")) {
+            tipo = "MAYOR_IGUAL";
+        } else if (lexema.toString().equals("<=")) {
+            tipo = "MENOR_IGUAL";
+        } else if (lexema.toString().equals("<>")) {
+            tipo = "DISTINTO";
+        } else if (lexema.toString().equals(":=")) {
+            tipo = "ASIGNACION";
+        }
+
+        Simbolo s = new Simbolo(lexema, tipo);
+
         tablaS.add(s);
         Token t = new Token(s.getTipo(), s);
         return t;
