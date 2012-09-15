@@ -83,7 +83,8 @@ argumento: IDENTIFICADOR
 indice: arreglo
   |  expresion
   |  FLOAT
-
+;
+%%%%%%%%%%%%%%
 
 conj_sent_decl: conj_sent_decl sent_decl
   |  sent_decl
