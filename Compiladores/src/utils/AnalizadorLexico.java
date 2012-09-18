@@ -3,6 +3,8 @@
  */
 package utils;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -11,21 +13,26 @@ import java.util.Hashtable;
  * @author Mauricio
  */
 public class AnalizadorLexico {
+
     private Matriz estados;
     private Matriz accionesSemanticas;
-    private ArrayList<String> errores ;
-    public AnalizadorLexico()
-    {
+    private ArrayList<String> errores;
+    private Lector l;
+    private ArrayList<Simbolo> tablaS = new ArrayList<Simbolo>();
+    private Token token;
+    private ParserVal p;
+    public AnalizadorLexico(String ruta) {
+        l = new Lector(ruta);
         errores = new ArrayList<String>();
-        estados = new Matriz(14,18);
-        accionesSemanticas = new Matriz(14,18);
+        estados = new Matriz(14, 18);
+        accionesSemanticas = new Matriz(14, 18);
         //acciones semanticas
         AccionSemantica accionSemantica1 = new AccionSemantica1("accion1");
         AccionSemantica accionSemantica2 = new AccionSemantica2("accion2");
         AccionSemantica accionSemantica3 = new AccionSemantica3("accion3");
         AccionSemantica accionSemantica4 = new AccionSemantica4("accion4");
         AccionSemantica accionSemantica5 = new AccionSemantica5("accion5");
-        AccionSemantica accionSemantica6 = new AccionSemantica6("accion6");      
+        AccionSemantica accionSemantica6 = new AccionSemantica6("accion6");
         AccionSemantica accionSemantica7 = new AccionSemantica7("accion7");
         AccionSemantica accionSemantica8 = new AccionSemantica8("accion8");
         AccionSemantica accionSemantica9 = new AccionSemantica9("accion9");
@@ -33,21 +40,22 @@ public class AnalizadorLexico {
         AccionSemantica accionSemantica11 = new AccionSemantica11("accion11");
         AccionSemantica accionSemantica12 = new AccionSemantica12("accion12");
         AccionSemantica accionSemantica13 = new AccionSemantica13("accion13");
-        
-        
-       /* AccionSemantica accionSemantica1 = new AccionSemantica("");
-        AccionSemantica accionSemantica2 = new AccionSemantica("");
-        AccionSemantica accionSemantica3 = new AccionSemantica("");
-        AccionSemantica accionSemantica4 = new AccionSemantica4("");
-        AccionSemantica accionSemantica5 = new AccionSemantica("");
-        AccionSemantica accionSemantica6 = new AccionSemantica("");
-        AccionSemantica accionSemantica7 = new AccionSemantica("");
-        AccionSemantica accionSemantica8 = new AccionSemantica("");
-        AccionSemantica accionSemantica9 = new AccionSemantica("");
-        AccionSemantica accionSemantica10 = new AccionSemantica("");
-        AccionSemantica accionSemantica11 = new AccionSemantica("");
-        AccionSemantica accionSemantica12 = new AccionSemantica("");
-        */
+
+
+        /*
+         * AccionSemantica accionSemantica1 = new AccionSemantica("");
+         * AccionSemantica accionSemantica2 = new AccionSemantica("");
+         * AccionSemantica accionSemantica3 = new AccionSemantica("");
+         * AccionSemantica accionSemantica4 = new AccionSemantica4("");
+         * AccionSemantica accionSemantica5 = new AccionSemantica("");
+         * AccionSemantica accionSemantica6 = new AccionSemantica("");
+         * AccionSemantica accionSemantica7 = new AccionSemantica("");
+         * AccionSemantica accionSemantica8 = new AccionSemantica("");
+         * AccionSemantica accionSemantica9 = new AccionSemantica("");
+         * AccionSemantica accionSemantica10 = new AccionSemantica("");
+         * AccionSemantica accionSemantica11 = new AccionSemantica("");
+         * AccionSemantica accionSemantica12 = new AccionSemantica("");
+         */
         //FILA0
         estados.set(0, 0, 0);
         estados.set(0, 1, 1);
@@ -61,7 +69,7 @@ public class AnalizadorLexico {
         estados.set(0, 9, 0);
         estados.set(0, 10, 0);
         estados.set(0, 11, 0);
-        estados.set(0, 12, 14);        
+        estados.set(0, 12, 14);
         estados.set(0, 13, 5);
         estados.set(0, 14, 7);
         estados.set(0, 15, 11);
@@ -70,7 +78,7 @@ public class AnalizadorLexico {
         //FILA1
         estados.set(1, 0, 14);
         estados.set(1, 1, 1);
-        estados.set(1, 2, 1);        
+        estados.set(1, 2, 1);
         estados.set(1, 3, 14);
         estados.set(1, 4, 14);
         estados.set(1, 5, 14);
@@ -80,7 +88,7 @@ public class AnalizadorLexico {
         estados.set(1, 9, 14);
         estados.set(1, 10, 14);
         estados.set(1, 11, 14);
-        estados.set(1, 12,  14);
+        estados.set(1, 12, 14);
         estados.set(1, 13, 14);
         estados.set(1, 14, 14);
         estados.set(1, 15, 14);
@@ -105,7 +113,7 @@ public class AnalizadorLexico {
         estados.set(2, 15, 0);
         estados.set(2, 16, 0);
         estados.set(2, 17, 0);
-        
+
         //FILA3
         estados.set(3, 0, 14);
         estados.set(3, 1, 14);
@@ -143,7 +151,7 @@ public class AnalizadorLexico {
         estados.set(4, 14, 14);
         estados.set(4, 15, 14);
         estados.set(4, 16, 14);
-        estados.set(4, 17, 14);     
+        estados.set(4, 17, 14);
         //FILA5
         estados.set(5, 0, 14);
         estados.set(5, 1, 14);
@@ -200,7 +208,7 @@ public class AnalizadorLexico {
         estados.set(7, 14, 14);
         estados.set(7, 15, 7);
         estados.set(7, 16, 7);
-        estados.set(7, 17, 7);        
+        estados.set(7, 17, 7);
         //FILA8
         estados.set(8, 0, 8);
         estados.set(8, 1, 8);
@@ -212,7 +220,7 @@ public class AnalizadorLexico {
         estados.set(8, 7, 8);
         estados.set(8, 8, 8);
         estados.set(8, 9, 8);
-        estados.set(8, 10,8);
+        estados.set(8, 10, 8);
         estados.set(8, 11, 8);
         estados.set(8, 12, 8);
         estados.set(8, 13, 8);
@@ -250,7 +258,7 @@ public class AnalizadorLexico {
         estados.set(10, 7, 0);
         estados.set(10, 8, 0);
         estados.set(10, 9, 0);
-        estados.set(10, 10,0);
+        estados.set(10, 10, 0);
         estados.set(10, 11, 0);
         estados.set(10, 12, 0);
         estados.set(10, 13, 0);
@@ -269,7 +277,7 @@ public class AnalizadorLexico {
         estados.set(11, 7, 0);
         estados.set(11, 8, 0);
         estados.set(11, 9, 0);
-        estados.set(11, 10,0);
+        estados.set(11, 10, 0);
         estados.set(11, 11, 0);
         estados.set(11, 12, 0);
         estados.set(11, 13, 0);
@@ -307,7 +315,7 @@ public class AnalizadorLexico {
         estados.set(13, 7, 14);
         estados.set(13, 8, 14);
         estados.set(13, 9, 14);
-        estados.set(13, 10,14);
+        estados.set(13, 10, 14);
         estados.set(13, 11, 14);
         estados.set(13, 12, 14);
         estados.set(13, 13, 14);
@@ -315,7 +323,7 @@ public class AnalizadorLexico {
         estados.set(13, 15, 14);
         estados.set(13, 16, 14);
         estados.set(13, 17, 14);
-        
+
         //FILA0
         accionesSemanticas.set(0, 0, accionSemantica1);
         accionesSemanticas.set(0, 1, accionSemantica2);
@@ -586,109 +594,127 @@ public class AnalizadorLexico {
         accionesSemanticas.set(13, 17, accionSemantica10);
 
     }
-    public void imprimirEstados(){
-        for(int i = 0 ; i < 14 ; i++){
-            System.out.print("F:"+ i);
-            for(int j = 0 ; j < 18 ; j++)
-                System.out.print(" C"+ j+ ":"+estados.get(i,j));
+
+    public void imprimirEstados() {
+        for (int i = 0; i < 14; i++) {
+            System.out.print("F:" + i);
+            for (int j = 0; j < 18; j++) {
+                System.out.print(" C" + j + ":" + estados.get(i, j));
+            }
             System.out.println("");
-        }                
-    }    
-    public void imprimirAcciones(){
-        for(int i = 0 ; i < 14 ; i++){
-            System.out.print("F:"+ i);
-            for(int j = 0 ; j < 18 ; j++){
-                if(accionesSemanticas.get(i,j)!=null) {
-                    AccionSemantica a = (AccionSemantica)accionesSemanticas.get(i,j);
-                    System.out.print(" C:"+ j+"_"+ a.getIdentificador() );                
-                }
-                else {
+        }
+    }
+
+    public void imprimirAcciones() {
+        for (int i = 0; i < 14; i++) {
+            System.out.print("F:" + i);
+            for (int j = 0; j < 18; j++) {
+                if (accionesSemanticas.get(i, j) != null) {
+                    AccionSemantica a = (AccionSemantica) accionesSemanticas.get(i, j);
+                    System.out.print(" C:" + j + "_" + a.getIdentificador());
+                } else {
                     System.out.print(" ");
                 }
             }
             System.out.println("");
-        }                
-    }   
-//    public Token getTokens(Lector l, ArrayList<Simbolo> tablaSimb){        
-//        String lexema = "";
-//        Integer eActual = 0;
-//        Integer eSiguiente = 0;
-//        Token token = new Token();
-//       
-//        char caracter = ' ';
-//        while (caracter != '$' && eSiguiente != 14){    
-//            //System.out.println("Entro");
-//            caracter = l.getCaracter();
-//            AccionSemantica acc =(AccionSemantica)accionesSemanticas.getCelda(caracter, eActual);             
-//            System.out.println(acc.getIdentificador());            
-//            System.out.println("act:"+ eActual);   
-//            
-//            token = acc.run(lexema,caracter,tablaSimb,l.getLine());
-//            
-//            eSiguiente = (Integer)estados.getCelda(caracter, eActual);
-//            System.out.println("sig:"+ eSiguiente);
-//            eActual = eSiguiente;
-//            System.out.println("---------------");
-//           
-//            if (acc.getError()){
-//                errores.add(acc.getMensajeError());
-//            }            
-//
-//            
-//            if (acc.getRetroceder()){
-//                l.retrocederPosicion();
-//                acc.setRetroceder(false);
-//            }            
-//            
-//             
-//                      
-//        }                        
-//        return token;
-//    }
-    public Token getTokens(Lector l, ArrayList<Simbolo> tablaSimb){        
+        }
+    }
+
+    public Token getTokens() {
         StringBuffer lexema = new StringBuffer();
         Integer eActual = 0;
         Integer eSiguiente = 0;
         Token token = new Token();
         char caracter = ' ';
-        while (caracter != '$' && eSiguiente != 14){    
+        while (caracter != '$' && eSiguiente != 14) {
             //System.out.println("Entro");
             caracter = l.getCaracter();
-            AccionSemantica acc =(AccionSemantica)accionesSemanticas.getCelda(caracter, eActual);  
-            eSiguiente = (Integer)estados.getCelda(caracter, eActual);
-            System.out.println("act:"+ eActual);
-            System.out.println(acc.getIdentificador());            
-                   
-            
-            
-            token = acc.run(lexema,caracter,tablaSimb,l.getLine());
-            
-           // if(token != null)
-             System.out.println("Caracter: "+caracter);
-            
-            
-            
+            AccionSemantica acc = (AccionSemantica) accionesSemanticas.getCelda(caracter, eActual);
+            eSiguiente = (Integer) estados.getCelda(caracter, eActual);
+            System.out.println("act:" + eActual);
+            System.out.println(acc.getIdentificador());
 
-            if (acc.getError()== true){
+
+
+            token = acc.run(lexema, caracter, tablaS, l.getLine());
+
+            // if(token != null)
+            System.out.println("Caracter: " + caracter);
+
+
+
+
+            if (acc.getError() == true) {
                 errores.add(acc.getMensajeError());
                 acc.setError(false);
-            }            
-            if (acc.getRetroceder()){
+            }
+            if (acc.getRetroceder()) {
                 l.retrocederPosicion();
                 acc.setRetroceder(false);
-                eSiguiente = (Integer)estados.getCelda(caracter, eActual);
+                eSiguiente = (Integer) estados.getCelda(caracter, eActual);
             }
             eActual = eSiguiente;
-            System.out.println("sig:"+ eSiguiente);
+            System.out.println("sig:" + eSiguiente);
             System.out.println("---------------");
-            if(eActual == 14)
+            if (eActual == 14) {
                 lexema = new StringBuffer().append("");
-        }                        
+            }
+        }
         return token;
     }
-    
-    public ArrayList<String> getErrores(){
+    public ParserVal getValorSimbolo(){
+        return p;
+    }
+    public int yylex() throws FileNotFoundException, IOException {
+
+        int numero = 0;
+
+        token = getTokens();
+        System.out.println("< "+ token.getTipo()+" , "+token.getPuntero().getValor()+" >");
+        if (token.getTipo().equals("FLOAT")) {
+            numero = Parser.FLOAT;
+        } else if (token.getTipo().equals(":=")) {
+            numero = Parser.ASIG;
+        } else if (token.getTipo().equals("<>")) {
+            numero = Parser.DISTINTO;
+        } else if (token.getTipo().equals("<=")) {
+            numero = Parser.MENOR_IGUAL;
+        } else if (token.getTipo().equals(">=")) {
+            numero = Parser.MAYOR_IGUAL;
+        } else if (token.getTipo().equals("WHILE")) {
+            numero = Parser.WHILE;
+        } else if (token.getTipo().equals("DO")) {
+            numero = Parser.DO;
+        } else if (token.getTipo().equals("IF")) {
+            numero = Parser.IF;
+        } else if (token.getTipo().equals("THEN")) {
+            numero = Parser.THEN;
+        } else if (token.getTipo().equals("ELSE")) {
+            numero = Parser.ELSE;
+        } else if (token.getTipo().equals("PRINT")) {
+            numero = Parser.PRINT;
+        } else if (token.getTipo().equals("ARRAY")) {
+            numero = Parser.ARRAY;
+        } else if (token.getTipo().equals("CADENA")) {
+            numero = Parser.CADENA;
+        } else if (token.getTipo().equals("IDENFITICADOR")) {
+            numero = Parser.IDENTIFICADOR;
+        } else if (token.getPuntero().getValor().length() == 1) {
+            numero = token.getPuntero().getValor().charAt(0);
+        }
+        //System.out.println("Pidio un token!");
+        p = new ParserVal(token.getPuntero().getValor().toString());
+        while(l.esFinal()){
+        }
+        
+        return numero;
+    }
+
+    public ArrayList<Simbolo> getTabla() {
+        return this.tablaS;
+    }
+
+    public ArrayList<String> getErrores() {
         return errores;
     }
-    
 }
