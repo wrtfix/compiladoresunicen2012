@@ -30,7 +30,8 @@ public class AccionSemantica3 extends AccionSemantica {
         palabras.add("var");
         palabras.add("print");
         palabras.add("float");
-        palabras.add("array");
+        palabras.add("array");   
+        palabras.add("do");   
     }
     
     public Token run(StringBuffer lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
@@ -50,7 +51,7 @@ public class AccionSemantica3 extends AccionSemantica {
                 lexema = lexema.delete(12, lexema.length()); // trunco el string
             }
             s = new Simbolo(lexema, "IDENTIFICADOR");
-            System.out.println();
+            //System.out.println();
             if (!tablaS.contains(s)) {
                 tablaS.add(s);
             } else {

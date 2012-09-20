@@ -33,7 +33,7 @@ public class Simbolo {
         this.tipo = tipo;
     }
     public boolean equals(Simbolo s){
-        System.out.println("valor"+s.getValor().toString());
+        //System.out.println("valor"+s.getValor().toString());
         return valor.equals(s.getValor());
     }
 

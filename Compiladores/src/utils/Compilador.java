@@ -28,8 +28,10 @@ public class Compilador {
 //        Lector l = new Lector(args[0]);
         AnalizadorLexico analizadorL = new AnalizadorLexico(args[0]);
         Parser p = new Parser(analizadorL);
-        p.run();
+        //while (analizadorL.masTokens()){
             
+            p.run();
+        //}
         
 //        ArrayList<Simbolo> tablaSimbolos = new ArrayList<Simbolo>();
 //        ArrayList<Token> lista = new ArrayList<Token>();
@@ -50,10 +52,10 @@ public class Compilador {
 //        for(int i = 0; i < tablaSimbolos.size(); i++  )
 //            System.out.println(tablaSimbolos.get(i).getTipo()+"  "+tablaSimbolos.get(i).getValor());
 //        
-//        ArrayList errores = analizadorL.getErrores();
-//        System.out.println("ERRORES");
-//        for(int i = 0;i < errores.size() ;i++)
-//            System.out.println(errores.get(i));
+        ArrayList errores = analizadorL.getErrores();
+        System.out.println("ERRORES");
+        for(int i = 0;i < errores.size() ;i++)
+            System.out.println(errores.get(i));
         
         
     }

@@ -1,10 +1,12 @@
 %{
+package utils;
 import java.util.Hashtable;
 import java.util.Vector;
 import java.io.IOException;
+
 %}
 
-%token IDENTIFICADOR, FLOAT, IF, THEN, ELSE, WHILE, DO, PRINT, ARRAY, CADENA, MAYOR_IGUAL, MENOR_IGUAL, DISTINTO, ASIG
+%token IDENTIFICADOR, FLOAT, IF,THEN, ELSE, WHILE, DO, PRINT, ARRAY, CADENA, MAYOR_IGUAL, MENOR_IGUAL, DISTINTO, ASIG,NUMERO
 
 %left '+' '-'
 %left '*' '/'
@@ -13,100 +15,98 @@ import java.io.IOException;
 
 %%
 
-programa: sentencias						
-;
-
-bloque: sentencia
-  |  '{' sentencias '}'
+programa: sentencias	{System.out.println("Terminacion del programa");}
 ;
 
 sentencias: sentencia
   |  sentencias sentencia
 ;
 
-indice: arreglo
-  |  expresion
-  |  FLOAT
-;
-
-argumento: IDENTIFICADOR 
-  |  FLOAT
-  |  IDENTIFICADOR '['indice']'
-;
-
 sentencia: declaracion
-  |  seleccion
   |  bucle
   |  impresion
-  |  asignacion
+  |  asignacion';'
+  |  seleccion 
 ;
 
-declaracion: FLOAT variables';'
-  |  ARRAY arreglo ';'
+declaracion: FLOAT variables {System.out.println("Variable tipo float");}
+  |  ARRAY arreglo ';' {System.out.println("Variable tipo arreglo");}
+| CADENA variables  {System.out.println("Variable tipo cadena");}
+  
 ;
 
-arreglo: IDENTIFICADOR '[' argumento ']'
-;
-
-variables: IDENTIFICADOR
+variables: IDENTIFICADOR ';' {System.out.println("Esto es una variable ");}
   |  variables ',' IDENTIFICADOR
 ;
 
-comparador: '<'
+arreglo: IDENTIFICADOR '[' expresion ']' 
+;
+
+seleccion: IF'('condicion')'THEN bloque {System.out.println("Sentecia IF");}
+  |  IF'('condicion')'THEN bloque ELSE bloque  {System.out.println("Sentecia IF ELSE");}
+;
+
+condicion: argumento comparador argumento {System.out.println("Esto es un comparador");}
+;
+
+comparador: '<' 
   |  '>'
   |  '='
   |  MENOR_IGUAL 
   |  MAYOR_IGUAL
-  |  DISTINTO
 ;
 
-condicion: argumento comparador argumento
+bloque: sentencia
+  |  '{'sentencias'}'
 ;
 
-seleccion: IF '(' condicion ')' THEN bloque
-  |  IF '('condicion')'THEN { bloque } ELSE bloque
+bucle: WHILE '('condicion')' DO bloque {System.out.println("Bucle while");}
 ;
 
-
-bucle: WHILE '('condicion')' DO bloque
+impresion: PRINT'('CADENA')'';' 					{System.out.println("Salida por pantalla");}
 ;
 
-impresion: PRINT'('CADENA')'';'
+asignacion: IDENTIFICADOR ASIG expresion  			{System.out.println("Asignacion");}
+  |  IDENTIFICADOR '[' expresion ']' ASIG expresion             {System.out.println("Asignacion");}
 ;
 
-termino: termino '*' argumento
-  |  termino '/' argumento
-  |  argumento 
+expresion: expresion '+' termino {System.out.println("Esto es una expresion");}
+  |  expresion '-' termino          {System.out.println("Esto es una expresion");}
+  | termino  
 ;
 
-expresion: expresion '+' termino
-  |  expresion '-' termino
+termino: termino '*' argumento  {System.out.println("Esto es un termino");}
+  |  termino '/' argumento      {System.out.println("Esto es un termino");}
+  |  argumento                  {System.out.println("Esto es un argumento");}
 ;
 
-asignacion: IDENTIFICADOR ASIG expresion ';'
-  |  IDENTIFICADOR ASIG argumento
+argumento: IDENTIFICADOR   
+  |  NUMERO                
+  |  IDENTIFICADOR '[' expresion ']'    
 ;
 
 %%
-    private AnalizadorLexico lexico;
+  
+  private AnalizadorLexico lexico;
 
-    public Parser(AnalizadorLexico l) {
+  public Parser(AnalizadorLexico l) {
          lexico = l;
 
     }
 
-    private int yylex() throws FileNotFoundException, IOException{
-	int yyl_return = -1;
-	try{
-		yyl_return = lexico.yylex();
-		yylval = lexico.getValorSimbolo();
+    private int yylex(){
+        int yyl_return = -1;
+        while (lexico.masTokens()) {
+            try {
+                yyl_return = lexico.yylex();
+                yylval = lexico.getValorSimbolo();
 
-	}
-	catch (IOException e)
-        {
-		System.err.println("error de E/S:"+e);
-	}
-	return yyl_return;
+            } catch (IOException e) {
+                System.err.println("error de E/S:" + e);
+            }
+            return yyl_return;
+        }
+        return 0;
     }
 
     private void yyerror(String stack_underflow_aborting) {

@@ -631,15 +631,15 @@ public class AnalizadorLexico {
             caracter = l.getCaracter();
             AccionSemantica acc = (AccionSemantica) accionesSemanticas.getCelda(caracter, eActual);
             eSiguiente = (Integer) estados.getCelda(caracter, eActual);
-            System.out.println("act:" + eActual);
-            System.out.println(acc.getIdentificador());
+//            System.out.println("act:" + eActual);
+//            System.out.println(acc.getIdentificador());
 
 
 
             token = acc.run(lexema, caracter, tablaS, l.getLine());
 
             // if(token != null)
-            System.out.println("Caracter: " + caracter);
+//            System.out.println("Caracter: " + caracter);
 
 
 
@@ -654,8 +654,8 @@ public class AnalizadorLexico {
                 eSiguiente = (Integer) estados.getCelda(caracter, eActual);
             }
             eActual = eSiguiente;
-            System.out.println("sig:" + eSiguiente);
-            System.out.println("---------------");
+//            System.out.println("sig:" + eSiguiente);
+//            System.out.println("---------------");
             if (eActual == 14) {
                 lexema = new StringBuffer().append("");
             }
@@ -671,15 +671,18 @@ public class AnalizadorLexico {
 
         token = getTokens();
         System.out.println("< "+ token.getTipo()+" , "+token.getPuntero().getValor()+" >");
+        if (token.getTipo().equals("NUMERO")) {
+            numero = Parser.NUMERO;
+        }
         if (token.getTipo().equals("FLOAT")) {
             numero = Parser.FLOAT;
-        } else if (token.getTipo().equals(":=")) {
+        } else if (token.getTipo().equals("ASIGNACION")) {
             numero = Parser.ASIG;
-        } else if (token.getTipo().equals("<>")) {
+        } else if (token.getTipo().equals("DISTINTO")) {
             numero = Parser.DISTINTO;
-        } else if (token.getTipo().equals("<=")) {
+        } else if (token.getTipo().equals("MENOR_IGUAL")) {
             numero = Parser.MENOR_IGUAL;
-        } else if (token.getTipo().equals(">=")) {
+        } else if (token.getTipo().equals("MAYOR_IGUAL")) {
             numero = Parser.MAYOR_IGUAL;
         } else if (token.getTipo().equals("WHILE")) {
             numero = Parser.WHILE;
@@ -697,24 +700,31 @@ public class AnalizadorLexico {
             numero = Parser.ARRAY;
         } else if (token.getTipo().equals("CADENA")) {
             numero = Parser.CADENA;
-        } else if (token.getTipo().equals("IDENFITICADOR")) {
+        } else if (token.getTipo().equals("IDENTIFICADOR")) {            
             numero = Parser.IDENTIFICADOR;
         } else if (token.getPuntero().getValor().length() == 1) {
             numero = token.getPuntero().getValor().charAt(0);
         }
         //System.out.println("Pidio un token!");
+        //System.out.println("el tipo  \""+token.getTipo()+"\"");
         p = new ParserVal(token.getPuntero().getValor().toString());
-        while(l.esFinal()){
-        }
-        
+
         return numero;
     }
 
+    public boolean masTokens(){        
+        return (!l.esFinal());
+    }
+    
     public ArrayList<Simbolo> getTabla() {
         return this.tablaS;
     }
 
     public ArrayList<String> getErrores() {
         return errores;
+    }
+    
+    public int getLinea(){
+        return l.getLine();
     }
 }

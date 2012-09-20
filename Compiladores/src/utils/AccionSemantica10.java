@@ -19,7 +19,7 @@ public class AccionSemantica10 extends AccionSemantica{
     }
     @Override
     public Token run(StringBuffer lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
-        System.out.println("lexema"+lexema);
+//        System.out.println("lexema"+lexema);
         Float a;
         Token t = null;
         Float f = Float.valueOf(lexema.toString()).floatValue();
@@ -34,7 +34,7 @@ public class AccionSemantica10 extends AccionSemantica{
         }
         else
         {
-            Simbolo s = new Simbolo(lexema,"FLOAT");
+            Simbolo s = new Simbolo(lexema,"NUMERO");
             t = new Token(s.getTipo(),s);
             tablaS.add(s);
             

@@ -54,7 +54,7 @@ public class Lector {
      
     public char getCaracter(){
         char c = 0;     
-        System.out.println("Posicion:"+ pos);
+//        System.out.println("Posicion:"+ pos);
         if (linea < fuente.size()){
             
             if (pos < fuente.get(linea).length()){
@@ -69,7 +69,7 @@ public class Lector {
        else
            c='$';
         
-        System.out.println(c);
+//        System.out.println(c);
         return c; 
     }
     
