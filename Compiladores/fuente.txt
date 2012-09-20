@@ -1,0 +1,26 @@
+**float a;
+**float b;
+**float a;
+**float b;
+**float a;
+**if( a < b) then{
+  **  a := c;
+    ** w := b;
+**}
+**else
+  **  a := w;
+**while (b < a) do
+  **  a:=a;
+**if( a < b) then 
+  **  if(a < b) then
+    **    a := w;
+**a := a * v + 1.e10 ;
+**array a[b]; 
+**array a[1.0];
+**c := a[d+1.0];
+**c := a[1.0];
+**c := a[w];
+**c := a[d+w*2.0];
+print('prueba ploni\ 
+\ toma');
+var float a;
