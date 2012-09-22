@@ -34,17 +34,18 @@ public class AccionSemantica3 extends AccionSemantica {
         palabras.add("do");   
     }
     
-    public Token run(StringBuffer lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
+    public Token run(StringBuffer lexema, char caracter, TablaSimbolo tablaS,int linea) {
         
         //verificamos si es una palabra reservada
         Simbolo s = null;
         
         if (this.palabras.contains(lexema.toString())){
             s = new Simbolo(lexema,lexema.toString().toUpperCase());
-            if(!tablaS.contains(s))
-                tablaS.add(s);
-                
-         } 
+//            if(!tablaS.contains(s))
+//                tablaS.add(s);
+//                
+            tablaS.addSimbolo(s);
+        } 
         else 
         {
             if (lexema.length() > 12) {
@@ -52,18 +53,19 @@ public class AccionSemantica3 extends AccionSemantica {
             }
             s = new Simbolo(lexema, "IDENTIFICADOR");
             //System.out.println();
-            if (!tablaS.contains(s)) {
-                tablaS.add(s);
-            } else {
-
-                Iterator<Simbolo> it = tablaS.iterator();
-                Simbolo a = null;
-
-                while (it.hasNext() && !a.equals(s)) {
-                    a = it.next();
-                }
-                s = a;
-            }
+//            if (!tablaS.contains(s)) {
+//                tablaS.add(s);
+//            } else {
+//
+//                Iterator<Simbolo> it = tablaS.iterator();
+//                Simbolo a = null;
+//
+//                while (it.hasNext() && !a.equals(s)) {
+//                    a = it.next();
+//                }
+//                s = a;
+//            }
+            tablaS.addSimbolo(s);
         }
         Token t = new Token(s.getTipo(),s);
         retroceder = true;

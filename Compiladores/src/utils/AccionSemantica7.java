@@ -16,7 +16,7 @@ public class AccionSemantica7 extends AccionSemantica{
         super(m);
     }
     @Override
-    public Token run(StringBuffer lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
+    public Token run(StringBuffer lexema, char caracter, TablaSimbolo tablaS,int linea) {
         linea++;
         this.mensajeError = "Error linea "+ linea +" caracter no valido "+caracter;
         this.error = true;

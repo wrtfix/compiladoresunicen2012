@@ -16,7 +16,7 @@ public class AccionSemantica6 extends AccionSemantica{
         super(m);
     }
     @Override
-    public Token run(StringBuffer lexema, char caracter, ArrayList<Simbolo> tablaS,int linea) {
+    public Token run(StringBuffer lexema, char caracter,TablaSimbolo tablaS,int linea) {
 
         String tipo = "";
         lexema.append(caracter);
@@ -32,7 +32,7 @@ public class AccionSemantica6 extends AccionSemantica{
 
         Simbolo s = new Simbolo(lexema, tipo);
 
-        tablaS.add(s);
+        tablaS.addSimbolo(s);
         Token t = new Token(s.getTipo(), s);
         return t;
     }

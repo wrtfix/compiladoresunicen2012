@@ -64,7 +64,7 @@ public abstract class AccionSemantica {
     * @return Devuelve un String con el lexema que va formando en caso contrario lo devuelve vacío.
     * @author mauripiccolo
     */    
-    public abstract Token run (StringBuffer lexema,char caracter,ArrayList<Simbolo> tablaS,int linea); 
+    public abstract Token run (StringBuffer lexema,char caracter,TablaSimbolo tablaS,int linea); 
     public boolean getRetroceder(){
         return retroceder;
     }

@@ -22,6 +22,14 @@ sentencias: sentencia
   |  sentencias sentencia
 ;
 
+
+num: '-'NUMERO {System.out.println("Negativo");
+putNegativo($2.sval);
+}
+| NUMERO {System.out.println("Positivo");
+}
+;
+
 sentencia: declaracion
   |  bucle
   |  impresion
@@ -81,7 +89,7 @@ termino: termino '*' argumento  {System.out.println("Esto es un termino");}
 ;
 
 argumento: IDENTIFICADOR   
-  |  NUMERO                
+  |  num                
   |  IDENTIFICADOR '[' expresion ']'    
 ;
 
@@ -112,3 +120,15 @@ argumento: IDENTIFICADOR
     private void yyerror(String stack_underflow_aborting) {
 //        throw new UnsupportedOperationException("Not yet implemented");
     }
+public void putNegativo(String valor){
+         Simbolo s = new Simbolo(new StringBuffer("-"+valor),"NUMERO");
+        lexico.getTabla().addSimbolo(s);
+        
+        Simbolo raya = new Simbolo(new StringBuffer("-"),"-");
+        lexico.getTabla().eliminarSimbolo(raya);
+        
+        Simbolo elival = new Simbolo(new StringBuffer(valor),"NUMERO");
+        lexico.getTabla().eliminarSimbolo(elival);
+
+    
+}

@@ -26,10 +26,10 @@ public class Compilador {
         // TODO code application logic here
         //Abrimos el codigo fuente
 //        Lector l = new Lector(args[0]);
+        
         AnalizadorLexico analizadorL = new AnalizadorLexico(args[0]);
         Parser p = new Parser(analizadorL);
         //while (analizadorL.masTokens()){
-            
             p.run();
         //}
         
@@ -52,6 +52,8 @@ public class Compilador {
 //        for(int i = 0; i < tablaSimbolos.size(); i++  )
 //            System.out.println(tablaSimbolos.get(i).getTipo()+"  "+tablaSimbolos.get(i).getValor());
 //        
+        
+        analizadorL.getTabla().imprimirTabla();
         ArrayList errores = analizadorL.getErrores();
         System.out.println("ERRORES");
         for(int i = 0;i < errores.size() ;i++)

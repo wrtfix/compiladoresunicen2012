@@ -18,7 +18,7 @@ public class AnalizadorLexico {
     private Matriz accionesSemanticas;
     private ArrayList<String> errores;
     private Lector l;
-    private ArrayList<Simbolo> tablaS = new ArrayList<Simbolo>();
+    private TablaSimbolo tablaS = new TablaSimbolo();
     private Token token;
     private ParserVal p;
     public AnalizadorLexico(String ruta) {
@@ -665,6 +665,10 @@ public class AnalizadorLexico {
     public ParserVal getValorSimbolo(){
         return p;
     }
+    public Token devolverToken(){
+        return token;
+    }
+   
     public int yylex() throws FileNotFoundException, IOException {
 
         int numero = 0;
@@ -716,7 +720,7 @@ public class AnalizadorLexico {
         return (!l.esFinal());
     }
     
-    public ArrayList<Simbolo> getTabla() {
+    public TablaSimbolo getTabla() {
         return this.tablaS;
     }
 
