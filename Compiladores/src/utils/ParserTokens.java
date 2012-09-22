@@ -13,4 +13,5 @@ public final static short MAYOR_IGUAL=267;
 public final static short MENOR_IGUAL=268;
 public final static short DISTINTO=269;
 public final static short ASIG=270;
+public final static short NUMERO=271;
 }

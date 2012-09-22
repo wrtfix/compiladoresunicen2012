@@ -27,7 +27,6 @@ public class AccionSemantica3 extends AccionSemantica {
         palabras.add("else");
         palabras.add("then");
         palabras.add("while");
-        palabras.add("var");
         palabras.add("print");
         palabras.add("float");
         palabras.add("array");   

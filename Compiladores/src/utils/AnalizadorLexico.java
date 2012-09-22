@@ -731,4 +731,7 @@ public class AnalizadorLexico {
     public int getLinea(){
         return l.getLine();
     }
+    public int getLineas(){
+        return l.getLine()+1;
+    }
 }

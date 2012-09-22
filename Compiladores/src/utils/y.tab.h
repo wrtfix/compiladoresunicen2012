@@ -1,0 +1,15 @@
+#define IDENTIFICADOR 257
+#define FLOAT 258
+#define IF 259
+#define THEN 260
+#define ELSE 261
+#define WHILE 262
+#define DO 263
+#define PRINT 264
+#define ARRAY 265
+#define CADENA 266
+#define MAYOR_IGUAL 267
+#define MENOR_IGUAL 268
+#define DISTINTO 269
+#define ASIG 270
+#define NUMERO 271

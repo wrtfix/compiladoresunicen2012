@@ -1,33 +1,25 @@
 %{
+
 package utils;
-import java.util.Hashtable;
-import java.util.Vector;
 import java.io.IOException;
 
 %}
 
-%token IDENTIFICADOR, FLOAT, IF,THEN, ELSE, WHILE, DO, PRINT, ARRAY, CADENA, MAYOR_IGUAL, MENOR_IGUAL, DISTINTO, ASIG,NUMERO
-
-%left '+' '-'
-%left '*' '/'
+%token IDENTIFICADOR, FLOAT, IF,THEN, ELSE, WHILE, DO, PRINT, ARRAY, CADENA, MAYOR_IGUAL, MENOR_IGUAL, DISTINTO, ASIG, NUMERO
 
 %start programa
 
 %%
 
-programa: sentencias	{System.out.println("Terminacion del programa");}
+programa: bloque
+;
+
+bloque: sentencia
+  |  '{'sentencias'}'
 ;
 
 sentencias: sentencia
   |  sentencias sentencia
-;
-
-
-num: '-'NUMERO {System.out.println("Negativo");
-putNegativo($2.sval);
-}
-| NUMERO {System.out.println("Positivo");
-}
 ;
 
 sentencia: declaracion
@@ -37,23 +29,25 @@ sentencia: declaracion
   |  seleccion 
 ;
 
-declaracion: FLOAT variables {System.out.println("Variable tipo float");}
-  |  ARRAY arreglo ';' {System.out.println("Variable tipo arreglo");}
-| CADENA variables  {System.out.println("Variable tipo cadena");}
-  
+declaracion: FLOAT variables 
+  |  ARRAY arreglo';' 
 ;
 
-variables: IDENTIFICADOR ';' {System.out.println("Esto es una variable ");}
-  |  variables ',' IDENTIFICADOR
+variables: IDENTIFICADOR';' 
+  |  variables','IDENTIFICADOR
 ;
 
 arreglo: IDENTIFICADOR '[' expresion ']' 
 ;
 
-seleccion: IF'('condicion')'THEN bloque {System.out.println("Sentecia IF");}
-  |  IF'('condicion')'THEN bloque ELSE bloque  {System.out.println("Sentecia IF ELSE");}
+seleccion: IF'('condicion')'THEN bloque {System.out.println("Seleccion en linea "+lexico.getLineas());}
+|IF '(' condicion ')' bloque_then ELSE bloque_else   
+;
+bloque_then: bloque
 ;
 
+bloque_else: bloque
+;
 condicion: argumento comparador argumento {System.out.println("Esto es un comparador");}
 ;
 
@@ -64,34 +58,39 @@ comparador: '<'
   |  MAYOR_IGUAL
 ;
 
-bloque: sentencia
-  |  '{'sentencias'}'
+bucle: WHILE '('condicion')' DO bloque {System.out.println("Bucle en linea "+lexico.getLineas());}
 ;
 
-bucle: WHILE '('condicion')' DO bloque {System.out.println("Bucle while");}
+impresion: PRINT'('CADENA')'';' 				{System.out.println("Salida por pantalla en linea "+lexico.getLineas());}
+|PRINT'('CADENA')'argumento {System.out.println("ERROR en salida por pantalla un ; en linea "+ lexico.getLineas());}
+|PRINT'('CADENA';'     {System.out.println("ERROR en salida por pantalla en linea "+lexico.getLineas()+" se esperaba un )");}
+|PRINT';' {System.out.println("ERROR en salida por pantalla en linea "+lexico.getLineas() + " se esperaba una CADENA");}
 ;
 
-impresion: PRINT'('CADENA')'';' 					{System.out.println("Salida por pantalla");}
-;
-
-asignacion: IDENTIFICADOR ASIG expresion  			{System.out.println("Asignacion");}
+asignacion: IDENTIFICADOR ASIG expresion  			{System.out.println("Asignacion en linea "+lexico.getLineas());}
   |  IDENTIFICADOR '[' expresion ']' ASIG expresion             {System.out.println("Asignacion");}
 ;
 
-expresion: expresion '+' termino {System.out.println("Esto es una expresion");}
-  |  expresion '-' termino          {System.out.println("Esto es una expresion");}
+expresion: expresion '+' termino {System.out.println("Expresion en linea "+lexico.getLineas());}
+  |  expresion '-' termino          {System.out.println("Expresion en linea "+lexico.getLineas());}
   | termino  
 ;
 
-termino: termino '*' argumento  {System.out.println("Esto es un termino");}
-  |  termino '/' argumento      {System.out.println("Esto es un termino");}
-  |  argumento                  {System.out.println("Esto es un argumento");}
+termino: termino '*' argumento  
+  |  termino '/' argumento      
+  |  argumento                  
+;
+
+num: '-'NUMERO {putNegativo($2.sval);}
+| NUMERO 
 ;
 
 argumento: IDENTIFICADOR   
   |  num                
   |  IDENTIFICADOR '[' expresion ']'    
 ;
+
+
 
 %%
   
@@ -129,6 +128,4 @@ public void putNegativo(String valor){
         
         Simbolo elival = new Simbolo(new StringBuffer(valor),"NUMERO");
         lexico.getTabla().eliminarSimbolo(elival);
-
-    
 }
