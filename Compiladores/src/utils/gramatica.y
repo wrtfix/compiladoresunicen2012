@@ -27,15 +27,16 @@ sentencia: declaracion
   |  impresion
   |  asignacion';'
   |  seleccion 
-  |  ';' {System.out.println("ERROR en linea "+lexico.getLineas()+": sentencia no permitida");}
+  |  ';' error {System.out.println("ERROR en linea "+lexico.getLineas()+": sentencia no permitida");}
 ;
 
 declaracion: FLOAT variables 
-  |  ARRAY arreglo';' 
+  |  ARRAY arreglo';'
 ;
 
 variables: IDENTIFICADOR';' 
   |  variables','IDENTIFICADOR
+  |  error {System.out.println("ERROR en linea"+lexico.getLineas()+": declaracion de variables");} 
 ;
 
 arreglo: IDENTIFICADOR '[' expresion ']' 
