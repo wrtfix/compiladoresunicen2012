@@ -222,7 +222,8 @@ public class AnalizadorLexico {
         estados.set(8, 9, 8);
         estados.set(8, 10, 8);
         estados.set(8, 11, 8);
-        estados.set(8, 12, 8);
+        //estados.set(8, 12, 8);
+        estados.set(8, 12, 0);
         estados.set(8, 13, 8);
         estados.set(8, 14, 14);
         estados.set(8, 15, 8);
@@ -491,7 +492,7 @@ public class AnalizadorLexico {
         accionesSemanticas.set(8, 9, accionSemantica5);
         accionesSemanticas.set(8, 10, accionSemantica5);
         accionesSemanticas.set(8, 11, accionSemantica5);
-        accionesSemanticas.set(8, 12, accionSemantica5);
+        accionesSemanticas.set(8, 12, accionSemantica1);
         accionesSemanticas.set(8, 13, accionSemantica5);
         accionesSemanticas.set(8, 14, accionSemantica9);
         accionesSemanticas.set(8, 15, accionSemantica5);
@@ -674,7 +675,9 @@ public class AnalizadorLexico {
         int numero = 0;
 
         token = getTokens();
-        System.out.println("< "+ token.getTipo()+" , "+token.getPuntero().getValor()+" >");
+        if (token != null){
+            System.out.println("< "+ token.getTipo()+" , "+token.getPuntero().getValor()+" >");
+        
         if (token.getTipo().equals("NUMERO")) {
             numero = Parser.NUMERO;
         }
@@ -712,7 +715,7 @@ public class AnalizadorLexico {
         //System.out.println("Pidio un token!");
         //System.out.println("el tipo  \""+token.getTipo()+"\"");
         p = new ParserVal(token.getPuntero().getValor().toString());
-
+        }
         return numero;
     }
 
