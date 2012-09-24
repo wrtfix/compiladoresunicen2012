@@ -7,7 +7,7 @@ package utils;
 import java.util.ArrayList;
 
 /**
- *
+ * Reconoce simbolos tales como el < > = <= >= 
  * @author Mauricio
  */
 public class AccionSemantica12 extends AccionSemantica{

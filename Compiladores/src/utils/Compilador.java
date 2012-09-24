@@ -25,22 +25,23 @@ public class Compilador {
     public static void main(String[] args) throws FileNotFoundException, IOException {
         // TODO code application logic here
         //Abrimos el codigo fuente
-//        Lector l = new Lector(args[0]);
+        Lector l = new Lector(args[0]);
         
         AnalizadorLexico analizadorL = new AnalizadorLexico(args[0]);
         Parser p = new Parser(analizadorL);
         //while (analizadorL.masTokens()){
             p.run();
         //}
-        
+//        
 //        ArrayList<Simbolo> tablaSimbolos = new ArrayList<Simbolo>();
-//        ArrayList<Token> lista = new ArrayList<Token>();
-//        while (!l.esFinal()){
-//            
-//            Token r = analizadorL.getTokens(l, tablaSimbolos);
+//         ArrayList<Token> lista = new ArrayList<Token>();
+//        while (analizadorL.masTokens()){
+//            Token r = analizadorL.getTokens();
 //            if(r != null)
 //                lista.add(r);
 //       }
+//        analizadorL.imprimirAcciones();
+        
 //        System.out.println("# TOKEN: "+ lista.size());
 //        System.out.println("<Tipo,Valor>");
 //        for (int i = 0; i<lista.size();i++)

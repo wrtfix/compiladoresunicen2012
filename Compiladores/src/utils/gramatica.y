@@ -11,11 +11,11 @@ import java.io.IOException;
 
 %%
 
-programa: bloque
+programa: bloque {System.out.println("El programa finalizo correctamente");}
 ;
 
 bloque: sentencia
-  |  '{'sentencias'}'
+  |  '{'sentencias'}'  
 ;
 
 sentencias: sentencia
@@ -27,6 +27,7 @@ sentencia: declaracion
   |  impresion
   |  asignacion';'
   |  seleccion 
+  |  ';' {System.out.println("ERROR en linea "+lexico.getLineas()+": sentencia no permitida");}
 ;
 
 declaracion: FLOAT variables 
@@ -38,17 +39,28 @@ variables: IDENTIFICADOR';'
 ;
 
 arreglo: IDENTIFICADOR '[' expresion ']' 
+| error {System.out.println("ERROR en linea "+lexico.getLineas()+": sintactico en el arreglo");}
 ;
 
-seleccion: IF'('condicion')'THEN bloque {System.out.println("Seleccion en linea "+lexico.getLineas());}
-|IF '(' condicion ')' bloque_then ELSE bloque_else   
-;
-bloque_then: bloque
+seleccion: IF'('condicion')'THEN '{'sentencias'}'   {System.out.println("Linea "+lexico.getLineas()+": Seleccion");}
+|IF'('condicion')'THEN '{'sentencias'}' ELSE '{'sentencias'}'   {System.out.println("Linea "+lexico.getLineas()+": Seleccion ifelse");}
+|error {System.out.println("ERROR en linea "+lexico.getLineas()+": sintactico en la seleccion");}
 ;
 
-bloque_else: bloque
+condicion: argumento comparador argumento 
+| error {System.out.println("ERROR en linea "+lexico.getLineas()+": sintactico en la seleccion");}
 ;
-condicion: argumento comparador argumento {System.out.println("Esto es un comparador");}
+
+bucle: WHILE '('condicion')' DO bloque {System.out.println("Linea "+lexico.getLineas()+": Bucle");}
+| WHILE '('condicion')' bloque {System.out.println("ERROR en linea "+lexico.getLineas()+": se esperaba el DO");}
+| WHILE '('';' bloque {System.out.println("ERROR en linea "+lexico.getLineas()+": se esperaba una condicion");}
+;
+
+impresion: PRINT'('CADENA')'';' 				{System.out.println("Salida por pantalla en linea "+lexico.getLineas());}
+;
+
+asignacion: IDENTIFICADOR ASIG expresion  			{System.out.println("Linea "+lexico.getLineas()+": Asignacion");}
+  |  IDENTIFICADOR '[' expresion ']' ASIG expresion             {System.out.println("Linea "+lexico.getLineas()+": Asignacion");}
 ;
 
 comparador: '<' 
@@ -56,29 +68,18 @@ comparador: '<'
   |  '='
   |  MENOR_IGUAL 
   |  MAYOR_IGUAL
+  |  error {System.out.println("ERROR en linea "+lexico.getLineas()+": sintactico en la comparacion");}
 ;
 
-bucle: WHILE '('condicion')' DO bloque {System.out.println("Bucle en linea "+lexico.getLineas());}
-;
-
-impresion: PRINT'('CADENA')'';' 				{System.out.println("Salida por pantalla en linea "+lexico.getLineas());}
-|PRINT'('CADENA')'argumento {System.out.println("ERROR en salida por pantalla un ; en linea "+ lexico.getLineas());}
-|PRINT'('CADENA';'     {System.out.println("ERROR en salida por pantalla en linea "+lexico.getLineas()+" se esperaba un )");}
-|PRINT';' {System.out.println("ERROR en salida por pantalla en linea "+lexico.getLineas() + " se esperaba una CADENA");}
-;
-
-asignacion: IDENTIFICADOR ASIG expresion  			{System.out.println("Asignacion en linea "+lexico.getLineas());}
-  |  IDENTIFICADOR '[' expresion ']' ASIG expresion             {System.out.println("Asignacion");}
-;
-
-expresion: expresion '+' termino {System.out.println("Expresion en linea "+lexico.getLineas());}
-  |  expresion '-' termino          {System.out.println("Expresion en linea "+lexico.getLineas());}
+expresion: expresion '+' termino {System.out.println("Linea "+lexico.getLineas()+": se encontro una expresion");}
+  |  expresion '-' termino          {System.out.println("Linea "+lexico.getLineas()+": se encontro una expresion");}
   | termino  
 ;
 
 termino: termino '*' argumento  
   |  termino '/' argumento      
   |  argumento                  
+  | error {System.out.println("ERROR en linea"+lexico.getLineas()+": no es posible resolver la expresion");}
 ;
 
 num: '-'NUMERO {putNegativo($2.sval);}
@@ -89,8 +90,6 @@ argumento: IDENTIFICADOR
   |  num                
   |  IDENTIFICADOR '[' expresion ']'    
 ;
-
-
 
 %%
   
