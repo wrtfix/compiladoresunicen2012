@@ -20,10 +20,9 @@ public class AccionSemantica13 extends AccionSemantica{
         //lexema = new StringBuffer();  
         lexema.deleteCharAt(0);
         linea++;
-        this.mensajeError = "Error en linea "+linea+" caracter no valido '.'";
-           this.error = true;
-           this.retroceder = true;
-           
-           return null;
+        this.mensajeError = "Error en linea "+linea+" número mal especificado '.'";
+        this.error = true;
+        this.retroceder = true;
+        return null;
     }
 }

@@ -28,7 +28,6 @@ public class AccionSemantica10 extends AccionSemantica{
             this.error = true;
             linea++;
             this.mensajeError = "ERROR fuera de rango linea "+linea;
-            //lexema = new StringBuffer();
 
             
         }
@@ -41,9 +40,7 @@ public class AccionSemantica10 extends AccionSemantica{
         }
         lexema = new StringBuffer();               
         retroceder = true;
-            
-        //    lexema.setLength(0);
-//            lexema.delete(0, lexema.length());
+
         return t;
     }
     
