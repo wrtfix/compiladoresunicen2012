@@ -49,6 +49,8 @@ public class AccionSemantica3 extends AccionSemantica {
         {
             if (lexema.length() > 12) {
                 lexema = lexema.delete(12, lexema.length()); // trunco el string
+                super.error = true;
+                super.mensajeError = "WARNING en linea "+linea+": el identificador es demasiado largo";
             }
             s = new Simbolo(lexema, "IDENTIFICADOR");
             //System.out.println();
