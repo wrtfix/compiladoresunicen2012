@@ -11,7 +11,7 @@ import java.io.IOException;
 
 %%
 
-programa: bloque {System.out.println("El programa finalizo correctamente");}
+programa: sentencias {System.out.println("El programa finalizo correctamente");}
 ;
 
 bloque: sentencia
