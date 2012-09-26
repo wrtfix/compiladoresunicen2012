@@ -55,12 +55,13 @@ public class TablaSimbolo {
     }
     
     public void imprimirTabla(){
+        Logger logSimbolos = new Logger("tablasimbolo.log");
         System.out.println("TABLA DE SIMBOLOS");
         System.out.println("TIPO    VALOR   ACCESOS");
         for(int i=0 ; i < tabla.size(); i++){
-            
-            System.out.println(tabla.get(i).getTipo() + " " + tabla.get(i).getValor() +" "+ tabla.get(i).getAccesos());
+            logSimbolos.addLogger(tabla.get(i).getTipo() + " " + tabla.get(i).getValor() +" "+ tabla.get(i).getAccesos());
         }
+        logSimbolos.imprimir();
     }
     
 }

@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
 /**
  *
  * @author wrtfix
@@ -20,14 +21,18 @@ public class Compilador {
      * @param args the command line arguments
      */
     
-    
-    
+   
     public static void main(String[] args) throws FileNotFoundException, IOException {
         // TODO code application logic here
         //Abrimos el codigo fuente
+        
+
+        
+        
         Lector l = new Lector(args[0]);
         
         AnalizadorLexico analizadorL = new AnalizadorLexico(args[0]);
+        System.out.println("Analizador Sintactico");
         Parser p = new Parser(analizadorL);
         //while (analizadorL.masTokens()){
             p.run();
@@ -53,12 +58,14 @@ public class Compilador {
 //        for(int i = 0; i < tablaSimbolos.size(); i++  )
 //            System.out.println(tablaSimbolos.get(i).getTipo()+"  "+tablaSimbolos.get(i).getValor());
 //        
-        
+        analizadorL.imprimirToken();
         analizadorL.getTabla().imprimirTabla();
-        ArrayList errores = analizadorL.getErrores();
-        System.out.println("ERRORES");
-        for(int i = 0;i < errores.size() ;i++)
-            System.out.println(errores.get(i));
+        analizadorL.imprimitErrores();
+        
+        
+//        System.out.println("ERRORES");
+//        for(int i = 0;i < errores.size() ;i++)
+//            System.out.println(errores.get(i));
         
         
     }

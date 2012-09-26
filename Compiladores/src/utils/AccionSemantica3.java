@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Verifica que el tamaño del String del lexema sea menor o igual a 12; si no es así, trunca la cadena aceptando solo los primeros 12 caracteres e informa la corrección realizada.

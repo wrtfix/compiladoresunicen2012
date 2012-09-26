@@ -626,7 +626,7 @@ case 26:
 break;
 case 27:
 //#line 60 "gramatica.y"
-{System.out.println("Salida por pantalla en linea "+lexico.getLineas());}
+{System.out.println("Linea "+lexico.getLineas()+": Salida por pantalla");}
 break;
 case 28:
 //#line 61 "gramatica.y"

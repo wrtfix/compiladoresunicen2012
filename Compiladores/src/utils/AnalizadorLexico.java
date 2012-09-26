@@ -21,6 +21,9 @@ public class AnalizadorLexico {
     private TablaSimbolo tablaS = new TablaSimbolo();
     private Token token;
     private ParserVal p;
+    private Logger logError = new Logger("error.log");
+    private Logger logToken = new Logger("token.log");
+
     public AnalizadorLexico(String ruta) {
         l = new Lector(ruta);
         errores = new ArrayList<String>();
@@ -647,6 +650,7 @@ public class AnalizadorLexico {
 
             if (acc.getError() == true) {
                 errores.add(acc.getMensajeError());
+                logError.addLogger(acc.getMensajeError());
                 acc.setError(false);
             }
             if (acc.getRetroceder()) {
@@ -663,66 +667,69 @@ public class AnalizadorLexico {
         }
         return token;
     }
-    public ParserVal getValorSimbolo(){
+
+    public ParserVal getValorSimbolo() {
         return p;
     }
-    public Token devolverToken(){
+
+    public Token devolverToken() {
         return token;
     }
-   
+
     public int yylex() throws FileNotFoundException, IOException {
 
         int numero = 0;
 
         token = getTokens();
-        if (token != null){
-            System.out.println("< "+ token.getTipo()+" , "+token.getPuntero().getValor()+" >");
-        
-        if (token.getTipo().equals("NUMERO")) {
-            numero = Parser.NUMERO;
-        }
-        if (token.getTipo().equals("FLOAT")) {
-            numero = Parser.FLOAT;
-        } else if (token.getTipo().equals("ASIGNACION")) {
-            numero = Parser.ASIG;
-        } else if (token.getTipo().equals("DISTINTO")) {
-            numero = Parser.DISTINTO;
-        } else if (token.getTipo().equals("MENOR_IGUAL")) {
-            numero = Parser.MENOR_IGUAL;
-        } else if (token.getTipo().equals("MAYOR_IGUAL")) {
-            numero = Parser.MAYOR_IGUAL;
-        } else if (token.getTipo().equals("WHILE")) {
-            numero = Parser.WHILE;
-        } else if (token.getTipo().equals("DO")) {
-            numero = Parser.DO;
-        } else if (token.getTipo().equals("IF")) {
-            numero = Parser.IF;
-        } else if (token.getTipo().equals("THEN")) {
-            numero = Parser.THEN;
-        } else if (token.getTipo().equals("ELSE")) {
-            numero = Parser.ELSE;
-        } else if (token.getTipo().equals("PRINT")) {
-            numero = Parser.PRINT;
-        } else if (token.getTipo().equals("ARRAY")) {
-            numero = Parser.ARRAY;
-        } else if (token.getTipo().equals("CADENA")) {
-            numero = Parser.CADENA;
-        } else if (token.getTipo().equals("IDENTIFICADOR")) {            
-            numero = Parser.IDENTIFICADOR;
-        } else if (token.getPuntero().getValor().length() == 1) {
-            numero = token.getPuntero().getValor().charAt(0);
-        }
-        //System.out.println("Pidio un token!");
-        //System.out.println("el tipo  \""+token.getTipo()+"\"");
-        p = new ParserVal(token.getPuntero().getValor().toString());
+        if (token != null) {
+            logToken.addLogger("< " + token.getTipo() + " , " + token.getPuntero().getValor() + " >");
+//            System.out.println("< " + token.getTipo() + " , " + token.getPuntero().getValor() + " >");
+
+            if (token.getTipo().equals("NUMERO")) {
+                numero = Parser.NUMERO;
+            }
+            if (token.getTipo().equals("FLOAT")) {
+                numero = Parser.FLOAT;
+            } else if (token.getTipo().equals("ASIGNACION")) {
+                numero = Parser.ASIG;
+            } else if (token.getTipo().equals("DISTINTO")) {
+                numero = Parser.DISTINTO;
+            } else if (token.getTipo().equals("MENOR_IGUAL")) {
+                numero = Parser.MENOR_IGUAL;
+            } else if (token.getTipo().equals("MAYOR_IGUAL")) {
+                numero = Parser.MAYOR_IGUAL;
+            } else if (token.getTipo().equals("WHILE")) {
+                numero = Parser.WHILE;
+            } else if (token.getTipo().equals("DO")) {
+                numero = Parser.DO;
+            } else if (token.getTipo().equals("IF")) {
+                numero = Parser.IF;
+            } else if (token.getTipo().equals("THEN")) {
+                numero = Parser.THEN;
+            } else if (token.getTipo().equals("ELSE")) {
+                numero = Parser.ELSE;
+            } else if (token.getTipo().equals("PRINT")) {
+                numero = Parser.PRINT;
+            } else if (token.getTipo().equals("ARRAY")) {
+                numero = Parser.ARRAY;
+            } else if (token.getTipo().equals("CADENA")) {
+                numero = Parser.CADENA;
+            } else if (token.getTipo().equals("IDENTIFICADOR")) {
+                numero = Parser.IDENTIFICADOR;
+            } else if (token.getPuntero().getValor().length() == 1) {
+                numero = token.getPuntero().getValor().charAt(0);
+            }
+            //System.out.println("Pidio un token!");
+            //System.out.println("el tipo  \""+token.getTipo()+"\"");
+            p = new ParserVal(token.getPuntero().getValor().toString());
         }
         return numero;
     }
 
-    public boolean masTokens(){        
+    public boolean masTokens() {
         return (!l.esFinal());
     }
-    
+
     public TablaSimbolo getTabla() {
         return this.tablaS;
     }
@@ -730,11 +737,18 @@ public class AnalizadorLexico {
     public ArrayList<String> getErrores() {
         return errores;
     }
-    
-    public int getLinea(){
+
+    public int getLinea() {
         return l.getLine();
     }
-    public int getLineas(){
-        return l.getLine()+1;
+
+    public int getLineas() {
+        return l.getLine() + 1;
+    }
+    public void imprimirToken(){
+        logToken.imprimir();
+    }
+    public void imprimitErrores(){
+        logError.imprimir();
     }
 }

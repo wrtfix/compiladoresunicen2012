@@ -57,7 +57,7 @@ bucle: WHILE '('condicion')' DO bloque {System.out.println("Linea "+lexico.getLi
 | WHILE '('';' bloque {System.out.println("ERROR en linea "+lexico.getLineas()+": se esperaba una condicion");}
 ;
 
-impresion: PRINT'('CADENA')'';' 				{System.out.println("Salida por pantalla en linea "+lexico.getLineas());}
+impresion: PRINT'('CADENA')'';' 				{System.out.println("Linea "+lexico.getLineas()+": Salida por pantalla");}
 |PRINT'('CADENA')' error {System.out.println("ERROR en linea "+lexico.getLineas()+": se esperaba un punto y coma");}
 |PRINT'('';' error {System.out.println("ERROR en linea "+lexico.getLineas()+": se esperaba una cadena");}
 |PRINT';' error {System.out.println("ERROR en linea "+lexico.getLineas()+": se esperaba una ('cadena')");}

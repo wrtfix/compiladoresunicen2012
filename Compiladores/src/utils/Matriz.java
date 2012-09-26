@@ -110,7 +110,7 @@ public class Matriz {
         }
         else
         {
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, "La posicion "+fila+":"+columna+" se encuentra fuera de rango ");
+            
         }
     }
     
