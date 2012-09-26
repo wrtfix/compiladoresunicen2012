@@ -11,7 +11,10 @@ import java.io.IOException;
 
 %%
 
-programa: sentencias {System.out.println("El programa finalizo correctamente");}
+programa: sentencias {
+
+logSintactico.addLogger("El programa finalizo correctamente");
+}
 ;
 
 bloque: sentencia
@@ -27,7 +30,7 @@ sentencia: declaracion
   |  impresion
   |  asignacion';'
   |  seleccion 
-  |  ';' error {System.out.println("ERROR en linea "+lexico.getLineas()+": sentencia no permitida");}
+  |  ';' error {logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": sentencia no permitida");}
 ;
 
 declaracion: FLOAT variables 
@@ -36,35 +39,35 @@ declaracion: FLOAT variables
 
 variables: IDENTIFICADOR';' 
   |  variables','IDENTIFICADOR
-  |  error {System.out.println("ERROR en linea"+lexico.getLineas()+": declaracion de variables");} 
+  |  error {logSintactico.addLogger("ERROR en linea"+lexico.getLineas()+": declaracion de variables");} 
 ;
 
 arreglo: IDENTIFICADOR '[' expresion ']' 
-| error {System.out.println("ERROR en linea "+lexico.getLineas()+": sintactico en el arreglo");}
+| error {logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": sintactico en el arreglo");}
 ;
 
-seleccion: IF'('condicion')'THEN '{'sentencias'}'   {System.out.println("Linea "+lexico.getLineas()+": Seleccion");}
-|IF'('condicion')'THEN '{'sentencias'}' ELSE '{'sentencias'}'   {System.out.println("Linea "+lexico.getLineas()+": Seleccion ifelse");}
-|error {System.out.println("ERROR en linea "+lexico.getLineas()+": sintactico en la seleccion");}
+seleccion: IF'('condicion')'THEN '{'sentencias'}'   {logSintactico.addLogger("Linea "+lexico.getLineas()+": Seleccion");}
+|IF'('condicion')'THEN '{'sentencias'}' ELSE '{'sentencias'}'   {logSintactico.addLogger("Linea "+lexico.getLineas()+": Seleccion ifelse");}
+|error {logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": sintactico en la seleccion");}
 ;
 
 condicion: argumento comparador argumento 
-| error {System.out.println("ERROR en linea "+lexico.getLineas()+": sintactico en la seleccion");}
+| error {logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": sintactico en la seleccion");}
 ;
 
-bucle: WHILE '('condicion')' DO bloque {System.out.println("Linea "+lexico.getLineas()+": Bucle");}
-| WHILE '('condicion')' bloque {System.out.println("ERROR en linea "+lexico.getLineas()+": se esperaba el DO");}
-| WHILE '('';' bloque {System.out.println("ERROR en linea "+lexico.getLineas()+": se esperaba una condicion");}
+bucle: WHILE '('condicion')' DO bloque {logSintactico.addLogger("Linea "+lexico.getLineas()+": Bucle");}
+| WHILE '('condicion')' bloque {logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": se esperaba el DO");}
+| WHILE '('';' bloque {logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": se esperaba una condicion");}
 ;
 
-impresion: PRINT'('CADENA')'';' 				{System.out.println("Linea "+lexico.getLineas()+": Salida por pantalla");}
-|PRINT'('CADENA')' error {System.out.println("ERROR en linea "+lexico.getLineas()+": se esperaba un punto y coma");}
-|PRINT'('';' error {System.out.println("ERROR en linea "+lexico.getLineas()+": se esperaba una cadena");}
-|PRINT';' error {System.out.println("ERROR en linea "+lexico.getLineas()+": se esperaba una ('cadena')");}
+impresion: PRINT'('CADENA')'';' 				{logSintactico.addLogger("Linea "+lexico.getLineas()+": Salida por pantalla");}
+|PRINT'('CADENA')' error {logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": se esperaba un punto y coma");}
+|PRINT'('';' error {logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": se esperaba una cadena");}
+|PRINT';' error {logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": se esperaba una ('cadena')");}
 ;
 
-asignacion: IDENTIFICADOR ASIG expresion  			{System.out.println("Linea "+lexico.getLineas()+": Asignacion");}
-  |  IDENTIFICADOR '[' expresion ']' ASIG expresion             {System.out.println("Linea "+lexico.getLineas()+": Asignacion");}
+asignacion: IDENTIFICADOR ASIG expresion  			{logSintactico.addLogger("Linea "+lexico.getLineas()+": Asignacion");}
+  |  IDENTIFICADOR '[' expresion ']' ASIG expresion             {logSintactico.addLogger("Linea "+lexico.getLineas()+": Asignacion");}
 ;
 
 comparador: '<' 
@@ -72,18 +75,18 @@ comparador: '<'
   |  '='
   |  MENOR_IGUAL 
   |  MAYOR_IGUAL
-  |  error {System.out.println("ERROR en linea "+lexico.getLineas()+": sintactico en la comparacion");}
+  |  error {logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": sintactico en la comparacion");}
 ;
 
-expresion: expresion '+' termino {System.out.println("Linea "+lexico.getLineas()+": se encontro una expresion");}
-  |  expresion '-' termino          {System.out.println("Linea "+lexico.getLineas()+": se encontro una expresion");}
+expresion: expresion '+' termino {logSintactico.addLogger("Linea "+lexico.getLineas()+": se encontro una expresion");}
+  |  expresion '-' termino          {logSintactico.addLogger("Linea "+lexico.getLineas()+": se encontro una expresion");}
   | termino  
 ;
 
 termino: termino '*' argumento  
   |  termino '/' argumento      
   |  argumento                  
-  | error {System.out.println("ERROR en linea"+lexico.getLineas()+": no es posible resolver la expresion");}
+  | error {logSintactico.addLogger("ERROR en linea"+lexico.getLineas()+": no es posible resolver la expresion");}
 ;
 
 num: '-'NUMERO {putNegativo($2.sval);}
@@ -96,7 +99,7 @@ argumento: IDENTIFICADOR
 ;
 
 %%
-  
+  private Logger logSintactico = new Logger("sintactico.log");
   private AnalizadorLexico lexico;
 
   public Parser(AnalizadorLexico l) {
@@ -131,4 +134,7 @@ public void putNegativo(String valor){
         
         Simbolo elival = new Simbolo(new StringBuffer(valor),"NUMERO");
         lexico.getTabla().eliminarSimbolo(elival);
+}
+public void imprimirSintactico(){
+    logSintactico.imprimir();
 }

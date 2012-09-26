@@ -36,7 +36,8 @@ public class Compilador {
         Parser p = new Parser(analizadorL);
         //while (analizadorL.masTokens()){
             p.run();
-        //}
+        p.imprimirSintactico();
+            //}
 //        
 //        ArrayList<Simbolo> tablaSimbolos = new ArrayList<Simbolo>();
 //         ArrayList<Token> lista = new ArrayList<Token>();

@@ -388,9 +388,9 @@ final static String yyrule[] = {
 "argumento : IDENTIFICADOR '[' expresion ']'",
 };
 
-//#line 98 "gramatica.y"
+//#line 101 "gramatica.y"
 
-  
+  private Logger logSintactico = new Logger("sintactico.log");
   private AnalizadorLexico lexico;
 
   public Parser(AnalizadorLexico l) {
@@ -426,7 +426,10 @@ public void putNegativo(String valor){
         Simbolo elival = new Simbolo(new StringBuffer(valor),"NUMERO");
         lexico.getTabla().eliminarSimbolo(elival);
 }
-//#line 358 "Parser.java"
+public void imprimirSintactico(){
+    logSintactico.imprimir();
+}
+//#line 361 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -582,93 +585,96 @@ boolean doaction;
 //########## USER-SUPPLIED ACTIONS ##########
 case 1:
 //#line 14 "gramatica.y"
-{System.out.println("El programa finalizo correctamente");}
+{
+
+logSintactico.addLogger("El programa finalizo correctamente");
+}
 break;
 case 11:
-//#line 30 "gramatica.y"
-{System.out.println("ERROR en linea "+lexico.getLineas()+": sentencia no permitida");}
+//#line 33 "gramatica.y"
+{logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": sentencia no permitida");}
 break;
 case 16:
-//#line 39 "gramatica.y"
-{System.out.println("ERROR en linea"+lexico.getLineas()+": declaracion de variables");}
+//#line 42 "gramatica.y"
+{logSintactico.addLogger("ERROR en linea"+lexico.getLineas()+": declaracion de variables");}
 break;
 case 18:
-//#line 43 "gramatica.y"
-{System.out.println("ERROR en linea "+lexico.getLineas()+": sintactico en el arreglo");}
+//#line 46 "gramatica.y"
+{logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": sintactico en el arreglo");}
 break;
 case 19:
-//#line 46 "gramatica.y"
-{System.out.println("Linea "+lexico.getLineas()+": Seleccion");}
+//#line 49 "gramatica.y"
+{logSintactico.addLogger("Linea "+lexico.getLineas()+": Seleccion");}
 break;
 case 20:
-//#line 47 "gramatica.y"
-{System.out.println("Linea "+lexico.getLineas()+": Seleccion ifelse");}
+//#line 50 "gramatica.y"
+{logSintactico.addLogger("Linea "+lexico.getLineas()+": Seleccion ifelse");}
 break;
 case 21:
-//#line 48 "gramatica.y"
-{System.out.println("ERROR en linea "+lexico.getLineas()+": sintactico en la seleccion");}
+//#line 51 "gramatica.y"
+{logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": sintactico en la seleccion");}
 break;
 case 23:
-//#line 52 "gramatica.y"
-{System.out.println("ERROR en linea "+lexico.getLineas()+": sintactico en la seleccion");}
+//#line 55 "gramatica.y"
+{logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": sintactico en la seleccion");}
 break;
 case 24:
-//#line 55 "gramatica.y"
-{System.out.println("Linea "+lexico.getLineas()+": Bucle");}
+//#line 58 "gramatica.y"
+{logSintactico.addLogger("Linea "+lexico.getLineas()+": Bucle");}
 break;
 case 25:
-//#line 56 "gramatica.y"
-{System.out.println("ERROR en linea "+lexico.getLineas()+": se esperaba el DO");}
+//#line 59 "gramatica.y"
+{logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": se esperaba el DO");}
 break;
 case 26:
-//#line 57 "gramatica.y"
-{System.out.println("ERROR en linea "+lexico.getLineas()+": se esperaba una condicion");}
+//#line 60 "gramatica.y"
+{logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": se esperaba una condicion");}
 break;
 case 27:
-//#line 60 "gramatica.y"
-{System.out.println("Linea "+lexico.getLineas()+": Salida por pantalla");}
+//#line 63 "gramatica.y"
+{logSintactico.addLogger("Linea "+lexico.getLineas()+": Salida por pantalla");}
 break;
 case 28:
-//#line 61 "gramatica.y"
-{System.out.println("ERROR en linea "+lexico.getLineas()+": se esperaba un punto y coma");}
+//#line 64 "gramatica.y"
+{logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": se esperaba un punto y coma");}
 break;
 case 29:
-//#line 62 "gramatica.y"
-{System.out.println("ERROR en linea "+lexico.getLineas()+": se esperaba una cadena");}
+//#line 65 "gramatica.y"
+{logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": se esperaba una cadena");}
 break;
 case 30:
-//#line 63 "gramatica.y"
-{System.out.println("ERROR en linea "+lexico.getLineas()+": se esperaba una ('cadena')");}
+//#line 66 "gramatica.y"
+{logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": se esperaba una ('cadena')");}
 break;
 case 31:
-//#line 66 "gramatica.y"
-{System.out.println("Linea "+lexico.getLineas()+": Asignacion");}
+//#line 69 "gramatica.y"
+{logSintactico.addLogger("Linea "+lexico.getLineas()+": Asignacion");}
 break;
 case 32:
-//#line 67 "gramatica.y"
-{System.out.println("Linea "+lexico.getLineas()+": Asignacion");}
+//#line 70 "gramatica.y"
+{logSintactico.addLogger("Linea "+lexico.getLineas()+": Asignacion");}
 break;
 case 38:
-//#line 75 "gramatica.y"
-{System.out.println("ERROR en linea "+lexico.getLineas()+": sintactico en la comparacion");}
+//#line 78 "gramatica.y"
+{logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": sintactico en la comparacion");}
 break;
 case 39:
-//#line 78 "gramatica.y"
-{System.out.println("Linea "+lexico.getLineas()+": se encontro una expresion");}
+//#line 81 "gramatica.y"
+{logSintactico.addLogger("Linea "+lexico.getLineas()+": se encontro una expresion");}
 break;
 case 40:
-//#line 79 "gramatica.y"
-{System.out.println("Linea "+lexico.getLineas()+": se encontro una expresion");}
+//#line 82 "gramatica.y"
+{logSintactico.addLogger("Linea "+lexico.getLineas()+": se encontro una expresion");}
 break;
 case 45:
-//#line 86 "gramatica.y"
-{System.out.println("ERROR en linea"+lexico.getLineas()+": no es posible resolver la expresion");}
+//#line 89 "gramatica.y"
+{logSintactico.addLogger("ERROR en linea"+lexico.getLineas()+": no es posible resolver la expresion");}
 break;
 case 46:
-//#line 89 "gramatica.y"
+//#line 92 "gramatica.y"
 {putNegativo(val_peek(0).sval);}
 break;
-//#line 595 "Parser.java"
+//#line 601 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####
