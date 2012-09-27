@@ -44,7 +44,8 @@ public class AccionSemantica3 extends AccionSemantica {
             s = new Simbolo(lexema,lexema.toString().toUpperCase());
 //            if(!tablaS.contains(s))
 //                tablaS.add(s);
-//                
+//          
+            
             tablaS.addSimbolo(s);
         } 
         else 

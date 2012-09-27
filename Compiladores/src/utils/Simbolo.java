@@ -50,5 +50,5 @@ public class Simbolo {
             return s.getValor().toString().equals(valor.toString());
         return false;
     }
-    
+
 }

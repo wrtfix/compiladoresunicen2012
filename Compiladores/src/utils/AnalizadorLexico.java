@@ -23,7 +23,7 @@ public class AnalizadorLexico {
     private ParserVal p;
     private Logger logError = new Logger("error.log");
     private Logger logToken = new Logger("token.log");
-
+    private int linea;
     public AnalizadorLexico(String ruta) {
         l = new Lector(ruta);
         errores = new ArrayList<String>();
@@ -679,10 +679,10 @@ public class AnalizadorLexico {
     public int yylex() throws FileNotFoundException, IOException {
 
         int numero = 0;
-
+        linea = l.getLine();
         token = getTokens();
         if (token != null) {
-            logToken.addLogger("< " + token.getTipo() + " , " + token.getPuntero().getValor() + " >");
+            logToken.addLogger("<" + token.getTipo() + "," + token.getPuntero().getValor() + ">");
 //            System.out.println("< " + token.getTipo() + " , " + token.getPuntero().getValor() + " >");
 
             if (token.getTipo().equals("NUMERO")) {
@@ -743,7 +743,7 @@ public class AnalizadorLexico {
     }
 
     public int getLineas() {
-        return l.getLine() + 1;
+        return l.getLine()+1;
     }
     public void imprimirToken(){
         logToken.imprimir();

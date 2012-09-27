@@ -18,7 +18,7 @@ logSintactico.addLogger("El programa finalizo correctamente");
 ;
 
 bloque: sentencia
-  |  '{'sentencias'}'  
+  |  '{'sentencias'}'
 ;
 
 sentencias: sentencia
@@ -26,18 +26,20 @@ sentencias: sentencia
 ;
 
 sentencia: declaracion
-  |  bucle
+  |   {logSintactico.addLogger("Linea "+lexico.getLineas()+": Bucle");} bucle
   |  impresion
+  |   {logSintactico.addLogger("Linea "+lexico.getLineas()+": Seleccion");} seleccion
   |  asignacion';'
-  |  seleccion 
   |  ';' error {logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": sentencia no permitida");}
 ;
 
-declaracion: FLOAT variables 
-  |  ARRAY arreglo';'
+declaracion: FLOAT variables';' {logSintactico.addLogger("En linea "+lexico.getLineas()+": declaracion de un FLOAT");}
+  |  ARRAY arreglo';' {logSintactico.addLogger("En linea "+lexico.getLineas()+": declaracion de un ARRAY");}
+| ARRAY arreglo error {logSintactico.addLogger("Error sintactico en linea "+lexico.getLineas()+": declaracion de variables");}
+| FLOAT';' error {logSintactico.addLogger("Error sintactico en linea "+lexico.getLineas()+": declaracion de variables");}
 ;
 
-variables: IDENTIFICADOR';' 
+variables: IDENTIFICADOR 
   |  variables','IDENTIFICADOR
   |  error {logSintactico.addLogger("ERROR en linea"+lexico.getLineas()+": declaracion de variables");} 
 ;
@@ -46,16 +48,19 @@ arreglo: IDENTIFICADOR '[' expresion ']'
 | error {logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": sintactico en el arreglo");}
 ;
 
-seleccion: IF'('condicion')'THEN '{'sentencias'}'   {logSintactico.addLogger("Linea "+lexico.getLineas()+": Seleccion");}
-|IF'('condicion')'THEN '{'sentencias'}' ELSE '{'sentencias'}'   {logSintactico.addLogger("Linea "+lexico.getLineas()+": Seleccion ifelse");}
-|error {logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": sintactico en la seleccion");}
+seleccion: IF'('condicion')'THEN'{'sentencias'}'   
+|IF'('condicion')'THEN'{'sentencias'}' ELSE '{'sentencias'}'   {logSintactico.addLogger("Linea "+lexico.getLineas()+": Seleccion ifelse");}
+|IF'('condicion')'THEN'{'sentencias'}' ELSE  {logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": Seleccion faltan las LLAVES");}
+|IF'('condicion')''{'sentencias'}' ELSE  {logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": Seleccion falta setencia THEN ");}
+|IF'('condicion')'THEN {logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": Seleccion faltan las LLAVES");}
+|error {logSintactico.addLogger("ERROR sintactico en linea "+lexico.getLineas()+": seleccion no valida");}
 ;
 
 condicion: argumento comparador argumento 
-| error {logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": sintactico en la seleccion");}
+| error {logSintactico.addLogger("ERROR sintactico en linea "+lexico.getLineas()+": condicion no valida");}
 ;
 
-bucle: WHILE '('condicion')' DO bloque {logSintactico.addLogger("Linea "+lexico.getLineas()+": Bucle");}
+bucle: WHILE '('condicion')' DO bloque 
 | WHILE '('condicion')' bloque {logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": se esperaba el DO");}
 | WHILE '('';' bloque {logSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": se esperaba una condicion");}
 ;
