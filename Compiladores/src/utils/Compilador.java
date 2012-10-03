@@ -38,6 +38,7 @@ public class Compilador {
             p.run();
         p.imprimirSintactico();
             //}
+        p.imprimirPila();
 //        
 //        ArrayList<Simbolo> tablaSimbolos = new ArrayList<Simbolo>();
 //         ArrayList<Token> lista = new ArrayList<Token>();

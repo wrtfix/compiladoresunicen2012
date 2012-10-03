@@ -21,7 +21,7 @@ public class AnalizadorLexico {
     private TablaSimbolo tablaS = new TablaSimbolo();
     private Token token;
     private ParserVal p;
-    private Logger logError = new Logger("error.log");
+    private Logger logError = new Logger("lexicoerror.log");
     private Logger logToken = new Logger("token.log");
     private int linea;
     public AnalizadorLexico(String ruta) {

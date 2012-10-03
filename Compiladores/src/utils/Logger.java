@@ -33,7 +33,7 @@ public class Logger {
 
             //Creamos un Nuevo objeto FileWriter dandole
             //como parámetros la ruta y nombre del fichero
-            FileWriter fichero = new FileWriter("./log/"+direccion);
+            FileWriter fichero = new FileWriter(direccion);
 
             //Insertamos el texto creado y si trabajamos
             //en Windows terminaremos cada línea con "\r\n"
