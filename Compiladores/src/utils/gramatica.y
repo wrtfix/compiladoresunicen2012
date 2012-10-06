@@ -3,6 +3,7 @@
 package utils;
 import java.io.IOException;
 import java.util.Vector;
+import java.util.Stack;
 %}
 
 %token IDENTIFICADOR, FLOAT, IF,THEN, ELSE, WHILE, DO, PRINT, ARRAY, CADENA, MAYOR_IGUAL, MENOR_IGUAL, DISTINTO, ASIG, NUMERO
@@ -34,9 +35,9 @@ sentencia: declaracion
 ;
 
 declaracion: FLOAT variables';' {logSintactico.addLogger("Linea "+lexico.getLineas()+": declaracion de un FLOAT");}
-  |  ARRAY arreglo';' {logSintactico.addLogger("Linea "+lexico.getLineas()+": declaracion de un ARRAY");}
-| ARRAY arreglo error {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": declaracion de variables");}
-| FLOAT';' error {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": declaracion de variables");}
+  | ARRAY arreglo';' {logSintactico.addLogger("Linea "+lexico.getLineas()+": declaracion de un ARRAY");}
+  | ARRAY arreglo error {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": declaracion de variables");}
+  | FLOAT';' error {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": declaracion de variables");}
 ;
 
 variables: IDENTIFICADOR 
@@ -45,24 +46,61 @@ variables: IDENTIFICADOR
 ;
 
 arreglo: IDENTIFICADOR '[' expresion ']' 
-| error {logSintactico.addLogger("ERROR sintactica en la linea "+lexico.getLineas()+": sintactico en el arreglo");}
+  | error {logSintactico.addLogger("ERROR sintactica en la linea "+lexico.getLineas()+": sintactico en el arreglo");}
 ;
 
-seleccion: IF'('condicion')'THEN'{'sentencias'}'   
-|IF'('condicion')'THEN'{'sentencias'}' ELSE '{'sentencias'}'   {logSintactico.addLogger("Linea "+lexico.getLineas()+": seleccion ifelse");}
-|IF'('condicion')'THEN'{'sentencias'}' ELSE  {logSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": seleccion faltan las LLAVES");}
-|IF'('condicion')''{'sentencias'}' ELSE  {logSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": seleccion falta setencia THEN ");}
-|IF'('condicion')'THEN {logSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": seleccion faltan las LLAVES");}
+seleccion: comienzo_if rama_then rama_else
+| comienzo_if THEN '{'sentencias'}'{
+            Integer pos = (Integer) pila.pop(); // saca el tope de la pila
+            pi.add(pos.intValue(),String.valueOf(pi.size()));// cambia el valor blanco en la polaca por el salto(size de polaca)               
+            pi.remove(pos.intValue()+1);          
+            } 
+;
+
+comienzo_if: IF'('condicion')' {pi.add(" "); pi.add("bf"); pila.push(pi.size()- 2 );} 
+
+rama_then: THEN '{'sentencias'}'{ 
+            pi.add(" "); //agrega un blanco en  la polaca
+            pi.add("bi"); //agrega un bi en la polaca 
+            Integer pos = (Integer) pila.pop(); // saca el tope de la pila
+            pi.add(pos.intValue(),String.valueOf(pi.size()));// cambia el valor blanco en la polaca por el salto(size de polaca)               
+            pi.remove(pos.intValue()+1);          
+            pila.push(pi.size()- 2);//apila el lugar en blanco en la pila
+            } 
+
+rama_else:
+        | ELSE '{'sentencias'}'{ 
+        Integer pos = (Integer) pila.pop(); // saca el tope de la pila
+        pi.add(pos.intValue(),String.valueOf(pi.size()));// cambia el valor blanco en la polaca por el salto(size de polaca)               
+        pi.remove(pos.intValue()+1);            
+        logSintactico.addLogger("Linea "+lexico.getLineas()+": seleccion ifelse");
+}
 |error {logSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": seleccion no valida");}
 ;
 
-condicion: argumento comparador argumento 
-| error {logSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": condicion no valida");}
+condicion: argumento comparador argumento  {pi.add($2.sval); }
+  | error {logSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": condicion no valida");}
 ;
 
-bucle: WHILE '('condicion')' DO bloque 
-| WHILE '('condicion')' bloque {logSintactico.addLogger("ERROR sintactica en la linea "+lexico.getLineas()+": se esperaba el DO");}
-| WHILE '('';' bloque {logSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": se esperaba una condicion");}
+
+comparador: '<'
+  |  '>' 
+  |  '=' 
+  |  MENOR_IGUAL 
+  |  MAYOR_IGUAL 
+  |  DISTINTO
+  |  error {logSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": no es posible resolver la comparacion");}
+;
+
+bucle: {pila.push(pi.size());} WHILE '('condicion')' {pi.add(" "); pi.add("blt"); pila.push(pi.size()- 2);}  DO bloque {
+        Integer pos = (Integer) pila.pop(); // posicion 3 
+        pi.add(pos.intValue(),String.valueOf(pi.size()+2));// cambia el valor blanco en la polaca por el salto(size de polaca)               
+        pi.remove(pos.intValue()+1);  
+
+        pos = (Integer) pila.pop(); 
+        pi.add(String.valueOf(pos)); 
+        pi.add("bi");                
+}
 ;
 
 impresion: PRINT'('CADENA')'';' 				{logSintactico.addLogger("Linea "+lexico.getLineas()+":salida por pantalla");}
@@ -78,14 +116,6 @@ asignacion: iden ASIG expresion  			{pi.add($2.sval); $$=$1;logSintactico.addLog
 iden: IDENTIFICADOR {pi.add($1.sval); $$=$1;}
 
 
-comparador: '<' 
-  |  '>'
-  |  '='
-  |  MENOR_IGUAL 
-  |  MAYOR_IGUAL
-  |  error {logSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": no es posible resolver la comparacion");}
-;
-
 expresion: expresion '+' termino { pi.add($2.sval); $$=$1; logSintactico.addLogger("Linea "+lexico.getLineas()+": se encontro una expresion");}
   |  expresion '-' termino          {pi.add($2.sval); $$=$1; logSintactico.addLogger("Linea "+lexico.getLineas()+": se encontro una expresion");}
   | termino  
@@ -93,7 +123,7 @@ expresion: expresion '+' termino { pi.add($2.sval); $$=$1; logSintactico.addLogg
 
 termino: termino '*' argumento  {pi.add($2.sval); $$=$1;}
   |  termino '/' argumento      {pi.add($2.sval); $$=$1;}
-  |  argumento  {pi.add($1.sval);}
+  |  argumento  
   | error {logSintactico.addLogger("ERROR sintactico en la linea"+lexico.getLineas()+": no es posible resolver la expresion");} {System.out.println($2.sval);}
 ;
 
@@ -101,20 +131,21 @@ num: '-'NUMERO {putNegativo($2.sval);}
 | NUMERO 
 ;
 
-argumento: IDENTIFICADOR {$$=$1;}
-  |  num                {$$=$1;}
-  |  IDENTIFICADOR '[' expresion ']'   {$$=$1;}
+argumento: IDENTIFICADOR {pi.add($1.sval); $$=$1;}
+  |  num                {pi.add($1.sval); $$=$1;}
+  |  IDENTIFICADOR '[' expresion ']'   {pi.add($1.sval); $$=$1;}
 ;
 
 %%
   private Logger logSintactico = new Logger("sintactico.log");
   private AnalizadorLexico lexico;
   private Vector<String> pi;
+  private Stack<Integer> pila;
 
   public Parser(AnalizadorLexico l) {
          lexico = l;
          pi = new Vector<String>();
-
+         pila = new Stack<Integer>();
     }
 
     private int yylex(){
@@ -149,7 +180,9 @@ public void imprimirSintactico(){
     logSintactico.imprimir();
 }
 
-public void imprimirPila(){
-    for(int i=0; i<pi.size();i++)
-        System.out.println(pi.elementAt(i));
+        
+public void imprimirPolacaInversa() {
+    for (int i = 0; i < pi.size(); i++) {
+        System.out.println(i+":"+pi.elementAt(i));
+    }
 }
