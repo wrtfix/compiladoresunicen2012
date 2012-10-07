@@ -35,41 +35,38 @@ sentencia: declaracion
 ;
 
 declaracion: FLOAT variables';' {logSintactico.addLogger("Linea "+lexico.getLineas()+": declaracion de un FLOAT");}
-  | ARRAY arreglo';' {logSintactico.addLogger("Linea "+lexico.getLineas()+": declaracion de un ARRAY");}
+  | ARRAY FLOAT arreglo';' {logSintactico.addLogger("Linea "+lexico.getLineas()+": declaracion de un ARRAY");}
   | ARRAY arreglo error {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": declaracion de variables");}
   | FLOAT';' error {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": declaracion de variables");}
 ;
 
-variables: IDENTIFICADOR 
+variables: IDENTIFICADOR {lexico.getTabla().addTipo($1.sval,"FLOAT");}
   |  variables','IDENTIFICADOR
   |  error {logSintactico.addLogger("ERROR sintactica en la linea"+lexico.getLineas()+": declaracion de variables");} 
 ;
 
-arreglo: IDENTIFICADOR '[' expresion ']' 
+arreglo: IDENTIFICADOR '[' expresion ']' {lexico.getTabla().addTipo($1.sval,"ARRAY FLOAT");}
   | error {logSintactico.addLogger("ERROR sintactica en la linea "+lexico.getLineas()+": sintactico en el arreglo");}
 ;
 
-seleccion: comienzo_if rama_then rama_else
-| comienzo_if THEN '{'sentencias'}'{
+
+seleccion: IF '('condicion')'  THEN bloque
+{ 
             Integer pos = (Integer) pila.pop(); // saca el tope de la pila
             pi.add(pos.intValue(),String.valueOf(pi.size()));// cambia el valor blanco en la polaca por el salto(size de polaca)               
             pi.remove(pos.intValue()+1);          
-            } 
-;
-
-comienzo_if: IF'('condicion')' {pi.add(" "); pi.add("bf"); pila.push(pi.size()- 2 );} 
-
-rama_then: THEN '{'sentencias'}'{ 
+} 
+| IF '('condicion')' THEN bloqueThen 
+{ 
             pi.add(" "); //agrega un blanco en  la polaca
             pi.add("bi"); //agrega un bi en la polaca 
             Integer pos = (Integer) pila.pop(); // saca el tope de la pila
             pi.add(pos.intValue(),String.valueOf(pi.size()));// cambia el valor blanco en la polaca por el salto(size de polaca)               
             pi.remove(pos.intValue()+1);          
             pila.push(pi.size()- 2);//apila el lugar en blanco en la pila
-            } 
-
-rama_else:
-        | ELSE '{'sentencias'}'{ 
+}  
+ELSE bloqueElse 
+{ 
         Integer pos = (Integer) pila.pop(); // saca el tope de la pila
         pi.add(pos.intValue(),String.valueOf(pi.size()));// cambia el valor blanco en la polaca por el salto(size de polaca)               
         pi.remove(pos.intValue()+1);            
@@ -78,7 +75,13 @@ rama_else:
 |error {logSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": seleccion no valida");}
 ;
 
-condicion: argumento comparador argumento  {pi.add($2.sval); }
+bloqueThen: '{'sentencias'}' 
+;
+bloqueElse: '{'sentencias'}'
+;	
+
+
+condicion: argumento comparador argumento  {pi.add($2.sval); pi.add(" "); pi.add("bf"); pila.push(pi.size()- 2 ); }
   | error {logSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": condicion no valida");}
 ;
 
@@ -92,7 +95,7 @@ comparador: '<'
   |  error {logSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": no es posible resolver la comparacion");}
 ;
 
-bucle: {pila.push(pi.size());} WHILE '('condicion')' {pi.add(" "); pi.add("blt"); pila.push(pi.size()- 2);}  DO bloque {
+bucle: {pila.push(pi.size());} WHILE '('condicion')' DO bloque {
         Integer pos = (Integer) pila.pop(); // posicion 3 
         pi.add(pos.intValue(),String.valueOf(pi.size()+2));// cambia el valor blanco en la polaca por el salto(size de polaca)               
         pi.remove(pos.intValue()+1);  
@@ -109,11 +112,20 @@ impresion: PRINT'('CADENA')'';' 				{logSintactico.addLogger("Linea "+lexico.get
 |PRINT';' error {logSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": se esperaba una ('cadena')");}
 ;
 
-asignacion: iden ASIG expresion  			{pi.add($2.sval); $$=$1;logSintactico.addLogger("Linea "+lexico.getLineas()+": asignacion");}
-  |  IDENTIFICADOR '[' expresion ']' ASIG expresion             {logSintactico.addLogger("Linea "+lexico.getLineas()+": asignacion");}
+asignacion: iden ASIG expresion  		      {pi.add($2.sval); $$=$1;logSintactico.addLogger("Linea "+lexico.getLineas()+": asignacion");}
+  |  IDENTIFICADOR '[' expresion ']' ASIG expresion   {if (lexico.getTabla().existeTipoVariable($1.sval,"ARRAY FLOAT")){
+pi.add($1.sval); $$=$1;
+}else
+    System.out.println("error tu codigo anda para el ojete aprende a programar mong@");
+}
+  {logSintactico.addLogger("Linea "+lexico.getLineas()+": asignacion");}
 ;
 
-iden: IDENTIFICADOR {pi.add($1.sval); $$=$1;}
+iden: IDENTIFICADOR {if (lexico.getTabla().existeTipoVariable($1.sval,"FLOAT")){
+pi.add($1.sval); $$=$1;
+}else
+    System.out.println("error tu codigo anda para el ojete aprende a programar mong@");
+}
 
 
 expresion: expresion '+' termino { pi.add($2.sval); $$=$1; logSintactico.addLogger("Linea "+lexico.getLineas()+": se encontro una expresion");}
