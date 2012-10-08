@@ -55,7 +55,10 @@ seleccion: IF '('condicion')'  THEN bloque
             Integer pos = (Integer) pila.pop(); // saca el tope de la pila
             pi.add(pos.intValue(),String.valueOf(pi.size()));// cambia el valor blanco en la polaca por el salto(size de polaca)               
             pi.remove(pos.intValue()+1);          
-} 
+}
+|IF '('condicion')' error {logSintactico.addLogger("Error sintactica en la linea "+lexico.getLineas()+": se esperaba un THEN");}
+|IF '('condicion error {logSintactico.addLogger("Error sintactica en la linea "+lexico.getLineas()+": se esperaba un )");}
+|IF  error {logSintactico.addLogger("Error sintactica en la linea "+lexico.getLineas()+": se esperaba una condicion )");}
 | IF '('condicion')' THEN bloqueThen 
 { 
             pi.add(" "); //agrega un blanco en  la polaca
@@ -82,7 +85,9 @@ bloqueElse: '{'sentencias'}'
 
 
 condicion: argumento comparador argumento  {pi.add($2.sval); pi.add(" "); pi.add("bf"); pila.push(pi.size()- 2 ); }
-  | error {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": condicion no valida");}
+  | argumento comparador error {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": condicion no valida se esperaba un argumento");}
+  | comparador argumento error {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": condicion no valida se esperaba un argumento");}
+  | error {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": condicion no valida se esperaba un compardor");}
 ;
 
 
@@ -95,38 +100,55 @@ comparador: '<'
   |  error {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": no es posible resolver la comparacion");}
 ;
 
-bucle: {pila.push(pi.size());} WHILE '('condicion')' DO bloque {
+bucle:  comienzo_while condicion_while bloque_while
+| comienzo_while '{'sentencia'}' error {logSintactico.addLogger("ERROR sintactica en la linea "+lexico.getLineas()+": se esperaba una condicion");}
+| condicion_while error {logSintactico.addLogger("ERROR sintactica en la linea "+lexico.getLineas()+": se esperaba un WHILE");}
+| comienzo_while '('condicion error {logSintactico.addLogger("ERROR sintactica en la linea "+lexico.getLineas()+": se esperaba una sentencia");}
+| comienzo_while '('condicion')' error {logSintactico.addLogger("ERROR sintactica en la linea "+lexico.getLineas()+": se esperaba un DO ");}
+;
+
+comienzo_while:{pila.push(pi.size());} WHILE
+;
+condicion_while: '('condicion')' DO
+;
+bloque_while: bloque {
         Integer pos = (Integer) pila.pop(); // posicion 3 
         pi.add(pos.intValue(),String.valueOf(pi.size()+2));// cambia el valor blanco en la polaca por el salto(size de polaca)               
         pi.remove(pos.intValue()+1);  
-
-        pos = (Integer) pila.pop(); 
-        pi.add(String.valueOf(pos)); 
-        pi.add("bi");                
+        if (!pila.empty()){
+            pos = (Integer) pila.pop(); 
+            pi.add(String.valueOf(pos)); 
+            pi.add("bi");                
+        
+        }        
+            
 }
-;
+
 
 impresion: PRINT'('CADENA')'';' {pi.add($3.sval); $$=$3; lexico.getTabla().addTipo($3.sval, "STRING");  logSintactico.addLogger("Linea "+lexico.getLineas()+":salida por pantalla");}
-|PRINT'('CADENA')' error {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba un punto y coma");}
-|PRINT'('';' error {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba una cadena");}
-|PRINT';' error {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba una ('cadena')");}
+   |PRINT'('CADENA')' error {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba un punto y coma");}
+   |PRINT'('';' error {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba una cadena");}
+   |PRINT';' error {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba una ('cadena')");}
+   |PRINT'('expresion')'';' error {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba una cadena");}
 ;
 
-asignacion: iden ASIG expresion  		      {pi.add($2.sval); $$=$1;logSintactico.addLogger("Linea "+lexico.getLineas()+": asignacion");}
+asignacion: iden ASIG expresion {pi.add($2.sval); $$=$1;logSintactico.addLogger("Linea "+lexico.getLineas()+": asignacion");}
   |  IDENTIFICADOR '[' expresion ']' ASIG expresion   {if (lexico.getTabla().existeTipoVariable($1.sval,"ARRAY FLOAT")){
-pi.add($1.sval); $$=$1;
-}else
-    System.out.println("error tu codigo anda para el ojete aprende a programar mong@");
-}
-  {logSintactico.addLogger("Linea "+lexico.getLineas()+": asignacion");}
+                                                            pi.add($1.sval); $$=$1;
+                                                            }else
+                                                                System.out.println("error tu codigo anda para el ojete aprende a programar mong@");
+                                                            logSintactico.addLogger("Linea "+lexico.getLineas()+": asignacion");
+                                                        }
+  | iden ASIG';' error { logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba una asignacion");} 
+  | ASIG expresion';' error { logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba una asignacion");} 
 ;
 
 iden: IDENTIFICADOR {if (lexico.getTabla().existeTipoVariable($1.sval,"FLOAT")){
 pi.add($1.sval); $$=$1;
 }else
-    logSintactico.addLogger("Error sintactico en linea: "+lexico.getLineas()+"se esperaba otro valor");
+    logSintactico.addLogger("Error sintactico en linea: "+lexico.getLineas()+" no se encuentra declarada la variable");
 }
-
+;
 
 expresion: expresion '+' termino { pi.add($2.sval); $$=$1; logSintactico.addLogger("Linea "+lexico.getLineas()+": se encontro una expresion");}
   |  expresion '-' termino          {pi.add($2.sval); $$=$1; logSintactico.addLogger("Linea "+lexico.getLineas()+": se encontro una expresion");}
@@ -143,9 +165,25 @@ num: '-'NUMERO {putNegativo($2.sval);}
 | NUMERO 
 ;
 
-argumento: IDENTIFICADOR {pi.add($1.sval); $$=$1;}
+argumento: IDENTIFICADOR {
+if (lexico.getTabla().existeTipoVariable($1.sval,"FLOAT")){
+    pi.add($1.sval); $$=$1;
+}else
+    System.out.println("ERROR en linea "+lexico.getLineas()+": no se ecuentra declarada la variable");
+                                                        
+
+
+}
   |  num                {pi.add($1.sval); $$=$1;}
-  |  IDENTIFICADOR '[' expresion ']'   {pi.add($1.sval); $$=$1;}
+  |  IDENTIFICADOR '[' expresion ']'   {
+if (lexico.getTabla().existeTipoVariable($1.sval,"ARRAY FLOAT")){
+    pi.add($1.sval); $$=$1;
+}else
+    System.out.println("ERROR en linea "+lexico.getLineas()+": no se ecuentra declarada el arreglo");
+                                                        
+
+
+}
 ;
 
 %%

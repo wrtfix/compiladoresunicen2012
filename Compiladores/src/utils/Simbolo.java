@@ -12,7 +12,23 @@ public class Simbolo {
     private StringBuffer valor;
     private String tipo;
     private int accesos;
+    private String tipoVariable;
+    private boolean declarado;
 
+    public boolean isDeclarado() {
+        return declarado;
+    }
+
+    public void setDeclarado(boolean declarado) {
+        this.declarado = declarado;
+    }
+    public String getTipoVariable() {
+        return tipoVariable;
+    }
+
+    public void setTipoVariable(String tipoVariable) {
+        this.tipoVariable = tipoVariable;
+    }
     public int getAccesos() {
         return accesos;
     }
@@ -31,6 +47,8 @@ public class Simbolo {
         this.valor.append(v);
         tipo = t ;
         accesos =1;
+        tipoVariable = "";
+        declarado =false;
     }
 
     public String getTipo() {
@@ -50,5 +68,8 @@ public class Simbolo {
             return s.getValor().toString().equals(valor.toString());
         return false;
     }
-
+    
+    public boolean esVacio(){
+        return "".equals(tipoVariable);
+    }
 }

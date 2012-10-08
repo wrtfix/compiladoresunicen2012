@@ -28,8 +28,9 @@ public class AccionSemantica10 extends AccionSemantica{
             this.error = true;
             linea++;
             this.mensajeError = "ERROR fuera de rango linea "+linea;
-
-            
+            Simbolo s = new Simbolo(lexema,"CADENA");
+            t = new Token(s.getTipo(),s);
+            tablaS.addSimbolo(s);
         }
         else
         {
