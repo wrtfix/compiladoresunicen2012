@@ -641,7 +641,8 @@ public class AnalizadorLexico {
 
 
             token = acc.run(lexema, caracter, tablaS, l.getLine());
-
+            if (token != null)
+                token.setLinea(l.getLine()+1);
             // if(token != null)
 //            System.out.println("Caracter: " + caracter);
 
@@ -682,7 +683,7 @@ public class AnalizadorLexico {
         linea = l.getLine();
         token = getTokens();
         if (token != null) {
-            logToken.addLogger("<" + token.getTipo() + "," + token.getPuntero().getValor() + ">");
+            logToken.addLogger("<" + token.getTipo() + "," + token.getPuntero().getValor() + ","+token.getLinea() +">");
 //            System.out.println("< " + token.getTipo() + " , " + token.getPuntero().getValor() + " >");
 
             if (token.getTipo().equals("NUMERO")) {

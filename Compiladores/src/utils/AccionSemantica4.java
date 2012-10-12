@@ -27,7 +27,7 @@ public class AccionSemantica4 extends AccionSemantica {
             s = new Simbolo(lexema.append(caracter),lexema.toString());        
         }
         Token t = new Token(s.getTipo(),s);
-        tablaS.addSimbolo(s);
+        //tablaS.addSimbolo(s); Comentado por sujerencia de la catedra
         lexema = new StringBuffer();
         return t;
     }

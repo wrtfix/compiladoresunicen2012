@@ -32,7 +32,7 @@ public class AccionSemantica6 extends AccionSemantica{
 
         Simbolo s = new Simbolo(lexema, tipo);
 
-        tablaS.addSimbolo(s);
+        //tablaS.addSimbolo(s); comento por sujerencia de la catedra
         Token t = new Token(s.getTipo(), s);
         return t;
     }

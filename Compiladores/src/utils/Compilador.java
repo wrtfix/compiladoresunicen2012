@@ -37,13 +37,13 @@ public class Compilador {
 
         p.imprimirPolacaInversa();
 
-       /* System.out.println("");
+        System.out.println("");
         System.out.println("TOKENS");
         System.out.println("<Tipo,Valor>");
         analizadorL.imprimirToken();
         System.out.println("");
         analizadorL.getTabla().imprimirTabla();
-        System.out.println("");*/
+        System.out.println("");
         System.out.println("ERRORES");
         analizadorL.imprimitErrores();
         

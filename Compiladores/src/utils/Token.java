@@ -11,12 +11,23 @@ package utils;
 public class Token {
     private Simbolo simb;
     private String tipo;
+    private int INICIAL = 0;
+    private int linea;
     public Token(){
         
     }
     public Token(String t,Simbolo s){
         simb = s;
         tipo = t;
+        linea = INICIAL;
+    }
+
+    public int getLinea() {
+        return linea;
+    }
+
+    public void setLinea(int linea) {
+        this.linea = linea;
     }
     public Simbolo getPuntero(){
         return simb;
