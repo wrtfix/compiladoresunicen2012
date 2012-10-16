@@ -46,8 +46,7 @@ public class Compilador {
         System.out.println("");
         System.out.println("ERRORES");
         analizadorL.imprimitErrores();
-        
-        
+
       
     }
 }
