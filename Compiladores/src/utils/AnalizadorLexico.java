@@ -683,7 +683,7 @@ public class AnalizadorLexico {
         linea = l.getLine();
         token = getTokens();
         if (token != null) {
-            logToken.addLogger("<" + token.getTipo() + "," + token.getPuntero().getValor() + ","+token.getLinea() +">");
+            logToken.addLogger("<"+token.getLinea() +","+ token.getTipo() + "," + token.getPuntero().getValor() + ">");
 //            System.out.println("< " + token.getTipo() + " , " + token.getPuntero().getValor() + " >");
 
             if (token.getTipo().equals("NUMERO")) {

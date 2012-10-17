@@ -37,7 +37,8 @@ public class Compilador {
 
         p.imprimirPolacaInversa();
 
-        System.out.println("");
+        p.imprimirLabels();
+        /*System.out.println("");
         System.out.println("TOKENS");
         System.out.println("<Tipo,Valor>");
         analizadorL.imprimirToken();
@@ -45,7 +46,7 @@ public class Compilador {
         analizadorL.getTabla().imprimirTabla();
         System.out.println("");
         System.out.println("ERRORES");
-        analizadorL.imprimitErrores();
+        analizadorL.imprimitErrores();*/
 
       
     }
