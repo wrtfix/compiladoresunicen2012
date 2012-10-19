@@ -40,11 +40,11 @@ declaracion: FLOAT variables';' {logSintactico.addLogger("Linea "+lexico.getLine
   | FLOAT';' {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": declaracion de variables");}
 ;
 
-variables: IDENTIFICADOR {lexico.getTabla().addTipo($1.sval,"FLOAT");}
+variables: IDENTIFICADOR {lexico.getTabla().addTipo($1.sval,"FLOAT",logSintactico,lexico.getLinea());}
   |  variables','IDENTIFICADOR
 ;
 
-arreglo: IDENTIFICADOR '[' expresion ']' {pi.remove(pi.size()-1);pi.add($1.sval"["+$3.sval+"]"); $$=$1;  lexico.getTabla().addTipo($1.sval,"ARRAY FLOAT");}
+arreglo: IDENTIFICADOR '[' expresion ']' {pi.remove(pi.size()-1);pi.add($1.sval+"["+$3.sval+"]"); $$=$1;  lexico.getTabla().addTipo($1.sval,"ARRAY FLOAT",logSintactico,lexico.getLinea());}
 ;
 
 
@@ -160,7 +160,7 @@ impresion: comienzoPrint cadena
 comienzoPrint: PRINT 
 ;
 
-cadena: '('CADENA')'';' {pi.add($2.sval); $$=$2; lexico.getTabla().addTipo($2.sval, "STRING");  logSintactico.addLogger("Linea "+lexico.getLineas()+":salida por pantalla");}
+cadena: '('CADENA')'';' {pi.add($2.sval); $$=$2; lexico.getTabla().addTipo($2.sval, "STRING",logSintactico,lexico.getLinea());  logSintactico.addLogger("Linea "+lexico.getLineas()+":salida por pantalla");}
 | '('CADENA')' {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba un punto y coma");}
 | '('CADENA {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba un );");}
 | '('';'  {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba una cadena");}
@@ -169,16 +169,19 @@ cadena: '('CADENA')'';' {pi.add($2.sval); $$=$2; lexico.getTabla().addTipo($2.sv
 ;
 
 asignacion: iden ASIG expresion ';' {pi.add($2.sval); $$=$1;logSintactico.addLogger("Linea "+lexico.getLineas()+": asignacion");}
-  |  IDENTIFICADOR '[' expresion ']' ASIG expresion ';'   {if (lexico.getTabla().existeTipoVariable($1.sval,"ARRAY FLOAT")){
-                                                            pi.add($1.sval); $$=$1;
-                                                            }else
-                                                                System.out.println("error tu codigo anda para el ojete aprende a programar mong@");
-                                                            logSintactico.addLogger("Linea "+lexico.getLineas()+": asignacion");
-                                                        }
+  | IDENTIFICADOR {
+
+ if (lexico.getTabla().existeTipoVariable($1.sval,"ARRAY FLOAT")){
+    pi.add($1.sval); pi.add("^"); $$=$1; 
+    }else
+        logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+"variable no declarada");
+    logSintactico.addLogger("Linea "+lexico.getLineas()+": asignacion");
+
+
+}'[' expresion ']'{pi.add("4"); pi.add("*");} ASIG expresion ';'   {pi.add($7.sval); $$=$1; logSintactico.addLogger("Linea "+lexico.getLineas()+": asignacion");}                                                        
   | iden ASIG';' { logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba una asignacion");} 
   | ASIG expresion';' { logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba una asignacion");} 
   | iden ASIG expresion  { logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba un punto y coma");} 
-  | IDENTIFICADOR '[' expresion ']' ASIG expresion { logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba un punto y coma");} 
 ;
 
 iden: IDENTIFICADOR {if (lexico.getTabla().existeTipoVariable($1.sval,"FLOAT")){
