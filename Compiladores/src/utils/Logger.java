@@ -28,22 +28,16 @@ public class Logger {
 
     public void imprimir() {
         // abrir el archivo
-        System.out.println("");
+        System.out.println("Se encontraron "+lineas.size()+" entradas");
         try {
-
-            //Creamos un Nuevo objeto FileWriter dandole
-            //como parámetros la ruta y nombre del fichero
             FileWriter fichero = new FileWriter(direccion);
-
-            //Insertamos el texto creado y si trabajamos
-            //en Windows terminaremos cada línea con "\r\n"
+            
+            String resultado;
             for (int i = 0; i < lineas.size(); i++) {
-                String resultado = lineas.get(i);
+                resultado = lineas.get(i);
                 System.out.println(resultado);
                 fichero.write(resultado + "\r\n");
             }
-
-            //cerramos el fichero
             fichero.close();
 
         } catch (Exception ex) {

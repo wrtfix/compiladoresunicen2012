@@ -14,6 +14,15 @@ public class Simbolo {
     private int accesos;
     private String tipoVariable;
     private boolean declarado;
+    private String tamanio;
+
+    public String getTamanio() {
+        return tamanio;
+    }
+
+    public void setTamanio(String tamanio) {
+        this.tamanio = tamanio;
+    }
 
     public boolean isDeclarado() {
         return declarado;

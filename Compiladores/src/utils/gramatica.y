@@ -40,11 +40,11 @@ declaracion: FLOAT variables';' {logSintactico.addLogger("Linea "+lexico.getLine
   | FLOAT';' {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": declaracion de variables");}
 ;
 
-variables: IDENTIFICADOR {lexico.getTabla().addTipo($1.sval,"FLOAT",logSintactico,lexico.getLinea());}
+variables: IDENTIFICADOR {lexico.getTabla().addTipo($1.sval,"FLOAT",logSintactico,lexico.getLineas(),"1");}
   |  variables','IDENTIFICADOR
 ;
 
-arreglo: IDENTIFICADOR '[' expresion ']' {pi.remove(pi.size()-1);pi.add($1.sval+"["+$3.sval+"]"); $$=$1;  lexico.getTabla().addTipo($1.sval,"ARRAY FLOAT",logSintactico,lexico.getLinea());}
+arreglo: IDENTIFICADOR '['NUMERO']' { extraerExpresion($1.sval,$3.sval);}
 ;
 
 
@@ -58,7 +58,7 @@ seleccion: comienzoif bloque
 | comienzoif bloqueThen 
 { 
             pi.add(" "); //agrega un blanco en  la polaca
-            pi.add("bi"); //agrega un bi en la polaca 
+            pi.add("JMP"); //agrega un bi en la polaca 
             Integer pos = (Integer) pila.pop(); // saca el tope de la pila
             pi.add(pos.intValue(),String.valueOf(pi.size()));// cambia el valor blanco en la polaca por el salto(size de polaca)               
             pi.remove(pos.intValue()+1);          
@@ -92,22 +92,22 @@ bloqueElse: '{'sentencias'}'
 
 condicion: argumento comparador argumento  {pi.add($2.sval);
 if ( $2.sval.equals("<")){
-pi.add(" "); pi.add("bge"); pila.push(pi.size()- 2 );
+pi.add(" "); pi.add("JGE"); pila.push(pi.size()- 2 );
 }
 if ( $2.sval.equals(">")){
-pi.add(" "); pi.add("ble"); pila.push(pi.size()- 2 );
+pi.add(" "); pi.add("JLE"); pila.push(pi.size()- 2 );
 }
 if ( $2.sval.equals("=")){
-pi.add(" "); pi.add("bne"); pila.push(pi.size()- 2 );
+pi.add(" "); pi.add("JNE"); pila.push(pi.size()- 2 );
 }
 if ( $2.sval.equals("MENOR_IGUAL")){
-pi.add(" "); pi.add("bgt"); pila.push(pi.size()- 2 );
+pi.add(" "); pi.add("JA"); pila.push(pi.size()- 2 );
 }
 if ( $2.sval.equals("MAYOR_IGUAL")){
-pi.add(" "); pi.add("blt"); pila.push(pi.size()- 2 );
+pi.add(" "); pi.add("JL"); pila.push(pi.size()- 2 );
 }
 if ( $2.sval.equals("DISTINTO")){
-    pi.add(" ");  pi.add("beq"); pila.push(pi.size()- 2 );
+    pi.add(" ");  pi.add("JE"); pila.push(pi.size()- 2 );
 }
 
 }
@@ -146,7 +146,7 @@ bloque_while: bloque {
             pos = (Integer) pila.pop(); 
             pi.add(String.valueOf(pos)); 
             label.add(pos);
-            pi.add("bi");                
+            pi.add("JMP");                
         
         }
         //label.add(pi.elementAt(pos));   
@@ -160,7 +160,7 @@ impresion: comienzoPrint cadena
 comienzoPrint: PRINT 
 ;
 
-cadena: '('CADENA')'';' {pi.add($2.sval); $$=$2; lexico.getTabla().addTipo($2.sval, "STRING",logSintactico,lexico.getLinea());  logSintactico.addLogger("Linea "+lexico.getLineas()+":salida por pantalla");}
+cadena: '('CADENA')'';' {pi.add($2.sval); $$=$2; lexico.getTabla().addTipo($2.sval, "STRING",logSintactico,lexico.getLineas(),"1");  logSintactico.addLogger("Linea "+lexico.getLineas()+":salida por pantalla");}
 | '('CADENA')' {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba un punto y coma");}
 | '('CADENA {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba un );");}
 | '('';'  {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba una cadena");}
@@ -172,13 +172,16 @@ asignacion: iden ASIG expresion ';' {pi.add($2.sval); $$=$1;logSintactico.addLog
   | IDENTIFICADOR {
 
  if (lexico.getTabla().existeTipoVariable($1.sval,"ARRAY FLOAT")){
-    pi.add($1.sval); pi.add("^"); $$=$1; 
+    pi.add($1.sval); pi.add("^"); pi.add("4"); $$=$1; entro1 = true;
     }else
-        logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+"variable no declarada");
+        logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+" variable no declarada");
     logSintactico.addLogger("Linea "+lexico.getLineas()+": asignacion");
 
 
-}'[' expresion ']'{pi.add("4"); pi.add("*");} ASIG expresion ';'   {pi.add($7.sval); $$=$1; logSintactico.addLogger("Linea "+lexico.getLineas()+": asignacion");}                                                        
+}'[' expresion ']'{ if (entro1){
+   pi.add("1"); pi.add("-"); pi.add("*"); pi.add("+");pi.add("&"); entro1=false;
+    } } ASIG expresion ';'   { pi.add($7.sval); $$=$1; logSintactico.addLogger("Linea "+lexico.getLineas()+": asignacion"); }
+                                                            
   | iden ASIG';' { logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba una asignacion");} 
   | ASIG expresion';' { logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba una asignacion");} 
   | iden ASIG expresion  { logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba un punto y coma");} 
@@ -215,15 +218,19 @@ if (lexico.getTabla().existeTipoVariable($1.sval,"FLOAT")){
 
 }
   |  num                {pi.add($1.sval); $$=$1;}
-  |  IDENTIFICADOR '[' expresion ']'   {
+  |  IDENTIFICADOR {
 if (lexico.getTabla().existeTipoVariable($1.sval,"ARRAY FLOAT")){
-    pi.add($1.sval); $$=$1;
+    pi.add($1.sval); pi.add("^"); pi.add("4"); entro2 = true;
 }else
     System.out.println("ERROR en linea "+lexico.getLineas()+": no se ecuentra declarada el arreglo");
-                                                        
 
-
+} '[' expresion ']'   {
+    if (entro2){
+        pi.add("1"); pi.add("-"); pi.add("*"); pi.add("+");pi.add("&");
+        entro2 = false;
+    }
 }
+
 ;
 
 %%
@@ -232,12 +239,15 @@ if (lexico.getTabla().existeTipoVariable($1.sval,"ARRAY FLOAT")){
   private Vector<String> pi;
   private Stack<Integer> pila;
   private Stack<Integer> label;
-
+  private boolean entro1;
+  private boolean entro2;
   public Parser(AnalizadorLexico l) {
          lexico = l;
          pi = new Vector<String>();
          pila = new Stack<Integer>();
          label = new Stack<Integer>();
+         entro1 = false;
+         entro2 = false;
     }
 
     private int yylex(){
@@ -282,4 +292,16 @@ public void imprimirPolacaInversa() {
 void imprimirLabels(){
     while(!label.empty())
         System.out.println(label.pop());
+}
+
+void extraerExpresion(String iden, String valor){
+    valor = valor.split("\\.")[0];
+    lexico.getTabla().addTipo(iden,"ARRAY FLOAT",logSintactico,lexico.getLineas(),valor);
+}
+
+public Stack<Integer> getLabels(){
+    return label;
+}
+public Vector<String> getPolaca(){
+    return pi;
 }

@@ -37,17 +37,21 @@ public class Compilador {
 
         p.imprimirPolacaInversa();
 
-        p.imprimirLabels();
-        /*System.out.println("");
-        System.out.println("TOKENS");
+        //p.imprimirLabels();
+        System.out.println("");
+        /*System.out.println("TOKENS");
         System.out.println("<Tipo,Valor>");
         analizadorL.imprimirToken();
-        System.out.println("");
+        System.out.println("");*/
         analizadorL.getTabla().imprimirTabla();
-        System.out.println("");
-        System.out.println("ERRORES");
+        /*System.out.println("");
+        System.out.println("ERRORES LEXICOS");
         analizadorL.imprimitErrores();*/
-
+        GeneradorCodigo c = new GeneradorCodigo(analizadorL.getTabla(), p.getLabels());
+        
+        c.addTablaSimbolo();
+        c.recorrerPolaca(p.getPolaca());
+        c.imprimir();
       
     }
 }

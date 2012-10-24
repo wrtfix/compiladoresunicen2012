@@ -45,9 +45,11 @@ public class TablaSimbolo {
 
     public void eliminarSimbolo(Simbolo s) {
         s = existeSimbolo(s);
+        if (s!=null){
         s.decrementarAccesos();
         if (s.getAccesos() == 0) {
             tabla.remove(s);
+        }
         }
     }
 
@@ -62,20 +64,22 @@ public class TablaSimbolo {
     public void imprimirTabla() {
         Logger logSimbolos = new Logger("tablasimbolo.log");
         System.out.println("TABLA DE SIMBOLOS");
-        System.out.println("TIPO    VALOR   ACCESOS");
+        System.out.println("TIPOVAR     TIPO    VALOR   ACCESOS TAMAÑO");
         for (int i = 0; i < tabla.size(); i++) {
-            logSimbolos.addLogger(tabla.get(i).getTipoVariable() + " " + tabla.get(i).getTipo() + " " + tabla.get(i).getValor() + " " + tabla.get(i).getAccesos());
+            logSimbolos.addLogger(tabla.get(i).getTipoVariable() + " " + tabla.get(i).getTipo() + " " + tabla.get(i).getValor() + " " + tabla.get(i).getAccesos() + " " + tabla.get(i).getTamanio());
         }
         logSimbolos.imprimir();
     }
 
-    public void addTipo(String valor, String variableTipo) {
+    public void addTipo(String valor, String variableTipo, Logger log , int linea,String tam) {
       Simbolo s = existeSimbolo(new Simbolo(new StringBuffer(valor), ""));
         if (s.esVacio()) {
             s.setTipoVariable(variableTipo);
             s.setDeclarado(true);
+            s.setTamanio(tam);
         } else {
-            System.out.println("ERROR ya se encuentra declarada esta variable");
+            //System.out.println("ERROR ya se encuentra declarada esta variable");
+            log.addLogger("ERROR sintactico en linea: "+linea+  " ya se encuentra declarada esta variable");
         }
 
     }
