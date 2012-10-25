@@ -63,6 +63,7 @@ public class GeneradorCodigo {
         log.addLogger("MOV ax," + der);
         log.addLogger("ADD ax," + izq);
         log.addLogger("MOV aux" + cont.toString() + ", ax");
+        pilaCodigo.add("aux" + cont.toString());
         cont++;
     }
 
@@ -71,14 +72,16 @@ public class GeneradorCodigo {
         log.addLogger("MOV ax," + der);
         log.addLogger("SUB ax," + izq);
         log.addLogger("MOV aux" + cont.toString() + ", ax");
+        pilaCodigo.add("aux" + cont.toString());
         cont++;
 
     }
 
     public void ejecutarMutiplicar(String der, String izq) {
         log.addLogger("MOV ax," + der);
-        log.addLogger("IMUL" + izq);
+        log.addLogger("IMUL " + izq);
         log.addLogger("MOV aux" + cont + ", ax");
+        pilaCodigo.add("aux" + cont.toString());
         cont++;
 
 
@@ -90,13 +93,14 @@ public class GeneradorCodigo {
         log.addLogger("DIV dx," );
         log.addLogger("IDIV" + izq);
         log.addLogger("MOV aux" + cont.toString() + ", ax");
+        pilaCodigo.add("aux" + cont.toString());
         cont++;
         
     }
 
     public void ejecutarAsignacion(String der, String izq) {
         log.addLogger("MOV ax " + izq);
-        log.addLogger("MOV dir "+der+", ax");
+        log.addLogger("MOV "+der+", ax");
     }
 
     public void ejecutarSalto(String salto, String tipo) {
@@ -104,6 +108,19 @@ public class GeneradorCodigo {
         log.addLogger("Label " + labels.firstElement().toString() + ": MOV edx, " + salto);
         log.addLogger(tipo + " edx");
         labels.remove(labels.firstElement());
+
+    }
+    public void verificarLimite(String valor, Integer l){
+        log.addLogger("MOV ax,"+valor);
+        log.addLogger("CMP ax,"+l);
+        log.addLogger("JLE _LIMOK");
+        log.addLogger("CALL ERROR_LIMITE");
+        log.addLogger("CALL TERMINAR");
+        log.addLogger("_LIMOK:");
+    }
+    public void finArreglo(String ofs, String valor){
+        log.addLogger("ADD bx, "+ofs); // seteo el bx que es la posicion donde se guardara el valor a asignar
+        pilaCodigo.add("word ptr[bx]"); //guardo en el arreglo el valor que esta en ax
 
     }
 
@@ -172,62 +189,67 @@ public class GeneradorCodigo {
                 }
                 if ("^".equals(varAux)){
                     String base = pilaCodigo.pop();
-                    StringBuffer vs = new StringBuffer(base);
-                    Simbolo aux = new Simbolo(vs, "ARRAY FLOAT");
+                    StringBuffer bs = new StringBuffer(base);
+                    Simbolo aux = new Simbolo(bs, "ARRAY FLOAT");
                     aux = ts.existeSimbolo(aux);
                     int limite = Integer.valueOf(aux.getTamanio());
+                    verificarLimite(base, limite);
+                    pilaCodigo.add("dir "+base);
                     
                 }
                 if ("&".equals(varAux)){
-                    
-                    
+                    finArreglo(pilaCodigo.pop(),"123");
                 }
-                //apilar el resultado en la pila                
-                pilaCodigo.push(String.valueOf(String.valueOf(result)));
+                if ("'".contains(varAux)){
+                    imrimirCadena(varAux);
+                }
+                
             } else {
                 pilaCodigo.push(varAux);//apilo;                            
             }
         }
+        log.addLogger("ERROR_LIMITE:");
+        log.addLogger("TERMINAR:");
+        log.addLogger("mov ax, 4C00h");
+        log.addLogger("int 21h");
+        log.addLogger("END");
+
     }
 
     public boolean esOperador(String varAux) {
         return (operadores.contains(varAux));
     }
 
-    public int obtenerLimite(String operacion) {
-//        String[] token = operacion.split(" ");
-//        int i,op=0;
-//        
-//        while (i < token.length){
-//            if(token[i].equals("+")){
-//                
-//            }
-//            i++;
-//        }
-        return 0;
-    }
-
     public void addTablaSimbolo() {
         ArrayList<Simbolo> elem = ts.getTabla();
         log.addLogger(".data");
+        log.addLogger("mov AX,@DATA ");
+        log.addLogger("mov DS,AX");
+
         String tipo = "";
         String aux = "";
         for (int i = 0; i < elem.size(); i++) {
             tipo = elem.get(i).getTipoVariable();
             if (tipo.equals("FLOAT")) {
-                log.addLogger(elem.get(i).getValor().toString() + " DD " + "0");
+                log.addLogger(elem.get(i).getValor().toString() + " DD " + "?");
             }
             if (tipo.equals("ARRAY FLOAT")) {
-                log.addLogger(elem.get(i).getValor().toString() +" "+ elem.get(i).getTamanio() + " DUP " + "0");
+                log.addLogger(elem.get(i).getValor().toString() +" dw "+ elem.get(i).getTamanio() + " DUP " + "(0)");
             }
             if (tipo.equals("STRING")) {
                 aux = elem.get(i).getValor().toString().replace("'", "");
                 log.addLogger(aux.replace(" ", "") + " db " + "\"" + aux + "\"");
             }
+        
         }
+        log.addLogger(".code");
     }
 
     public void imprimir() {
         log.imprimir();
+    }
+
+    private void imrimirCadena(String cadena) {
+        
     }
 }

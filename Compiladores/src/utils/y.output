@@ -8,152 +8,172 @@
    4  sentencias : sentencia
    5             | sentencias sentencia
 
-   6  sentencia : declaracion error
+   6  sentencia : declaracion
 
    7  $$1 :
 
-   8  sentencia : $$1 bucle error
-   9            | impresion error
+   8  sentencia : $$1 bucle
+   9            | impresion
 
   10  $$2 :
 
-  11  sentencia : $$2 seleccion error
-  12            | asignacion ';' error
+  11  sentencia : $$2 seleccion
+  12            | asignacion
+  13            | error
 
-  13  declaracion : FLOAT variables ';'
-  14              | ARRAY FLOAT arreglo ';'
-  15              | ARRAY arreglo
-  16              | FLOAT ';'
+  14  declaracion : FLOAT variables ';'
+  15              | ARRAY FLOAT arreglo ';'
+  16              | ARRAY arreglo
+  17              | FLOAT ';'
 
-  17  variables : IDENTIFICADOR
-  18            | variables ',' IDENTIFICADOR
+  18  variables : IDENTIFICADOR
+  19            | variables ',' IDENTIFICADOR
 
-  19  arreglo : IDENTIFICADOR '[' expresion ']'
+  20  arreglo : IDENTIFICADOR '[' expresion ']'
 
-  20  seleccion : IF '(' condicion ')' THEN bloque
-  21            | IF '(' condicion ')'
-  22            | IF '(' condicion
+  21  seleccion : comienzoif bloque
 
-  23  $$3 :
+  22  $$3 :
 
-  24  seleccion : IF '(' condicion ')' THEN bloqueThen $$3 ELSE bloqueElse
+  23  seleccion : comienzoif bloqueThen $$3 ELSE bloqueElse
 
-  25  bloqueThen : '{' sentencias '}'
+  24  comienzoif : IF '(' condicion ')' THEN
+  25             | IF '(' condicion
+  26             | IF '(' condicion ')'
+  27             | IF THEN
 
-  26  bloqueElse : '{' sentencias '}'
+  28  bloqueThen : '{' sentencias '}'
 
-  27  condicion : argumento comparador argumento
-  28            | argumento comparador error
-  29            | comparador argumento error
+  29  bloqueElse : '{' sentencias '}'
 
-  30  comparador : '<'
-  31             | '>'
-  32             | '='
-  33             | MENOR_IGUAL
-  34             | MAYOR_IGUAL
-  35             | DISTINTO
+  30  condicion : argumento comparador argumento
+  31            | argumento comparador error
+  32            | comparador argumento error
 
-  36  bucle : comienzo_while condicion_while bloque_while
-  37        | comienzo_while '{' sentencia '}'
-  38        | condicion_while
-  39        | comienzo_while '(' condicion
-  40        | comienzo_while '(' condicion ')'
+  33  comparador : '<'
+  34             | '>'
+  35             | '='
+  36             | MENOR_IGUAL
+  37             | MAYOR_IGUAL
+  38             | DISTINTO
 
-  41  $$4 :
+  39  bucle : comienzo_while condicion_while bloque_while
+  40        | comienzo_while '{' sentencia '}'
+  41        | condicion_while
 
-  42  comienzo_while : $$4 WHILE
+  42  $$4 :
 
-  43  condicion_while : '(' condicion ')' DO
+  43  comienzo_while : $$4 WHILE
 
-  44  bloque_while : bloque
+  44  condicion_while : '(' condicion ')' DO
+  45                  | '(' condicion ')'
+  46                  | '(' condicion
 
-  45  impresion : PRINT '(' CADENA ')' ';'
-  46            | PRINT '(' CADENA ')'
-  47            | PRINT '(' ';'
-  48            | PRINT ';'
-  49            | PRINT '(' expresion ')' ';'
+  47  bloque_while : bloque
 
-  50  asignacion : iden ASIG expresion
-  51             | IDENTIFICADOR '[' expresion ']' ASIG expresion
-  52             | iden ASIG ';'
-  53             | ASIG expresion ';'
+  48  impresion : comienzoPrint cadena
 
-  54  iden : IDENTIFICADOR
+  49  comienzoPrint : PRINT
 
-  55  expresion : expresion '+' termino
-  56            | expresion '-' termino
-  57            | termino
+  50  cadena : '(' CADENA ')' ';'
+  51         | '(' CADENA ')'
+  52         | '(' CADENA
+  53         | '(' ';'
+  54         | ';'
+  55         | '(' expresion ')' ';'
 
-  58  termino : termino '*' argumento
-  59          | termino '/' argumento
-  60          | argumento
+  56  asignacion : iden ASIG expresion ';'
 
-  61  num : '-' NUMERO
-  62      | NUMERO
+  57  $$5 :
 
-  63  argumento : IDENTIFICADOR
-  64            | num
-  65            | IDENTIFICADOR '[' expresion ']'
+  58  $$6 :
+
+  59  asignacion : IDENTIFICADOR $$5 '[' expresion ']' $$6 ASIG expresion ';'
+  60             | iden ASIG ';'
+  61             | ASIG expresion ';'
+  62             | iden ASIG expresion
+
+  63  iden : IDENTIFICADOR
+
+  64  expresion : expresion '+' termino
+  65            | expresion '-' termino
+  66            | termino
+
+  67  termino : termino '*' argumento
+  68          | termino '/' argumento
+  69          | argumento
+
+  70  num : '-' NUMERO
+  71      | NUMERO
+
+  72  argumento : IDENTIFICADOR
+  73            | num
+  74            | IDENTIFICADOR '[' expresion ']'
 
 state 0
 	$accept : . programa $end  (0)
 	$$1 : .  (7)
 	$$2 : .  (10)
 
-	IDENTIFICADOR  shift 1
-	FLOAT  shift 2
-	PRINT  shift 3
-	ARRAY  shift 4
-	ASIG  shift 5
+	error  shift 1
+	IDENTIFICADOR  shift 2
+	FLOAT  shift 3
+	PRINT  shift 4
+	ARRAY  shift 5
+	ASIG  shift 6
 	IF  reduce 10
 	WHILE  reduce 7
 	'('  reduce 7
 
-	programa  goto 6
-	sentencias  goto 7
-	sentencia  goto 8
-	declaracion  goto 9
-	$$1  goto 10
-	impresion  goto 11
-	$$2  goto 12
-	asignacion  goto 13
-	iden  goto 14
+	programa  goto 7
+	sentencias  goto 8
+	sentencia  goto 9
+	declaracion  goto 10
+	$$1  goto 11
+	impresion  goto 12
+	$$2  goto 13
+	asignacion  goto 14
+	comienzoPrint  goto 15
+	iden  goto 16
 
 
 state 1
-	asignacion : IDENTIFICADOR . '[' expresion ']' ASIG expresion  (51)
-	iden : IDENTIFICADOR .  (54)
+	sentencia : error .  (13)
 
-	'['  shift 15
-	ASIG  reduce 54
+	.  reduce 13
 
 
 state 2
-	declaracion : FLOAT . variables ';'  (13)
-	declaracion : FLOAT . ';'  (16)
+	asignacion : IDENTIFICADOR . $$5 '[' expresion ']' $$6 ASIG expresion ';'  (59)
+	iden : IDENTIFICADOR .  (63)
+	$$5 : .  (57)
 
-	IDENTIFICADOR  shift 16
-	';'  shift 17
-	.  error
+	ASIG  reduce 63
+	'['  reduce 57
 
-	variables  goto 18
+	$$5  goto 17
 
 
 state 3
-	impresion : PRINT . '(' CADENA ')' ';'  (45)
-	impresion : PRINT . '(' CADENA ')'  (46)
-	impresion : PRINT . '(' ';'  (47)
-	impresion : PRINT . ';'  (48)
-	impresion : PRINT . '(' expresion ')' ';'  (49)
+	declaracion : FLOAT . variables ';'  (14)
+	declaracion : FLOAT . ';'  (17)
 
+	IDENTIFICADOR  shift 18
 	';'  shift 19
-	'('  shift 20
 	.  error
+
+	variables  goto 20
 
 
 state 4
-	declaracion : ARRAY . FLOAT arreglo ';'  (14)
-	declaracion : ARRAY . arreglo  (15)
+	comienzoPrint : PRINT .  (49)
+
+	.  reduce 49
+
+
+state 5
+	declaracion : ARRAY . FLOAT arreglo ';'  (15)
+	declaracion : ARRAY . arreglo  (16)
 
 	IDENTIFICADOR  shift 21
 	FLOAT  shift 22
@@ -162,8 +182,8 @@ state 4
 	arreglo  goto 23
 
 
-state 5
-	asignacion : ASIG . expresion ';'  (53)
+state 6
+	asignacion : ASIG . expresion ';'  (61)
 
 	IDENTIFICADOR  shift 24
 	NUMERO  shift 25
@@ -176,245 +196,246 @@ state 5
 	num  goto 30
 
 
-state 6
+state 7
 	$accept : programa . $end  (0)
 
 	$end  accept
 
 
-state 7
+state 8
 	programa : sentencias .  (1)
 	sentencias : sentencias . sentencia  (5)
 	$$1 : .  (7)
 	$$2 : .  (10)
 
-	IDENTIFICADOR  shift 1
-	FLOAT  shift 2
-	PRINT  shift 3
-	ARRAY  shift 4
-	ASIG  shift 5
+	error  shift 1
+	IDENTIFICADOR  shift 2
+	FLOAT  shift 3
+	PRINT  shift 4
+	ARRAY  shift 5
+	ASIG  shift 6
 	$end  reduce 1
 	IF  reduce 10
 	WHILE  reduce 7
 	'('  reduce 7
 
 	sentencia  goto 31
-	declaracion  goto 9
-	$$1  goto 10
-	impresion  goto 11
-	$$2  goto 12
-	asignacion  goto 13
-	iden  goto 14
+	declaracion  goto 10
+	$$1  goto 11
+	impresion  goto 12
+	$$2  goto 13
+	asignacion  goto 14
+	comienzoPrint  goto 15
+	iden  goto 16
 
 
-state 8
+state 9
 	sentencias : sentencia .  (4)
 
 	.  reduce 4
 
 
-state 9
-	sentencia : declaracion . error  (6)
-
-	error  shift 32
-	.  error
-
-
 state 10
-	sentencia : $$1 . bucle error  (8)
-	$$4 : .  (41)
+	sentencia : declaracion .  (6)
 
-	'('  shift 33
-	WHILE  reduce 41
-
-	bucle  goto 34
-	comienzo_while  goto 35
-	condicion_while  goto 36
-	$$4  goto 37
+	.  reduce 6
 
 
 state 11
-	sentencia : impresion . error  (9)
+	sentencia : $$1 . bucle  (8)
+	$$4 : .  (42)
 
-	error  shift 38
-	.  error
+	'('  shift 32
+	WHILE  reduce 42
+
+	bucle  goto 33
+	comienzo_while  goto 34
+	condicion_while  goto 35
+	$$4  goto 36
 
 
 state 12
-	sentencia : $$2 . seleccion error  (11)
+	sentencia : impresion .  (9)
 
-	IF  shift 39
-	.  error
-
-	seleccion  goto 40
+	.  reduce 9
 
 
 state 13
-	sentencia : asignacion . ';' error  (12)
+	sentencia : $$2 . seleccion  (11)
 
-	';'  shift 41
+	IF  shift 37
 	.  error
+
+	seleccion  goto 38
+	comienzoif  goto 39
 
 
 state 14
-	asignacion : iden . ASIG expresion  (50)
-	asignacion : iden . ASIG ';'  (52)
+	sentencia : asignacion .  (12)
 
-	ASIG  shift 42
-	.  error
+	.  reduce 12
 
 
 state 15
-	asignacion : IDENTIFICADOR '[' . expresion ']' ASIG expresion  (51)
+	impresion : comienzoPrint . cadena  (48)
 
-	IDENTIFICADOR  shift 24
-	NUMERO  shift 25
-	'-'  shift 26
+	';'  shift 40
+	'('  shift 41
 	.  error
 
-	expresion  goto 43
-	argumento  goto 28
-	termino  goto 29
-	num  goto 30
+	cadena  goto 42
 
 
 state 16
-	variables : IDENTIFICADOR .  (17)
+	asignacion : iden . ASIG expresion ';'  (56)
+	asignacion : iden . ASIG ';'  (60)
+	asignacion : iden . ASIG expresion  (62)
+
+	ASIG  shift 43
+	.  error
+
+
+state 17
+	asignacion : IDENTIFICADOR $$5 . '[' expresion ']' $$6 ASIG expresion ';'  (59)
+
+	'['  shift 44
+	.  error
+
+
+state 18
+	variables : IDENTIFICADOR .  (18)
+
+	.  reduce 18
+
+
+state 19
+	declaracion : FLOAT ';' .  (17)
 
 	.  reduce 17
 
 
-state 17
-	declaracion : FLOAT ';' .  (16)
-
-	error  reduce 16
-
-
-state 18
-	declaracion : FLOAT variables . ';'  (13)
-	variables : variables . ',' IDENTIFICADOR  (18)
-
-	';'  shift 44
-	','  shift 45
-	.  error
-
-
-state 19
-	impresion : PRINT ';' .  (48)
-
-	error  reduce 48
-
-
 state 20
-	impresion : PRINT '(' . CADENA ')' ';'  (45)
-	impresion : PRINT '(' . CADENA ')'  (46)
-	impresion : PRINT '(' . ';'  (47)
-	impresion : PRINT '(' . expresion ')' ';'  (49)
+	declaracion : FLOAT variables . ';'  (14)
+	variables : variables . ',' IDENTIFICADOR  (19)
 
-	IDENTIFICADOR  shift 24
-	CADENA  shift 46
-	NUMERO  shift 25
-	';'  shift 47
-	'-'  shift 26
+	';'  shift 45
+	','  shift 46
 	.  error
-
-	expresion  goto 48
-	argumento  goto 28
-	termino  goto 29
-	num  goto 30
 
 
 state 21
-	arreglo : IDENTIFICADOR . '[' expresion ']'  (19)
+	arreglo : IDENTIFICADOR . '[' expresion ']'  (20)
 
-	'['  shift 49
+	'['  shift 47
 	.  error
 
 
 state 22
-	declaracion : ARRAY FLOAT . arreglo ';'  (14)
+	declaracion : ARRAY FLOAT . arreglo ';'  (15)
 
 	IDENTIFICADOR  shift 21
 	.  error
 
-	arreglo  goto 50
+	arreglo  goto 48
 
 
 state 23
-	declaracion : ARRAY arreglo .  (15)
+	declaracion : ARRAY arreglo .  (16)
 
-	error  reduce 15
+	.  reduce 16
 
 
 state 24
-	argumento : IDENTIFICADOR .  (63)
-	argumento : IDENTIFICADOR . '[' expresion ']'  (65)
+	argumento : IDENTIFICADOR .  (72)
+	argumento : IDENTIFICADOR . '[' expresion ']'  (74)
 
-	'['  shift 51
-	error  reduce 63
-	MAYOR_IGUAL  reduce 63
-	MENOR_IGUAL  reduce 63
-	DISTINTO  reduce 63
-	';'  reduce 63
-	']'  reduce 63
-	')'  reduce 63
-	'<'  reduce 63
-	'>'  reduce 63
-	'='  reduce 63
-	'+'  reduce 63
-	'-'  reduce 63
-	'*'  reduce 63
-	'/'  reduce 63
+	'['  shift 49
+	$end  reduce 72
+	error  reduce 72
+	IDENTIFICADOR  reduce 72
+	FLOAT  reduce 72
+	IF  reduce 72
+	WHILE  reduce 72
+	PRINT  reduce 72
+	ARRAY  reduce 72
+	MAYOR_IGUAL  reduce 72
+	MENOR_IGUAL  reduce 72
+	DISTINTO  reduce 72
+	ASIG  reduce 72
+	'{'  reduce 72
+	'}'  reduce 72
+	';'  reduce 72
+	']'  reduce 72
+	'('  reduce 72
+	')'  reduce 72
+	'<'  reduce 72
+	'>'  reduce 72
+	'='  reduce 72
+	'+'  reduce 72
+	'-'  reduce 72
+	'*'  reduce 72
+	'/'  reduce 72
 
 
 state 25
-	num : NUMERO .  (62)
+	num : NUMERO .  (71)
 
-	.  reduce 62
+	.  reduce 71
 
 
 state 26
-	num : '-' . NUMERO  (61)
+	num : '-' . NUMERO  (70)
 
-	NUMERO  shift 52
+	NUMERO  shift 50
 	.  error
 
 
 state 27
-	asignacion : ASIG expresion . ';'  (53)
-	expresion : expresion . '+' termino  (55)
-	expresion : expresion . '-' termino  (56)
+	asignacion : ASIG expresion . ';'  (61)
+	expresion : expresion . '+' termino  (64)
+	expresion : expresion . '-' termino  (65)
 
-	';'  shift 53
-	'+'  shift 54
-	'-'  shift 55
+	';'  shift 51
+	'+'  shift 52
+	'-'  shift 53
 	.  error
 
 
 state 28
-	termino : argumento .  (60)
+	termino : argumento .  (69)
 
-	.  reduce 60
+	.  reduce 69
 
 
 state 29
-	expresion : termino .  (57)
-	termino : termino . '*' argumento  (58)
-	termino : termino . '/' argumento  (59)
+	expresion : termino .  (66)
+	termino : termino . '*' argumento  (67)
+	termino : termino . '/' argumento  (68)
 
-	'*'  shift 56
-	'/'  shift 57
-	';'  reduce 57
-	']'  reduce 57
-	')'  reduce 57
-	'+'  reduce 57
-	'-'  reduce 57
+	'*'  shift 54
+	'/'  shift 55
+	$end  reduce 66
+	error  reduce 66
+	IDENTIFICADOR  reduce 66
+	FLOAT  reduce 66
+	IF  reduce 66
+	WHILE  reduce 66
+	PRINT  reduce 66
+	ARRAY  reduce 66
+	ASIG  reduce 66
+	'}'  reduce 66
+	';'  reduce 66
+	']'  reduce 66
+	'('  reduce 66
+	')'  reduce 66
+	'+'  reduce 66
+	'-'  reduce 66
 
 
 state 30
-	argumento : num .  (64)
+	argumento : num .  (73)
 
-	.  reduce 64
+	.  reduce 73
 
 
 state 31
@@ -424,99 +445,118 @@ state 31
 
 
 state 32
-	sentencia : declaracion error .  (6)
-
-	.  reduce 6
-
-
-state 33
-	condicion_while : '(' . condicion ')' DO  (43)
+	condicion_while : '(' . condicion ')' DO  (44)
+	condicion_while : '(' . condicion ')'  (45)
+	condicion_while : '(' . condicion  (46)
 
 	IDENTIFICADOR  shift 24
-	MAYOR_IGUAL  shift 58
-	MENOR_IGUAL  shift 59
-	DISTINTO  shift 60
+	MAYOR_IGUAL  shift 56
+	MENOR_IGUAL  shift 57
+	DISTINTO  shift 58
 	NUMERO  shift 25
-	'<'  shift 61
-	'>'  shift 62
-	'='  shift 63
+	'<'  shift 59
+	'>'  shift 60
+	'='  shift 61
 	'-'  shift 26
 	.  error
 
-	condicion  goto 64
-	argumento  goto 65
-	comparador  goto 66
+	condicion  goto 62
+	argumento  goto 63
+	comparador  goto 64
 	num  goto 30
 
 
-state 34
-	sentencia : $$1 bucle . error  (8)
+state 33
+	sentencia : $$1 bucle .  (8)
 
-	error  shift 67
+	.  reduce 8
+
+
+state 34
+	bucle : comienzo_while . condicion_while bloque_while  (39)
+	bucle : comienzo_while . '{' sentencia '}'  (40)
+
+	'{'  shift 65
+	'('  shift 32
 	.  error
+
+	condicion_while  goto 66
 
 
 state 35
-	bucle : comienzo_while . condicion_while bloque_while  (36)
-	bucle : comienzo_while . '{' sentencia '}'  (37)
-	bucle : comienzo_while . '(' condicion  (39)
-	bucle : comienzo_while . '(' condicion ')'  (40)
+	bucle : condicion_while .  (41)
 
-	'{'  shift 68
-	'('  shift 69
-	.  error
-
-	condicion_while  goto 70
+	.  reduce 41
 
 
 state 36
-	bucle : condicion_while .  (38)
+	comienzo_while : $$4 . WHILE  (43)
 
-	error  reduce 38
+	WHILE  shift 67
+	.  error
 
 
 state 37
-	comienzo_while : $$4 . WHILE  (42)
+	comienzoif : IF . '(' condicion ')' THEN  (24)
+	comienzoif : IF . '(' condicion  (25)
+	comienzoif : IF . '(' condicion ')'  (26)
+	comienzoif : IF . THEN  (27)
 
-	WHILE  shift 71
+	THEN  shift 68
+	'('  shift 69
 	.  error
 
 
 state 38
-	sentencia : impresion error .  (9)
+	sentencia : $$2 seleccion .  (11)
 
-	.  reduce 9
+	.  reduce 11
 
 
 state 39
-	seleccion : IF . '(' condicion ')' THEN bloque  (20)
-	seleccion : IF . '(' condicion ')'  (21)
-	seleccion : IF . '(' condicion  (22)
-	seleccion : IF . '(' condicion ')' THEN bloqueThen $$3 ELSE bloqueElse  (24)
+	seleccion : comienzoif . bloque  (21)
+	seleccion : comienzoif . bloqueThen $$3 ELSE bloqueElse  (23)
+	$$1 : .  (7)
+	$$2 : .  (10)
 
-	'('  shift 72
-	.  error
+	error  shift 1
+	IDENTIFICADOR  shift 2
+	FLOAT  shift 3
+	PRINT  shift 4
+	ARRAY  shift 5
+	ASIG  shift 6
+	'{'  shift 70
+	IF  reduce 10
+	WHILE  reduce 7
+	'('  reduce 7
+
+	bloque  goto 71
+	sentencia  goto 72
+	declaracion  goto 10
+	$$1  goto 11
+	impresion  goto 12
+	$$2  goto 13
+	asignacion  goto 14
+	bloqueThen  goto 73
+	comienzoPrint  goto 15
+	iden  goto 16
 
 
 state 40
-	sentencia : $$2 seleccion . error  (11)
+	cadena : ';' .  (54)
 
-	error  shift 73
-	.  error
+	.  reduce 54
 
 
 state 41
-	sentencia : asignacion ';' . error  (12)
-
-	error  shift 74
-	.  error
-
-
-state 42
-	asignacion : iden ASIG . expresion  (50)
-	asignacion : iden ASIG . ';'  (52)
+	cadena : '(' . CADENA ')' ';'  (50)
+	cadena : '(' . CADENA ')'  (51)
+	cadena : '(' . CADENA  (52)
+	cadena : '(' . ';'  (53)
+	cadena : '(' . expresion ')' ';'  (55)
 
 	IDENTIFICADOR  shift 24
+	CADENA  shift 74
 	NUMERO  shift 25
 	';'  shift 75
 	'-'  shift 26
@@ -528,57 +568,58 @@ state 42
 	num  goto 30
 
 
-state 43
-	asignacion : IDENTIFICADOR '[' expresion . ']' ASIG expresion  (51)
-	expresion : expresion . '+' termino  (55)
-	expresion : expresion . '-' termino  (56)
+state 42
+	impresion : comienzoPrint cadena .  (48)
 
-	']'  shift 77
-	'+'  shift 54
-	'-'  shift 55
+	.  reduce 48
+
+
+state 43
+	asignacion : iden ASIG . expresion ';'  (56)
+	asignacion : iden ASIG . ';'  (60)
+	asignacion : iden ASIG . expresion  (62)
+
+	IDENTIFICADOR  shift 24
+	NUMERO  shift 25
+	';'  shift 77
+	'-'  shift 26
 	.  error
+
+	expresion  goto 78
+	argumento  goto 28
+	termino  goto 29
+	num  goto 30
 
 
 state 44
-	declaracion : FLOAT variables ';' .  (13)
+	asignacion : IDENTIFICADOR $$5 '[' . expresion ']' $$6 ASIG expresion ';'  (59)
 
-	error  reduce 13
+	IDENTIFICADOR  shift 24
+	NUMERO  shift 25
+	'-'  shift 26
+	.  error
+
+	expresion  goto 79
+	argumento  goto 28
+	termino  goto 29
+	num  goto 30
 
 
 state 45
-	variables : variables ',' . IDENTIFICADOR  (18)
+	declaracion : FLOAT variables ';' .  (14)
 
-	IDENTIFICADOR  shift 78
-	.  error
+	.  reduce 14
 
 
 state 46
-	impresion : PRINT '(' CADENA . ')' ';'  (45)
-	impresion : PRINT '(' CADENA . ')'  (46)
+	variables : variables ',' . IDENTIFICADOR  (19)
 
-	')'  shift 79
+	IDENTIFICADOR  shift 80
 	.  error
 
 
 state 47
-	impresion : PRINT '(' ';' .  (47)
-
-	error  reduce 47
-
-
-state 48
-	impresion : PRINT '(' expresion . ')' ';'  (49)
-	expresion : expresion . '+' termino  (55)
-	expresion : expresion . '-' termino  (56)
-
-	')'  shift 80
-	'+'  shift 54
-	'-'  shift 55
-	.  error
-
-
-state 49
-	arreglo : IDENTIFICADOR '[' . expresion ']'  (19)
+	arreglo : IDENTIFICADOR '[' . expresion ']'  (20)
 
 	IDENTIFICADOR  shift 24
 	NUMERO  shift 25
@@ -591,15 +632,15 @@ state 49
 	num  goto 30
 
 
-state 50
-	declaracion : ARRAY FLOAT arreglo . ';'  (14)
+state 48
+	declaracion : ARRAY FLOAT arreglo . ';'  (15)
 
 	';'  shift 82
 	.  error
 
 
-state 51
-	argumento : IDENTIFICADOR '[' . expresion ']'  (65)
+state 49
+	argumento : IDENTIFICADOR '[' . expresion ']'  (74)
 
 	IDENTIFICADOR  shift 24
 	NUMERO  shift 25
@@ -612,20 +653,20 @@ state 51
 	num  goto 30
 
 
-state 52
-	num : '-' NUMERO .  (61)
+state 50
+	num : '-' NUMERO .  (70)
+
+	.  reduce 70
+
+
+state 51
+	asignacion : ASIG expresion ';' .  (61)
 
 	.  reduce 61
 
 
-state 53
-	asignacion : ASIG expresion ';' .  (53)
-
-	.  reduce 53
-
-
-state 54
-	expresion : expresion '+' . termino  (55)
+state 52
+	expresion : expresion '+' . termino  (64)
 
 	IDENTIFICADOR  shift 24
 	NUMERO  shift 25
@@ -637,8 +678,8 @@ state 54
 	num  goto 30
 
 
-state 55
-	expresion : expresion '-' . termino  (56)
+state 53
+	expresion : expresion '-' . termino  (65)
 
 	IDENTIFICADOR  shift 24
 	NUMERO  shift 25
@@ -650,8 +691,8 @@ state 55
 	num  goto 30
 
 
-state 56
-	termino : termino '*' . argumento  (58)
+state 54
+	termino : termino '*' . argumento  (67)
 
 	IDENTIFICADOR  shift 24
 	NUMERO  shift 25
@@ -662,8 +703,8 @@ state 56
 	num  goto 30
 
 
-state 57
-	termino : termino '/' . argumento  (59)
+state 55
+	termino : termino '/' . argumento  (68)
 
 	IDENTIFICADOR  shift 24
 	NUMERO  shift 25
@@ -674,66 +715,79 @@ state 57
 	num  goto 30
 
 
-state 58
-	comparador : MAYOR_IGUAL .  (34)
+state 56
+	comparador : MAYOR_IGUAL .  (37)
 
-	.  reduce 34
+	.  reduce 37
+
+
+state 57
+	comparador : MENOR_IGUAL .  (36)
+
+	.  reduce 36
+
+
+state 58
+	comparador : DISTINTO .  (38)
+
+	.  reduce 38
 
 
 state 59
-	comparador : MENOR_IGUAL .  (33)
+	comparador : '<' .  (33)
 
 	.  reduce 33
 
 
 state 60
-	comparador : DISTINTO .  (35)
+	comparador : '>' .  (34)
+
+	.  reduce 34
+
+
+state 61
+	comparador : '=' .  (35)
 
 	.  reduce 35
 
 
-state 61
-	comparador : '<' .  (30)
-
-	.  reduce 30
-
-
 state 62
-	comparador : '>' .  (31)
+	condicion_while : '(' condicion . ')' DO  (44)
+	condicion_while : '(' condicion . ')'  (45)
+	condicion_while : '(' condicion .  (46)
 
-	.  reduce 31
+	')'  shift 88
+	$end  reduce 46
+	error  reduce 46
+	IDENTIFICADOR  reduce 46
+	FLOAT  reduce 46
+	IF  reduce 46
+	WHILE  reduce 46
+	PRINT  reduce 46
+	ARRAY  reduce 46
+	ASIG  reduce 46
+	'{'  reduce 46
+	'}'  reduce 46
+	'('  reduce 46
 
 
 state 63
-	comparador : '=' .  (32)
+	condicion : argumento . comparador argumento  (30)
+	condicion : argumento . comparador error  (31)
 
-	.  reduce 32
-
-
-state 64
-	condicion_while : '(' condicion . ')' DO  (43)
-
-	')'  shift 88
-	.  error
-
-
-state 65
-	condicion : argumento . comparador argumento  (27)
-	condicion : argumento . comparador error  (28)
-
-	MAYOR_IGUAL  shift 58
-	MENOR_IGUAL  shift 59
-	DISTINTO  shift 60
-	'<'  shift 61
-	'>'  shift 62
-	'='  shift 63
+	MAYOR_IGUAL  shift 56
+	MENOR_IGUAL  shift 57
+	DISTINTO  shift 58
+	'<'  shift 59
+	'>'  shift 60
+	'='  shift 61
 	.  error
 
 	comparador  goto 89
 
 
-state 66
-	condicion : comparador . argumento error  (29)
+state 64
+	condicion : comparador . argumento error  (32)
 
 	IDENTIFICADOR  shift 24
 	NUMERO  shift 25
@@ -744,406 +798,530 @@ state 66
 	num  goto 30
 
 
-state 67
-	sentencia : $$1 bucle error .  (8)
-
-	.  reduce 8
-
-
-state 68
-	bucle : comienzo_while '{' . sentencia '}'  (37)
+state 65
+	bucle : comienzo_while '{' . sentencia '}'  (40)
 	$$1 : .  (7)
 	$$2 : .  (10)
 
-	IDENTIFICADOR  shift 1
-	FLOAT  shift 2
-	PRINT  shift 3
-	ARRAY  shift 4
-	ASIG  shift 5
+	error  shift 1
+	IDENTIFICADOR  shift 2
+	FLOAT  shift 3
+	PRINT  shift 4
+	ARRAY  shift 5
+	ASIG  shift 6
 	IF  reduce 10
 	WHILE  reduce 7
 	'('  reduce 7
 
 	sentencia  goto 91
-	declaracion  goto 9
-	$$1  goto 10
-	impresion  goto 11
-	$$2  goto 12
-	asignacion  goto 13
-	iden  goto 14
+	declaracion  goto 10
+	$$1  goto 11
+	impresion  goto 12
+	$$2  goto 13
+	asignacion  goto 14
+	comienzoPrint  goto 15
+	iden  goto 16
 
 
-state 69
-	bucle : comienzo_while '(' . condicion  (39)
-	bucle : comienzo_while '(' . condicion ')'  (40)
-	condicion_while : '(' . condicion ')' DO  (43)
-
-	IDENTIFICADOR  shift 24
-	MAYOR_IGUAL  shift 58
-	MENOR_IGUAL  shift 59
-	DISTINTO  shift 60
-	NUMERO  shift 25
-	'<'  shift 61
-	'>'  shift 62
-	'='  shift 63
-	'-'  shift 26
-	.  error
-
-	condicion  goto 92
-	argumento  goto 65
-	comparador  goto 66
-	num  goto 30
-
-
-state 70
-	bucle : comienzo_while condicion_while . bloque_while  (36)
+state 66
+	bucle : comienzo_while condicion_while . bloque_while  (39)
 	$$1 : .  (7)
 	$$2 : .  (10)
 
-	IDENTIFICADOR  shift 1
-	FLOAT  shift 2
-	PRINT  shift 3
-	ARRAY  shift 4
-	ASIG  shift 5
-	'{'  shift 93
+	error  shift 1
+	IDENTIFICADOR  shift 2
+	FLOAT  shift 3
+	PRINT  shift 4
+	ARRAY  shift 5
+	ASIG  shift 6
+	'{'  shift 92
 	IF  reduce 10
 	WHILE  reduce 7
 	'('  reduce 7
 
-	bloque  goto 94
-	sentencia  goto 95
-	declaracion  goto 9
-	$$1  goto 10
-	impresion  goto 11
-	$$2  goto 12
-	asignacion  goto 13
-	bloque_while  goto 96
-	iden  goto 14
+	bloque  goto 93
+	sentencia  goto 72
+	declaracion  goto 10
+	$$1  goto 11
+	impresion  goto 12
+	$$2  goto 13
+	asignacion  goto 14
+	bloque_while  goto 94
+	comienzoPrint  goto 15
+	iden  goto 16
 
 
-state 71
-	comienzo_while : $$4 WHILE .  (42)
+state 67
+	comienzo_while : $$4 WHILE .  (43)
 
-	.  reduce 42
+	.  reduce 43
 
 
-state 72
-	seleccion : IF '(' . condicion ')' THEN bloque  (20)
-	seleccion : IF '(' . condicion ')'  (21)
-	seleccion : IF '(' . condicion  (22)
-	seleccion : IF '(' . condicion ')' THEN bloqueThen $$3 ELSE bloqueElse  (24)
+state 68
+	comienzoif : IF THEN .  (27)
+
+	.  reduce 27
+
+
+state 69
+	comienzoif : IF '(' . condicion ')' THEN  (24)
+	comienzoif : IF '(' . condicion  (25)
+	comienzoif : IF '(' . condicion ')'  (26)
 
 	IDENTIFICADOR  shift 24
-	MAYOR_IGUAL  shift 58
-	MENOR_IGUAL  shift 59
-	DISTINTO  shift 60
+	MAYOR_IGUAL  shift 56
+	MENOR_IGUAL  shift 57
+	DISTINTO  shift 58
 	NUMERO  shift 25
-	'<'  shift 61
-	'>'  shift 62
-	'='  shift 63
+	'<'  shift 59
+	'>'  shift 60
+	'='  shift 61
 	'-'  shift 26
 	.  error
 
-	condicion  goto 97
-	argumento  goto 65
-	comparador  goto 66
+	condicion  goto 95
+	argumento  goto 63
+	comparador  goto 64
 	num  goto 30
 
 
-state 73
-	sentencia : $$2 seleccion error .  (11)
+state 70
+	bloque : '{' . sentencias '}'  (3)
+	bloqueThen : '{' . sentencias '}'  (28)
+	$$1 : .  (7)
+	$$2 : .  (10)
 
-	.  reduce 11
+	error  shift 1
+	IDENTIFICADOR  shift 2
+	FLOAT  shift 3
+	PRINT  shift 4
+	ARRAY  shift 5
+	ASIG  shift 6
+	IF  reduce 10
+	WHILE  reduce 7
+	'('  reduce 7
+
+	sentencias  goto 96
+	sentencia  goto 9
+	declaracion  goto 10
+	$$1  goto 11
+	impresion  goto 12
+	$$2  goto 13
+	asignacion  goto 14
+	comienzoPrint  goto 15
+	iden  goto 16
+
+
+state 71
+	seleccion : comienzoif bloque .  (21)
+
+	.  reduce 21
+
+
+state 72
+	bloque : sentencia .  (2)
+
+	.  reduce 2
+
+
+state 73
+	seleccion : comienzoif bloqueThen . $$3 ELSE bloqueElse  (23)
+	$$3 : .  (22)
+
+	.  reduce 22
+
+	$$3  goto 97
 
 
 state 74
-	sentencia : asignacion ';' error .  (12)
+	cadena : '(' CADENA . ')' ';'  (50)
+	cadena : '(' CADENA . ')'  (51)
+	cadena : '(' CADENA .  (52)
 
-	.  reduce 12
+	')'  shift 98
+	$end  reduce 52
+	error  reduce 52
+	IDENTIFICADOR  reduce 52
+	FLOAT  reduce 52
+	IF  reduce 52
+	WHILE  reduce 52
+	PRINT  reduce 52
+	ARRAY  reduce 52
+	ASIG  reduce 52
+	'}'  reduce 52
+	'('  reduce 52
 
 
 state 75
-	asignacion : iden ASIG ';' .  (52)
+	cadena : '(' ';' .  (53)
 
-	.  reduce 52
+	.  reduce 53
 
 
 state 76
-	asignacion : iden ASIG expresion .  (50)
-	expresion : expresion . '+' termino  (55)
-	expresion : expresion . '-' termino  (56)
+	cadena : '(' expresion . ')' ';'  (55)
+	expresion : expresion . '+' termino  (64)
+	expresion : expresion . '-' termino  (65)
 
-	'+'  shift 54
-	'-'  shift 55
-	';'  reduce 50
+	')'  shift 99
+	'+'  shift 52
+	'-'  shift 53
+	.  error
 
 
 state 77
-	asignacion : IDENTIFICADOR '[' expresion ']' . ASIG expresion  (51)
+	asignacion : iden ASIG ';' .  (60)
 
-	ASIG  shift 98
-	.  error
+	.  reduce 60
 
 
 state 78
-	variables : variables ',' IDENTIFICADOR .  (18)
+	asignacion : iden ASIG expresion . ';'  (56)
+	asignacion : iden ASIG expresion .  (62)
+	expresion : expresion . '+' termino  (64)
+	expresion : expresion . '-' termino  (65)
 
-	.  reduce 18
+	';'  shift 100
+	'+'  shift 52
+	'-'  shift 53
+	$end  reduce 62
+	error  reduce 62
+	IDENTIFICADOR  reduce 62
+	FLOAT  reduce 62
+	IF  reduce 62
+	WHILE  reduce 62
+	PRINT  reduce 62
+	ARRAY  reduce 62
+	ASIG  reduce 62
+	'}'  reduce 62
+	'('  reduce 62
 
 
 state 79
-	impresion : PRINT '(' CADENA ')' . ';'  (45)
-	impresion : PRINT '(' CADENA ')' .  (46)
+	asignacion : IDENTIFICADOR $$5 '[' expresion . ']' $$6 ASIG expresion ';'  (59)
+	expresion : expresion . '+' termino  (64)
+	expresion : expresion . '-' termino  (65)
 
-	';'  shift 99
-	error  reduce 46
-
-
-state 80
-	impresion : PRINT '(' expresion ')' . ';'  (49)
-
-	';'  shift 100
+	']'  shift 101
+	'+'  shift 52
+	'-'  shift 53
 	.  error
 
 
-state 81
-	arreglo : IDENTIFICADOR '[' expresion . ']'  (19)
-	expresion : expresion . '+' termino  (55)
-	expresion : expresion . '-' termino  (56)
+state 80
+	variables : variables ',' IDENTIFICADOR .  (19)
 
-	']'  shift 101
-	'+'  shift 54
-	'-'  shift 55
+	.  reduce 19
+
+
+state 81
+	arreglo : IDENTIFICADOR '[' expresion . ']'  (20)
+	expresion : expresion . '+' termino  (64)
+	expresion : expresion . '-' termino  (65)
+
+	']'  shift 102
+	'+'  shift 52
+	'-'  shift 53
 	.  error
 
 
 state 82
-	declaracion : ARRAY FLOAT arreglo ';' .  (14)
+	declaracion : ARRAY FLOAT arreglo ';' .  (15)
 
-	error  reduce 14
+	.  reduce 15
 
 
 state 83
-	expresion : expresion . '+' termino  (55)
-	expresion : expresion . '-' termino  (56)
-	argumento : IDENTIFICADOR '[' expresion . ']'  (65)
+	expresion : expresion . '+' termino  (64)
+	expresion : expresion . '-' termino  (65)
+	argumento : IDENTIFICADOR '[' expresion . ']'  (74)
 
-	']'  shift 102
-	'+'  shift 54
-	'-'  shift 55
+	']'  shift 103
+	'+'  shift 52
+	'-'  shift 53
 	.  error
 
 
 state 84
-	expresion : expresion '+' termino .  (55)
-	termino : termino . '*' argumento  (58)
-	termino : termino . '/' argumento  (59)
+	expresion : expresion '+' termino .  (64)
+	termino : termino . '*' argumento  (67)
+	termino : termino . '/' argumento  (68)
 
-	'*'  shift 56
-	'/'  shift 57
-	';'  reduce 55
-	']'  reduce 55
-	')'  reduce 55
-	'+'  reduce 55
-	'-'  reduce 55
+	'*'  shift 54
+	'/'  shift 55
+	$end  reduce 64
+	error  reduce 64
+	IDENTIFICADOR  reduce 64
+	FLOAT  reduce 64
+	IF  reduce 64
+	WHILE  reduce 64
+	PRINT  reduce 64
+	ARRAY  reduce 64
+	ASIG  reduce 64
+	'}'  reduce 64
+	';'  reduce 64
+	']'  reduce 64
+	'('  reduce 64
+	')'  reduce 64
+	'+'  reduce 64
+	'-'  reduce 64
 
 
 state 85
-	expresion : expresion '-' termino .  (56)
-	termino : termino . '*' argumento  (58)
-	termino : termino . '/' argumento  (59)
+	expresion : expresion '-' termino .  (65)
+	termino : termino . '*' argumento  (67)
+	termino : termino . '/' argumento  (68)
 
-	'*'  shift 56
-	'/'  shift 57
-	';'  reduce 56
-	']'  reduce 56
-	')'  reduce 56
-	'+'  reduce 56
-	'-'  reduce 56
+	'*'  shift 54
+	'/'  shift 55
+	$end  reduce 65
+	error  reduce 65
+	IDENTIFICADOR  reduce 65
+	FLOAT  reduce 65
+	IF  reduce 65
+	WHILE  reduce 65
+	PRINT  reduce 65
+	ARRAY  reduce 65
+	ASIG  reduce 65
+	'}'  reduce 65
+	';'  reduce 65
+	']'  reduce 65
+	'('  reduce 65
+	')'  reduce 65
+	'+'  reduce 65
+	'-'  reduce 65
 
 
 state 86
-	termino : termino '*' argumento .  (58)
+	termino : termino '*' argumento .  (67)
 
-	.  reduce 58
+	.  reduce 67
 
 
 state 87
-	termino : termino '/' argumento .  (59)
+	termino : termino '/' argumento .  (68)
 
-	.  reduce 59
+	.  reduce 68
 
 
 state 88
-	condicion_while : '(' condicion ')' . DO  (43)
+	condicion_while : '(' condicion ')' . DO  (44)
+	condicion_while : '(' condicion ')' .  (45)
 
-	DO  shift 103
-	.  error
+	DO  shift 104
+	$end  reduce 45
+	error  reduce 45
+	IDENTIFICADOR  reduce 45
+	FLOAT  reduce 45
+	IF  reduce 45
+	WHILE  reduce 45
+	PRINT  reduce 45
+	ARRAY  reduce 45
+	ASIG  reduce 45
+	'{'  reduce 45
+	'}'  reduce 45
+	'('  reduce 45
 
 
 state 89
-	condicion : argumento comparador . argumento  (27)
-	condicion : argumento comparador . error  (28)
+	condicion : argumento comparador . argumento  (30)
+	condicion : argumento comparador . error  (31)
 
-	error  shift 104
+	error  shift 105
 	IDENTIFICADOR  shift 24
 	NUMERO  shift 25
 	'-'  shift 26
 	.  error
 
-	argumento  goto 105
+	argumento  goto 106
 	num  goto 30
 
 
 state 90
-	condicion : comparador argumento . error  (29)
+	condicion : comparador argumento . error  (32)
 
-	error  shift 106
+	error  shift 107
 	.  error
 
 
 state 91
-	bucle : comienzo_while '{' sentencia . '}'  (37)
+	bucle : comienzo_while '{' sentencia . '}'  (40)
 
-	'}'  shift 107
+	'}'  shift 108
 	.  error
 
 
 state 92
-	bucle : comienzo_while '(' condicion .  (39)
-	bucle : comienzo_while '(' condicion . ')'  (40)
-	condicion_while : '(' condicion . ')' DO  (43)
-
-	')'  shift 108
-	error  reduce 39
-
-
-state 93
 	bloque : '{' . sentencias '}'  (3)
 	$$1 : .  (7)
 	$$2 : .  (10)
 
-	IDENTIFICADOR  shift 1
-	FLOAT  shift 2
-	PRINT  shift 3
-	ARRAY  shift 4
-	ASIG  shift 5
+	error  shift 1
+	IDENTIFICADOR  shift 2
+	FLOAT  shift 3
+	PRINT  shift 4
+	ARRAY  shift 5
+	ASIG  shift 6
 	IF  reduce 10
 	WHILE  reduce 7
 	'('  reduce 7
 
 	sentencias  goto 109
-	sentencia  goto 8
-	declaracion  goto 9
-	$$1  goto 10
-	impresion  goto 11
-	$$2  goto 12
-	asignacion  goto 13
-	iden  goto 14
+	sentencia  goto 9
+	declaracion  goto 10
+	$$1  goto 11
+	impresion  goto 12
+	$$2  goto 13
+	asignacion  goto 14
+	comienzoPrint  goto 15
+	iden  goto 16
+
+
+state 93
+	bloque_while : bloque .  (47)
+
+	.  reduce 47
 
 
 state 94
-	bloque_while : bloque .  (44)
+	bucle : comienzo_while condicion_while bloque_while .  (39)
 
-	error  reduce 44
+	.  reduce 39
 
 
 state 95
-	bloque : sentencia .  (2)
+	comienzoif : IF '(' condicion . ')' THEN  (24)
+	comienzoif : IF '(' condicion .  (25)
+	comienzoif : IF '(' condicion . ')'  (26)
 
-	error  reduce 2
+	')'  shift 110
+	error  reduce 25
+	IDENTIFICADOR  reduce 25
+	FLOAT  reduce 25
+	IF  reduce 25
+	WHILE  reduce 25
+	PRINT  reduce 25
+	ARRAY  reduce 25
+	ASIG  reduce 25
+	'{'  reduce 25
+	'('  reduce 25
 
 
 state 96
-	bucle : comienzo_while condicion_while bloque_while .  (36)
+	bloque : '{' sentencias . '}'  (3)
+	sentencias : sentencias . sentencia  (5)
+	bloqueThen : '{' sentencias . '}'  (28)
+	$$1 : .  (7)
+	$$2 : .  (10)
 
-	error  reduce 36
+	error  shift 1
+	IDENTIFICADOR  shift 2
+	FLOAT  shift 3
+	PRINT  shift 4
+	ARRAY  shift 5
+	ASIG  shift 6
+	'}'  shift 111
+	IF  reduce 10
+	WHILE  reduce 7
+	'('  reduce 7
+
+	sentencia  goto 31
+	declaracion  goto 10
+	$$1  goto 11
+	impresion  goto 12
+	$$2  goto 13
+	asignacion  goto 14
+	comienzoPrint  goto 15
+	iden  goto 16
 
 
 state 97
-	seleccion : IF '(' condicion . ')' THEN bloque  (20)
-	seleccion : IF '(' condicion . ')'  (21)
-	seleccion : IF '(' condicion .  (22)
-	seleccion : IF '(' condicion . ')' THEN bloqueThen $$3 ELSE bloqueElse  (24)
+	seleccion : comienzoif bloqueThen $$3 . ELSE bloqueElse  (23)
 
-	')'  shift 110
-	error  reduce 22
+	ELSE  shift 112
+	.  error
 
 
 state 98
-	asignacion : IDENTIFICADOR '[' expresion ']' ASIG . expresion  (51)
+	cadena : '(' CADENA ')' . ';'  (50)
+	cadena : '(' CADENA ')' .  (51)
 
-	IDENTIFICADOR  shift 24
-	NUMERO  shift 25
-	'-'  shift 26
-	.  error
-
-	expresion  goto 111
-	argumento  goto 28
-	termino  goto 29
-	num  goto 30
+	';'  shift 113
+	$end  reduce 51
+	error  reduce 51
+	IDENTIFICADOR  reduce 51
+	FLOAT  reduce 51
+	IF  reduce 51
+	WHILE  reduce 51
+	PRINT  reduce 51
+	ARRAY  reduce 51
+	ASIG  reduce 51
+	'}'  reduce 51
+	'('  reduce 51
 
 
 state 99
-	impresion : PRINT '(' CADENA ')' ';' .  (45)
+	cadena : '(' expresion ')' . ';'  (55)
 
-	error  reduce 45
+	';'  shift 114
+	.  error
 
 
 state 100
-	impresion : PRINT '(' expresion ')' ';' .  (49)
+	asignacion : iden ASIG expresion ';' .  (56)
 
-	error  reduce 49
+	.  reduce 56
 
 
 state 101
-	arreglo : IDENTIFICADOR '[' expresion ']' .  (19)
+	asignacion : IDENTIFICADOR $$5 '[' expresion ']' . $$6 ASIG expresion ';'  (59)
+	$$6 : .  (58)
 
-	.  reduce 19
+	.  reduce 58
+
+	$$6  goto 115
 
 
 state 102
-	argumento : IDENTIFICADOR '[' expresion ']' .  (65)
+	arreglo : IDENTIFICADOR '[' expresion ']' .  (20)
 
-	.  reduce 65
+	.  reduce 20
 
 
 state 103
-	condicion_while : '(' condicion ')' DO .  (43)
+	argumento : IDENTIFICADOR '[' expresion ']' .  (74)
 
-	.  reduce 43
+	.  reduce 74
 
 
 state 104
-	condicion : argumento comparador error .  (28)
+	condicion_while : '(' condicion ')' DO .  (44)
 
-	.  reduce 28
+	.  reduce 44
 
 
 state 105
-	condicion : argumento comparador argumento .  (27)
+	condicion : argumento comparador error .  (31)
 
-	.  reduce 27
+	.  reduce 31
 
 
 state 106
-	condicion : comparador argumento error .  (29)
+	condicion : argumento comparador argumento .  (30)
 
-	.  reduce 29
+	.  reduce 30
 
 
 state 107
-	bucle : comienzo_while '{' sentencia '}' .  (37)
+	condicion : comparador argumento error .  (32)
 
-	error  reduce 37
+	.  reduce 32
 
 
 state 108
-	bucle : comienzo_while '(' condicion ')' .  (40)
-	condicion_while : '(' condicion ')' . DO  (43)
+	bucle : comienzo_while '{' sentencia '}' .  (40)
 
-	DO  shift 103
-	error  reduce 40
+	.  reduce 40
 
 
 state 109
@@ -1152,227 +1330,197 @@ state 109
 	$$1 : .  (7)
 	$$2 : .  (10)
 
-	IDENTIFICADOR  shift 1
-	FLOAT  shift 2
-	PRINT  shift 3
-	ARRAY  shift 4
-	ASIG  shift 5
-	'}'  shift 112
+	error  shift 1
+	IDENTIFICADOR  shift 2
+	FLOAT  shift 3
+	PRINT  shift 4
+	ARRAY  shift 5
+	ASIG  shift 6
+	'}'  shift 116
 	IF  reduce 10
 	WHILE  reduce 7
 	'('  reduce 7
 
 	sentencia  goto 31
-	declaracion  goto 9
-	$$1  goto 10
-	impresion  goto 11
-	$$2  goto 12
-	asignacion  goto 13
-	iden  goto 14
+	declaracion  goto 10
+	$$1  goto 11
+	impresion  goto 12
+	$$2  goto 13
+	asignacion  goto 14
+	comienzoPrint  goto 15
+	iden  goto 16
 
 
 state 110
-	seleccion : IF '(' condicion ')' . THEN bloque  (20)
-	seleccion : IF '(' condicion ')' .  (21)
-	seleccion : IF '(' condicion ')' . THEN bloqueThen $$3 ELSE bloqueElse  (24)
+	comienzoif : IF '(' condicion ')' . THEN  (24)
+	comienzoif : IF '(' condicion ')' .  (26)
 
-	THEN  shift 113
-	error  reduce 21
+	THEN  shift 117
+	error  reduce 26
+	IDENTIFICADOR  reduce 26
+	FLOAT  reduce 26
+	IF  reduce 26
+	WHILE  reduce 26
+	PRINT  reduce 26
+	ARRAY  reduce 26
+	ASIG  reduce 26
+	'{'  reduce 26
+	'('  reduce 26
 
 
 state 111
-	asignacion : IDENTIFICADOR '[' expresion ']' ASIG expresion .  (51)
-	expresion : expresion . '+' termino  (55)
-	expresion : expresion . '-' termino  (56)
+	bloque : '{' sentencias '}' .  (3)
+	bloqueThen : '{' sentencias '}' .  (28)
 
-	'+'  shift 54
-	'-'  shift 55
-	';'  reduce 51
+	$end  reduce 3
+	error  reduce 3
+	IDENTIFICADOR  reduce 3
+	FLOAT  reduce 3
+	IF  reduce 3
+	ELSE  reduce 28
+	WHILE  reduce 3
+	PRINT  reduce 3
+	ARRAY  reduce 3
+	ASIG  reduce 3
+	'}'  reduce 3
+	'('  reduce 3
 
 
 state 112
-	bloque : '{' sentencias '}' .  (3)
+	seleccion : comienzoif bloqueThen $$3 ELSE . bloqueElse  (23)
 
-	error  reduce 3
+	'{'  shift 118
+	.  error
+
+	bloqueElse  goto 119
 
 
 state 113
-	seleccion : IF '(' condicion ')' THEN . bloque  (20)
-	seleccion : IF '(' condicion ')' THEN . bloqueThen $$3 ELSE bloqueElse  (24)
-	$$1 : .  (7)
-	$$2 : .  (10)
+	cadena : '(' CADENA ')' ';' .  (50)
 
-	IDENTIFICADOR  shift 1
-	FLOAT  shift 2
-	PRINT  shift 3
-	ARRAY  shift 4
-	ASIG  shift 5
-	'{'  shift 114
-	IF  reduce 10
-	WHILE  reduce 7
-	'('  reduce 7
-
-	bloque  goto 115
-	sentencia  goto 95
-	declaracion  goto 9
-	$$1  goto 10
-	impresion  goto 11
-	$$2  goto 12
-	asignacion  goto 13
-	bloqueThen  goto 116
-	iden  goto 14
+	.  reduce 50
 
 
 state 114
-	bloque : '{' . sentencias '}'  (3)
-	bloqueThen : '{' . sentencias '}'  (25)
-	$$1 : .  (7)
-	$$2 : .  (10)
+	cadena : '(' expresion ')' ';' .  (55)
 
-	IDENTIFICADOR  shift 1
-	FLOAT  shift 2
-	PRINT  shift 3
-	ARRAY  shift 4
-	ASIG  shift 5
-	IF  reduce 10
-	WHILE  reduce 7
-	'('  reduce 7
-
-	sentencias  goto 117
-	sentencia  goto 8
-	declaracion  goto 9
-	$$1  goto 10
-	impresion  goto 11
-	$$2  goto 12
-	asignacion  goto 13
-	iden  goto 14
+	.  reduce 55
 
 
 state 115
-	seleccion : IF '(' condicion ')' THEN bloque .  (20)
+	asignacion : IDENTIFICADOR $$5 '[' expresion ']' $$6 . ASIG expresion ';'  (59)
 
-	error  reduce 20
+	ASIG  shift 120
+	.  error
 
 
 state 116
-	seleccion : IF '(' condicion ')' THEN bloqueThen . $$3 ELSE bloqueElse  (24)
-	$$3 : .  (23)
+	bloque : '{' sentencias '}' .  (3)
 
-	.  reduce 23
-
-	$$3  goto 118
+	.  reduce 3
 
 
 state 117
-	bloque : '{' sentencias . '}'  (3)
-	sentencias : sentencias . sentencia  (5)
-	bloqueThen : '{' sentencias . '}'  (25)
-	$$1 : .  (7)
-	$$2 : .  (10)
+	comienzoif : IF '(' condicion ')' THEN .  (24)
 
-	IDENTIFICADOR  shift 1
-	FLOAT  shift 2
-	PRINT  shift 3
-	ARRAY  shift 4
-	ASIG  shift 5
-	'}'  shift 119
-	IF  reduce 10
-	WHILE  reduce 7
-	'('  reduce 7
-
-	sentencia  goto 31
-	declaracion  goto 9
-	$$1  goto 10
-	impresion  goto 11
-	$$2  goto 12
-	asignacion  goto 13
-	iden  goto 14
+	.  reduce 24
 
 
 state 118
-	seleccion : IF '(' condicion ')' THEN bloqueThen $$3 . ELSE bloqueElse  (24)
-
-	ELSE  shift 120
-	.  error
-
-
-state 119
-	bloque : '{' sentencias '}' .  (3)
-	bloqueThen : '{' sentencias '}' .  (25)
-
-	error  reduce 3
-	ELSE  reduce 25
-
-
-state 120
-	seleccion : IF '(' condicion ')' THEN bloqueThen $$3 ELSE . bloqueElse  (24)
-
-	'{'  shift 121
-	.  error
-
-	bloqueElse  goto 122
-
-
-state 121
-	bloqueElse : '{' . sentencias '}'  (26)
+	bloqueElse : '{' . sentencias '}'  (29)
 	$$1 : .  (7)
 	$$2 : .  (10)
 
-	IDENTIFICADOR  shift 1
-	FLOAT  shift 2
-	PRINT  shift 3
-	ARRAY  shift 4
-	ASIG  shift 5
+	error  shift 1
+	IDENTIFICADOR  shift 2
+	FLOAT  shift 3
+	PRINT  shift 4
+	ARRAY  shift 5
+	ASIG  shift 6
 	IF  reduce 10
 	WHILE  reduce 7
 	'('  reduce 7
 
-	sentencias  goto 123
-	sentencia  goto 8
-	declaracion  goto 9
-	$$1  goto 10
-	impresion  goto 11
-	$$2  goto 12
-	asignacion  goto 13
-	iden  goto 14
+	sentencias  goto 121
+	sentencia  goto 9
+	declaracion  goto 10
+	$$1  goto 11
+	impresion  goto 12
+	$$2  goto 13
+	asignacion  goto 14
+	comienzoPrint  goto 15
+	iden  goto 16
 
 
-state 122
-	seleccion : IF '(' condicion ')' THEN bloqueThen $$3 ELSE bloqueElse .  (24)
+state 119
+	seleccion : comienzoif bloqueThen $$3 ELSE bloqueElse .  (23)
 
-	error  reduce 24
+	.  reduce 23
 
 
-state 123
+state 120
+	asignacion : IDENTIFICADOR $$5 '[' expresion ']' $$6 ASIG . expresion ';'  (59)
+
+	IDENTIFICADOR  shift 24
+	NUMERO  shift 25
+	'-'  shift 26
+	.  error
+
+	expresion  goto 122
+	argumento  goto 28
+	termino  goto 29
+	num  goto 30
+
+
+state 121
 	sentencias : sentencias . sentencia  (5)
-	bloqueElse : '{' sentencias . '}'  (26)
+	bloqueElse : '{' sentencias . '}'  (29)
 	$$1 : .  (7)
 	$$2 : .  (10)
 
-	IDENTIFICADOR  shift 1
-	FLOAT  shift 2
-	PRINT  shift 3
-	ARRAY  shift 4
-	ASIG  shift 5
-	'}'  shift 124
+	error  shift 1
+	IDENTIFICADOR  shift 2
+	FLOAT  shift 3
+	PRINT  shift 4
+	ARRAY  shift 5
+	ASIG  shift 6
+	'}'  shift 123
 	IF  reduce 10
 	WHILE  reduce 7
 	'('  reduce 7
 
 	sentencia  goto 31
-	declaracion  goto 9
-	$$1  goto 10
-	impresion  goto 11
-	$$2  goto 12
-	asignacion  goto 13
-	iden  goto 14
+	declaracion  goto 10
+	$$1  goto 11
+	impresion  goto 12
+	$$2  goto 13
+	asignacion  goto 14
+	comienzoPrint  goto 15
+	iden  goto 16
+
+
+state 122
+	asignacion : IDENTIFICADOR $$5 '[' expresion ']' $$6 ASIG expresion . ';'  (59)
+	expresion : expresion . '+' termino  (64)
+	expresion : expresion . '-' termino  (65)
+
+	';'  shift 124
+	'+'  shift 52
+	'-'  shift 53
+	.  error
+
+
+state 123
+	bloqueElse : '{' sentencias '}' .  (29)
+
+	.  reduce 29
 
 
 state 124
-	bloqueElse : '{' sentencias '}' .  (26)
+	asignacion : IDENTIFICADOR $$5 '[' expresion ']' $$6 ASIG expresion ';' .  (59)
 
-	error  reduce 26
+	.  reduce 59
 
 
-32 terminals, 28 nonterminals
-66 grammar rules, 125 states
+32 terminals, 33 nonterminals
+75 grammar rules, 125 states
