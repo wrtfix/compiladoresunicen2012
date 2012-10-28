@@ -50,10 +50,12 @@ arreglo: IDENTIFICADOR '['NUMERO']' { extraerExpresion($1.sval,$3.sval);}
 
 seleccion: comienzoif bloque
 { 
+            if (!pila.isEmpty()){
             Integer pos = (Integer) pila.pop(); // saca el tope de la pila
             pi.add(pos.intValue(),String.valueOf(pi.size()));// cambia el valor blanco en la polaca por el salto(size de polaca)               
             pi.remove(pos.intValue()+1);          
             label.add(pi.size());
+            }
 }
 | comienzoif bloqueThen 
 { 
@@ -100,13 +102,13 @@ pi.add(" "); pi.add("JLE"); pila.push(pi.size()- 2 );
 if ( $2.sval.equals("=")){
 pi.add(" "); pi.add("JNE"); pila.push(pi.size()- 2 );
 }
-if ( $2.sval.equals("MENOR_IGUAL")){
+if ( $2.sval.equals("<=")){
 pi.add(" "); pi.add("JA"); pila.push(pi.size()- 2 );
 }
-if ( $2.sval.equals("MAYOR_IGUAL")){
+if ( $2.sval.equals(">=")){
 pi.add(" "); pi.add("JL"); pila.push(pi.size()- 2 );
 }
-if ( $2.sval.equals("DISTINTO")){
+if ( $2.sval.equals("<>")){
     pi.add(" ");  pi.add("JE"); pila.push(pi.size()- 2 );
 }
 
@@ -121,7 +123,7 @@ comparador: '<'
   |  '=' 
   |  MENOR_IGUAL 
   |  MAYOR_IGUAL 
-  |  DISTINTO {}
+  |  DISTINTO 
 ;
 
 bucle:  comienzo_while condicion_while bloque_while
@@ -155,8 +157,9 @@ bloque_while: bloque {
 }
 
 
-impresion: comienzoPrint cadena 
+impresion: comienzoPrint cadena {pi.add($1.sval);}
 ;
+
 comienzoPrint: PRINT 
 ;
 
@@ -230,7 +233,6 @@ if (lexico.getTabla().existeTipoVariable($1.sval,"ARRAY FLOAT")){
         entro2 = false;
     }
 }
-
 ;
 
 %%

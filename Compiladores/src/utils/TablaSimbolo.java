@@ -64,7 +64,7 @@ public class TablaSimbolo {
     public void imprimirTabla() {
         Logger logSimbolos = new Logger("tablasimbolo.log");
         System.out.println("TABLA DE SIMBOLOS");
-        System.out.println("TIPOVAR     TIPO    VALOR   ACCESOS TAMAÃ‘O");
+        System.out.println("TIPOVAR     TIPO    VALOR   ACCESOS TAMAÑO");
         for (int i = 0; i < tabla.size(); i++) {
             logSimbolos.addLogger(tabla.get(i).getTipoVariable() + " " + tabla.get(i).getTipo() + " " + tabla.get(i).getValor() + " " + tabla.get(i).getAccesos() + " " + tabla.get(i).getTamanio());
         }

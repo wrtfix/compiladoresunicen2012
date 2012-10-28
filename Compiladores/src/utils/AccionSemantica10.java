@@ -35,6 +35,7 @@ public class AccionSemantica10 extends AccionSemantica{
         else
         {
             Simbolo s = new Simbolo(lexema,"NUMERO");
+            s.setTipoVariable("NUMERO");
             t = new Token(s.getTipo(),s);
             tablaS.addSimbolo(s);
             

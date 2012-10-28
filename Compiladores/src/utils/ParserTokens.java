@@ -1,3 +1,4 @@
+package utils;
 public interface ParserTokens {
 public final static short IDENTIFICADOR=257;
 public final static short FLOAT=258;

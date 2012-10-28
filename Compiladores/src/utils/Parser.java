@@ -16,14 +16,13 @@
 
 
 
-//#line 1 "gramatica.y"
-
+//#line 2 "gramatica.y"
 
 package utils;
 import java.io.IOException;
 import java.util.Vector;
 import java.util.Stack;
-//#line 24 "Parser.java"
+//#line 23 "Parser.java"
 
 
 
@@ -453,8 +452,7 @@ final static String yyrule[] = {
 "argumento : IDENTIFICADOR $$7 '[' expresion ']'",
 };
 
-//#line 236 "gramatica.y"
-
+//#line 239 "gramatica.y"
   private Logger logSintactico = new Logger("sintactico.log");
   private AnalizadorLexico lexico;
   private Vector<String> pi;
@@ -526,7 +524,7 @@ public Stack<Integer> getLabels(){
 public Vector<String> getPolaca(){
     return pi;
 }
-//#line 458 "Parser.java"
+//#line 456 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -726,48 +724,50 @@ break;
 case 21:
 //#line 52 "gramatica.y"
 { 
-            Integer pos = (Integer) pila.pop(); /* saca el tope de la pila*/
-            pi.add(pos.intValue(),String.valueOf(pi.size()));/* cambia el valor blanco en la polaca por el salto(size de polaca)               */
+            if (!pila.isEmpty()){
+            Integer pos = (Integer) pila.pop(); /* saca el tope de la pila*/
+            pi.add(pos.intValue(),String.valueOf(pi.size()));/* cambia el valor blanco en la polaca por el salto(size de polaca)               */
             pi.remove(pos.intValue()+1);          
             label.add(pi.size());
+            }
 }
 break;
 case 22:
-//#line 59 "gramatica.y"
+//#line 61 "gramatica.y"
 { 
-            pi.add(" "); /*agrega un blanco en  la polaca*/
-            pi.add("JMP"); /*agrega un bi en la polaca */
-            Integer pos = (Integer) pila.pop(); /* saca el tope de la pila*/
-            pi.add(pos.intValue(),String.valueOf(pi.size()));/* cambia el valor blanco en la polaca por el salto(size de polaca)               */
+            pi.add(" "); /*agrega un blanco en  la polaca*/
+            pi.add("JMP"); /*agrega un bi en la polaca */
+            Integer pos = (Integer) pila.pop(); /* saca el tope de la pila*/
+            pi.add(pos.intValue(),String.valueOf(pi.size()));/* cambia el valor blanco en la polaca por el salto(size de polaca)               */
             pi.remove(pos.intValue()+1);          
             label.add(pi.size());
-            pila.push(pi.size()- 2);/*apila el lugar en blanco en la pila*/
+            pila.push(pi.size()- 2);/*apila el lugar en blanco en la pila*/
 }
 break;
 case 23:
-//#line 69 "gramatica.y"
+//#line 71 "gramatica.y"
 { 
-        Integer pos = (Integer) pila.pop(); /* saca el tope de la pila*/
-        pi.add(pos.intValue(),String.valueOf(pi.size()));/* cambia el valor blanco en la polaca por el salto(size de polaca)               */
+        Integer pos = (Integer) pila.pop(); /* saca el tope de la pila*/
+        pi.add(pos.intValue(),String.valueOf(pi.size()));/* cambia el valor blanco en la polaca por el salto(size de polaca)               */
         pi.remove(pos.intValue()+1);            
         label.add(pi.size());
         logSintactico.addLogger("Linea "+lexico.getLineas()+": seleccion ifelse");
 }
 break;
 case 25:
-//#line 79 "gramatica.y"
+//#line 81 "gramatica.y"
 {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba un )");}
 break;
 case 26:
-//#line 80 "gramatica.y"
+//#line 82 "gramatica.y"
 {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba un THEN ");}
 break;
 case 27:
-//#line 81 "gramatica.y"
+//#line 83 "gramatica.y"
 {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba una condicion");}
 break;
 case 30:
-//#line 93 "gramatica.y"
+//#line 95 "gramatica.y"
 {pi.add(val_peek(1).sval);
 if ( val_peek(1).sval.equals("<")){
 pi.add(" "); pi.add("JGE"); pila.push(pi.size()- 2 );
@@ -778,55 +778,51 @@ pi.add(" "); pi.add("JLE"); pila.push(pi.size()- 2 );
 if ( val_peek(1).sval.equals("=")){
 pi.add(" "); pi.add("JNE"); pila.push(pi.size()- 2 );
 }
-if ( val_peek(1).sval.equals("MENOR_IGUAL")){
+if ( val_peek(1).sval.equals("<=")){
 pi.add(" "); pi.add("JA"); pila.push(pi.size()- 2 );
 }
-if ( val_peek(1).sval.equals("MAYOR_IGUAL")){
+if ( val_peek(1).sval.equals(">=")){
 pi.add(" "); pi.add("JL"); pila.push(pi.size()- 2 );
 }
-if ( val_peek(1).sval.equals("DISTINTO")){
+if ( val_peek(1).sval.equals("<>")){
     pi.add(" ");  pi.add("JE"); pila.push(pi.size()- 2 );
 }
 
 }
 break;
 case 31:
-//#line 114 "gramatica.y"
+//#line 116 "gramatica.y"
 {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": condicion no valida se esperaba un argumento");}
 break;
 case 32:
-//#line 115 "gramatica.y"
+//#line 117 "gramatica.y"
 {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": condicion no valida se esperaba un argumento");}
 break;
-case 38:
-//#line 124 "gramatica.y"
-{}
-break;
 case 40:
-//#line 128 "gramatica.y"
+//#line 130 "gramatica.y"
 {logSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": se esperaba una condicion");}
 break;
 case 41:
-//#line 129 "gramatica.y"
+//#line 131 "gramatica.y"
 {logSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": se esperaba un WHILE");}
 break;
 case 42:
-//#line 132 "gramatica.y"
+//#line 134 "gramatica.y"
 {pila.push(pi.size());}
 break;
 case 45:
-//#line 136 "gramatica.y"
+//#line 138 "gramatica.y"
 {logSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": se esperaba un DO ");}
 break;
 case 46:
-//#line 137 "gramatica.y"
+//#line 139 "gramatica.y"
 {logSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": se esperaba una sentencia");}
 break;
 case 47:
-//#line 140 "gramatica.y"
+//#line 142 "gramatica.y"
 {
-        Integer pos = (Integer) pila.pop(); /* posicion 3 */
-        pi.add(pos.intValue(),String.valueOf(pi.size()+2));/* cambia el valor blanco en la polaca por el salto(size de polaca)               */
+        Integer pos = (Integer) pila.pop(); /* posicion 3 */
+        pi.add(pos.intValue(),String.valueOf(pi.size()+2));/* cambia el valor blanco en la polaca por el salto(size de polaca)               */
         pi.remove(pos.intValue()+1);  
              
         if (!pila.empty()){
@@ -836,41 +832,45 @@ case 47:
             pi.add("JMP");                
         
         }
-        /*label.add(pi.elementAt(pos));   */
+        /*label.add(pi.elementAt(pos));   */
         label.add(pi.size());   
             
 }
 break;
+case 48:
+//#line 160 "gramatica.y"
+{pi.add(val_peek(1).sval);}
+break;
 case 50:
-//#line 163 "gramatica.y"
+//#line 166 "gramatica.y"
 {pi.add(val_peek(2).sval); yyval=val_peek(2); lexico.getTabla().addTipo(val_peek(2).sval, "STRING",logSintactico,lexico.getLineas(),"1");  logSintactico.addLogger("Linea "+lexico.getLineas()+":salida por pantalla");}
 break;
 case 51:
-//#line 164 "gramatica.y"
+//#line 167 "gramatica.y"
 {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba un punto y coma");}
 break;
 case 52:
-//#line 165 "gramatica.y"
+//#line 168 "gramatica.y"
 {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba un );");}
 break;
 case 53:
-//#line 166 "gramatica.y"
+//#line 169 "gramatica.y"
 {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba una cadena");}
 break;
 case 54:
-//#line 167 "gramatica.y"
+//#line 170 "gramatica.y"
 {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba una ('cadena')");}
 break;
 case 55:
-//#line 168 "gramatica.y"
+//#line 171 "gramatica.y"
 {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba una cadena");}
 break;
 case 56:
-//#line 171 "gramatica.y"
+//#line 174 "gramatica.y"
 {pi.add(val_peek(2).sval); yyval=val_peek(3);logSintactico.addLogger("Linea "+lexico.getLineas()+": asignacion");}
 break;
 case 57:
-//#line 172 "gramatica.y"
+//#line 175 "gramatica.y"
 {
 
  if (lexico.getTabla().existeTipoVariable(val_peek(0).sval,"ARRAY FLOAT")){
@@ -883,29 +883,29 @@ case 57:
 }
 break;
 case 58:
-//#line 181 "gramatica.y"
+//#line 184 "gramatica.y"
 { if (entro1){
    pi.add("1"); pi.add("-"); pi.add("*"); pi.add("+");pi.add("&"); entro1=false;
     } }
 break;
 case 59:
-//#line 183 "gramatica.y"
+//#line 186 "gramatica.y"
 { pi.add(val_peek(2).sval); yyval=val_peek(8); logSintactico.addLogger("Linea "+lexico.getLineas()+": asignacion"); }
 break;
 case 60:
-//#line 185 "gramatica.y"
+//#line 188 "gramatica.y"
 { logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba una asignacion");}
 break;
 case 61:
-//#line 186 "gramatica.y"
+//#line 189 "gramatica.y"
 { logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba una asignacion");}
 break;
 case 62:
-//#line 187 "gramatica.y"
+//#line 190 "gramatica.y"
 { logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba un punto y coma");}
 break;
 case 63:
-//#line 190 "gramatica.y"
+//#line 193 "gramatica.y"
 {if (lexico.getTabla().existeTipoVariable(val_peek(0).sval,"FLOAT")){
 pi.add(val_peek(0).sval); yyval=val_peek(0);
 }else
@@ -913,27 +913,27 @@ pi.add(val_peek(0).sval); yyval=val_peek(0);
 }
 break;
 case 64:
-//#line 197 "gramatica.y"
+//#line 200 "gramatica.y"
 { pi.add(val_peek(1).sval); yyval=val_peek(2); logSintactico.addLogger("Linea "+lexico.getLineas()+": se encontro una expresion");}
 break;
 case 65:
-//#line 198 "gramatica.y"
+//#line 201 "gramatica.y"
 {pi.add(val_peek(1).sval); yyval=val_peek(2); logSintactico.addLogger("Linea "+lexico.getLineas()+": se encontro una expresion");}
 break;
 case 67:
-//#line 202 "gramatica.y"
+//#line 205 "gramatica.y"
 {pi.add(val_peek(1).sval); yyval=val_peek(2);}
 break;
 case 68:
-//#line 203 "gramatica.y"
+//#line 206 "gramatica.y"
 {pi.add(val_peek(1).sval); yyval=val_peek(2);}
 break;
 case 70:
-//#line 207 "gramatica.y"
+//#line 210 "gramatica.y"
 {putNegativo(val_peek(0).sval);}
 break;
 case 72:
-//#line 211 "gramatica.y"
+//#line 214 "gramatica.y"
 {
 if (lexico.getTabla().existeTipoVariable(val_peek(0).sval,"FLOAT")){
     pi.add(val_peek(0).sval); yyval=val_peek(0);
@@ -945,11 +945,11 @@ if (lexico.getTabla().existeTipoVariable(val_peek(0).sval,"FLOAT")){
 }
 break;
 case 73:
-//#line 220 "gramatica.y"
+//#line 223 "gramatica.y"
 {pi.add(val_peek(0).sval); yyval=val_peek(0);}
 break;
 case 74:
-//#line 221 "gramatica.y"
+//#line 224 "gramatica.y"
 {
 if (lexico.getTabla().existeTipoVariable(val_peek(0).sval,"ARRAY FLOAT")){
     pi.add(val_peek(0).sval); pi.add("^"); pi.add("4"); entro2 = true;
@@ -959,7 +959,7 @@ if (lexico.getTabla().existeTipoVariable(val_peek(0).sval,"ARRAY FLOAT")){
 }
 break;
 case 75:
-//#line 227 "gramatica.y"
+//#line 230 "gramatica.y"
 {
     if (entro2){
         pi.add("1"); pi.add("-"); pi.add("*"); pi.add("+");pi.add("&");
