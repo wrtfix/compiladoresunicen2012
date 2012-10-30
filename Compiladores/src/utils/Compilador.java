@@ -47,6 +47,7 @@ public class Compilador {
         /*System.out.println("");
         System.out.println("ERRORES LEXICOS");
         analizadorL.imprimitErrores();*/
+        
         GeneradorCodigo c = new GeneradorCodigo(analizadorL.getTabla(), p.getLabels());
         
         c.addTablaSimbolo();

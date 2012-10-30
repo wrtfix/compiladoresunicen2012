@@ -94,19 +94,19 @@ bloqueElse: '{'sentencias'}'
 
 condicion: argumento comparador argumento  {pi.add($2.sval);
 if ( $2.sval.equals("<")){
-pi.add(" "); pi.add("JGE"); pila.push(pi.size()- 2 );
+pi.add(" "); pi.add("JNB"); pila.push(pi.size()- 2 );
 }
 if ( $2.sval.equals(">")){
-pi.add(" "); pi.add("JLE"); pila.push(pi.size()- 2 );
+pi.add(" "); pi.add("JNA"); pila.push(pi.size()- 2 );
 }
 if ( $2.sval.equals("=")){
 pi.add(" "); pi.add("JNE"); pila.push(pi.size()- 2 );
 }
 if ( $2.sval.equals("<=")){
-pi.add(" "); pi.add("JA"); pila.push(pi.size()- 2 );
+pi.add(" "); pi.add("JNBE"); pila.push(pi.size()- 2 );
 }
 if ( $2.sval.equals(">=")){
-pi.add(" "); pi.add("JL"); pila.push(pi.size()- 2 );
+pi.add(" "); pi.add("JNGE"); pila.push(pi.size()- 2 );
 }
 if ( $2.sval.equals("<>")){
     pi.add(" ");  pi.add("JE"); pila.push(pi.size()- 2 );
