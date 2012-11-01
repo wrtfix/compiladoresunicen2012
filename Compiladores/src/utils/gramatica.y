@@ -113,7 +113,7 @@ if ( $2.sval.equals("<>")){
 }
 
 }
-  | argumento comparador error {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": condicion no valida se esperaba un argumento");}
+  | error {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": condicion no valida se esperaba un argumento");}
   | comparador argumento error {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": condicion no valida se esperaba un argumento");}
 ;
 
@@ -207,8 +207,8 @@ termino: termino '*' argumento  {pi.add($2.sval); $$=$1;}
   |  argumento  
 ;
 
-num: '-'NUMERO {putNegativo($2.sval);}
-| NUMERO 
+num: '-'NUMERO {putNegativo($2.sval); pi.add($1.sval+$2.sval); $$=$1;}
+| NUMERO {pi.add($1.sval); $$=$1;}
 ;
 
 argumento: IDENTIFICADOR {
@@ -220,7 +220,7 @@ if (lexico.getTabla().existeTipoVariable($1.sval,"FLOAT")){
 
 
 }
-  |  num                {pi.add($1.sval); $$=$1;}
+  |  num                
   |  IDENTIFICADOR {
 if (lexico.getTabla().existeTipoVariable($1.sval,"ARRAY FLOAT")){
     pi.add($1.sval); pi.add("^"); pi.add("4"); entro2 = true;
@@ -271,7 +271,8 @@ if (lexico.getTabla().existeTipoVariable($1.sval,"ARRAY FLOAT")){
 //        throw new UnsupportedOperationException("Not yet implemented");
     }
 public void putNegativo(String valor){
-         Simbolo s = new Simbolo(new StringBuffer("-"+valor),"NUMERO");
+        Simbolo s = new Simbolo(new StringBuffer("-"+valor),"NUMERO");
+        s.setTipoVariable("NUMERO");
         lexico.getTabla().addSimbolo(s);
         
         Simbolo raya = new Simbolo(new StringBuffer("-"),"-");

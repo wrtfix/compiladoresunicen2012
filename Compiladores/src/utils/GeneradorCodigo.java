@@ -72,6 +72,8 @@ public class GeneradorCodigo {
         operadores.put("JNGE", "JNGE");
         operadores.put("JE", "JE");
         operadores.put("print", "print");
+        operadores.put("1", "1");
+        operadores.put("4", "4");
         labels = l;
         contaux = 0;
     }
@@ -84,7 +86,11 @@ public class GeneradorCodigo {
 
     public void ejecutarSuma(String der, String izq) {
         assembler.add("FLD " + der +" ; carga el valor de la derecha en el st");
-        assembler.add("FADD " + izq+" ; suma el valor del st con el valor de la izq");
+        if (izq.contains("[")){
+        	assembler.add("FIADD " + izq+" ; suma el valor del st con el valor de la izq");
+        }else{
+        	assembler.add("FIADD " + izq+" ; suma el valor del st con el valor de la izq");
+        }
         assembler.add("FST aux"+contaux+" ; guarda el resultado");
         pilaCodigo.push("aux"+contaux);
         log.addLogger("aux"+contaux+" DD ?");
@@ -112,8 +118,14 @@ public class GeneradorCodigo {
         contaux++;
     }
     public void ejecutarDividir(String der, String izq) {
-        assembler.add("FLD " + izq +" ; carga el valor de la derecha en el st");
-        assembler.add("FDIV " + der +" ; resta el valor del st con el valor de la izq");
+    	assembler.add("FLD "+ der +" ; carga el el st el valor izq a comparar");
+//    	assembler.add("FADD cero ; compara el st con el valor de la derecha"); 
+    	assembler.add("FCOMP cero ; compara el st con el valor de la derecha");
+        assembler.add("FSTSW ax ; guarda el resultado de la operacion en el registro ax");
+    	assembler.add("SAHF ; toma los bits menos significativos del registro ax");
+    	assembler.add("JE ERROR_DIVISION");
+//    	assembler.add("FLD "+ der +" ; carga el el st el valor izq a comparar");
+    	assembler.add("FDIV " + izq +" ; resta el valor del st con el valor de la izq");
         assembler.add("FST aux"+contaux+" ; guarda el resultado");
         pilaCodigo.push("aux"+contaux);
         log.addLogger("aux"+contaux+" DD ?");
@@ -124,173 +136,203 @@ public class GeneradorCodigo {
 
     public void ejecutarAsignacion(String der, String izq) {
         assembler.add("FLD " + der + " ; carga el valor de der en el st"); //guardo en el registro st(0) el valor que voy a asignar
-        assembler.add("FST "+izq + " ; carga el valor de st en izq");
+        if (izq.contains("[")){
+        	assembler.add("FIST "+izq + " ; carga el valor de st en izq");
+        }else{
+        	assembler.add("FST "+izq + " ; carga el valor de st en izq");
+        }
     }
 
     public void ejecutarSalto(String salto, String tipo) {
-    	assembler.add(tipo +" Label"+labels.firstElement().toString());
-    	labels.remove(0);
+    	if (!labels.isEmpty()){
+	    	assembler.add(tipo +" Label"+labels.firstElement().toString());
+	    	labels.remove(0);
+    	}
     }
     
     
-    public void verificarLimite(String valor, String l){
-//    	assembler.add("FLD "+valor+" ;cargo en el st el valor");
-//    	assembler.add("FCOMP "+ l +" ; compara el st con el valor de la l");
-//    	assembler.add("FSTSW ax ; guarda el resultado de la operacion en el registro ax");
-//    	assembler.add("SAHF ; toma los bits menos significativos del registro ax");
-//    	assembler.add("JNBE ERROR_LIMITE");
-//        
-    }
-    public void finArreglo(String ofs){
+    public void finArreglo(String ofs, String nombre){
 //    	assembler.add("FLD "+pos);
     	assembler.add("MOV ebx, "+ofs); // seteo el bx que es la posicion donde se guardara el valor a asignar
-        pilaCodigo.add("WORD ptr[ebx]"); //guardo en el arreglo el valor que esta en ax
+        pilaCodigo.add(nombre+"[ebx]"); //guardo en el arreglo el valor que esta en ax
     }
 
     public void ejecutarComparador(String izq,String der){
     	assembler.add("FLD "+ izq +" ; carga el el st el valor izq a comparar");
-    	assembler.add("FCOMP "+ der +" ; compara el st con el valor de la derecha"); 
+   		if (der.contains("[")){
+   			assembler.add("FICOMP "+ der +" ; compara el st con el valor de la derecha");
+   		}else{
+    	assembler.add("FCOMP "+ der +" ; compara el st con el valor de la derecha");}
     	assembler.add("FSTSW ax ; guarda el resultado de la operacion en el registro ax");
     	assembler.add("SAHF ; toma los bits menos significativos del registro ax");
     }
     
     
     public void recorrerPolaca(Vector<String> polaca) {
-    	int i;
-        for (i=0 ; i < polaca.size(); i++) {
-            float result = 0;
-            String varAux = polaca.get(i);
-            if (!posiciones.isEmpty() && i == posiciones.firstElement()){
-            	assembler.add("Label"+posiciones.firstElement()+":");
-            	posiciones.remove(0);
-            }
-            if (esOperador(varAux)) {
-                // sumo desapilando el ultimo y ante ultimo y el resultado se apila
-                if ("+".equals(varAux)) {
-                    String id1 = pilaCodigo.pop();
-                    String id2 = pilaCodigo.pop();
-                    ejecutarSuma(id1, id2);
-                }
-                //resta desapilando el ultimo y ante ultimo y el resultado se apila
-                if("-".equals(varAux)){
-                    String id1 = pilaCodigo.pop();   
-                    String id2 = pilaCodigo.pop();
-                    ejecutarResta(id1,id2);
-                }
-                //multiplicar desapilando el ultimo y ante ultimo y el resultado se apila
-                if("*".equals(varAux)){
-                    String id1 = pilaCodigo.pop();   
-                    String id2 = pilaCodigo.pop();
-                    ejecutarMutiplicar(id1,id2);
-                }
-                //dividir desapilando el ultimo y ante ultimo y el resultado se apila
-                if("/".equals(varAux)){
-                    String id1 = pilaCodigo.pop();   
-                    String id2 = pilaCodigo.pop();
-                    ejecutarDividir(id1,id2);
-                }                
-                if (":=".equals(varAux)){
-                    String id1 = pilaCodigo.pop();   
-                    String id2 = pilaCodigo.pop();
-                    ejecutarAsignacion(id1,id2);
-                }
-                if ("JNB".equals(varAux)) {
-                    String salto = pilaCodigo.pop();
-                    ejecutarSalto(salto, varAux);
-                }
-                if ("JNA".equals(varAux)) {
-                    String salto = pilaCodigo.pop();
-                    ejecutarSalto(salto, varAux);
-                }
-                if ("JNE".equals(varAux)) {
-                    String salto = pilaCodigo.pop();
-                    ejecutarSalto(salto, varAux);
-                }
-                if ("JNBE".equals(varAux)) {
-                    String salto = pilaCodigo.pop();
-                    ejecutarSalto(salto, varAux);
-                }
-                if ("JNGE".equals(varAux)) {
-                    String salto = pilaCodigo.pop();
-                    ejecutarSalto(salto, varAux);
-                }
-                if ("JE".equals(varAux)) {
-                    String salto = pilaCodigo.pop();
-                    ejecutarSalto(salto, varAux);
-                }
-                if ("JMP".equals(varAux)) {
-                    String salto = pilaCodigo.pop();
-                    ejecutarSalto(salto, varAux);
-                }
-                if ("^".equals(varAux)){
-                	String base = pilaCodigo.pop();
-                	StringBuffer bs = new StringBuffer(base);
-                    Simbolo aux = new Simbolo(bs, "ARRAY FLOAT");
-                    aux = ts.existeSimbolo(aux);
-                    int lim = Integer.valueOf(aux.getTamanio());
-                    log.addLogger("limite"+limite+" DD "+ lim);
-                	pilaCodigo.add("OFFSET "+base);
-                }
-                if ("&".equals(varAux)){
-                	String ofs = pilaCodigo.pop();
-                    verificarLimite("1","limite"+limite);
-                    finArreglo(ofs);
-                    limite++;
-//                	finArreglo(pilaCodigo.pop(),"123");
-                }
-                if ("print".equals(varAux)){
-                	String base = pilaCodigo.pop();
-                       imprimirCadena(base);
-                   }
-                // Para todas las comparaciones 
-                if ("=".equals(varAux) || "<".equals(varAux) || ">".equals(varAux) || ">=".equals(varAux) ||  "<=".equals(varAux) ||  "<>".equals(varAux)  ){
-                	String id1 = pilaCodigo.pop();   
-                    String id2 = pilaCodigo.pop();
-                    ejecutarComparador(id1,id2);
-                }
-               
-            } else {
-            	   
-                Simbolo aux = ts.existeSimbolo(new Simbolo(new StringBuffer(varAux),""));   
-                if (aux !=null && aux.getTipoVariable().equals("NUMERO")){
-                	pilaCodigo.push("cte"+cte);//apilo;
-                	log.addLogger("cte"+cte+" DD "+varAux);
-                	cte++;
-                }else
-                	pilaCodigo.push(varAux);//apilo;
-                	
-                                            
-            }
-        }
-        assembler.add("JMP TERMINAR");
-        log.addLogger("overflow db \"hay overflow en la operacion \", 0");
-        log.addLogger("limite db \"fuera del limite del arreglo\", 0");
-        log.addLogger("oversuper DD 3.40282347e+38");
-        log.addLogger("overinf DD 1.17549435e-38");
-        log.addLogger(".code");
-        log.addLogger("start:");
-        assembler.add("ERROR_LIMITE:");
-        assembler.add("invoke MessageBox, NULL, addr limite, addr limite, MB_OK");
-        assembler.add("ERROR_OVERFLOW:");
-        assembler.add("invoke MessageBox, NULL, addr overflow, addr overflow, MB_OK");
-        if (!posiciones.isEmpty() && posiciones.size() == 1)
-        	assembler.add("Label"+posiciones.pop()+": JMP TERMINAR");
-        	
-        
-        
-        assembler.add("TERMINAR:");
-        assembler.add("invoke ExitProcess, 0");
-    	assembler.add("end start");
-        
-    	for (int j=0; j<assembler.size();j++){
-        	log.addLogger(assembler.get(j));	
-        }
-      
-        	
-        
-        
+		int i;
+		for (i = 0; i < polaca.size(); i++) {
+			float result = 0;
+			if (!polaca.isEmpty()) {
+				String varAux = polaca.get(i);
+				if (!" ".equals(varAux)) {
+					if (!posiciones.isEmpty() && i == posiciones.firstElement()) {
+						assembler
+								.add("Label" + posiciones.firstElement() + ":");
+						posiciones.remove(0);
+					}
+					if (esOperador(varAux)) {
+						// sumo desapilando el ultimo y ante ultimo y el
+						// resultado se apila
+						if ("+".equals(varAux)) {
+							String id1 = pilaCodigo.pop();
+							String id2 = pilaCodigo.pop();
+							ejecutarSuma(id1, id2);
+						}
+						// resta desapilando el ultimo y ante ultimo y el
+						// resultado se apila
+						if ("-".equals(varAux)) {
+							String id1 = pilaCodigo.pop();
+							String id2 = pilaCodigo.pop();
+							ejecutarResta(id1, id2);
+						}
+						// multiplicar desapilando el ultimo y ante ultimo y el
+						// resultado se apila
+						if ("*".equals(varAux)) {
+							String id1 = pilaCodigo.pop();
+							String id2 = pilaCodigo.pop();
+							ejecutarMutiplicar(id1, id2);
+						}
+						// dividir desapilando el ultimo y ante ultimo y el
+						// resultado se apila
+						if ("/".equals(varAux)) {
+							String id1 = pilaCodigo.pop();
+							String id2 = pilaCodigo.pop();
+							ejecutarDividir(id1, id2);
+						}
+						if (":=".equals(varAux)) {
+							String id1 = pilaCodigo.pop();
+							String id2 = pilaCodigo.pop();
+							ejecutarAsignacion(id1, id2);
+						}
+						if ("JNB".equals(varAux)) {
+							String salto = pilaCodigo.pop();
+							ejecutarSalto(salto, varAux);
+						}
+						if ("JNA".equals(varAux)) {
+							String salto = pilaCodigo.pop();
+							ejecutarSalto(salto, varAux);
+						}
+						if ("JNE".equals(varAux)) {
+							String salto = pilaCodigo.pop();
+							ejecutarSalto(salto, varAux);
+						}
+						if ("JNBE".equals(varAux)) {
+							String salto = pilaCodigo.pop();
+							ejecutarSalto(salto, varAux);
+						}
+						if ("JNGE".equals(varAux)) {
+							String salto = pilaCodigo.pop();
+							ejecutarSalto(salto, varAux);
+						}
+						if ("JE".equals(varAux)) {
+							String salto = pilaCodigo.pop();
+							ejecutarSalto(salto, varAux);
+						}
+						if ("JMP".equals(varAux)) {
+							String salto = pilaCodigo.pop();
+							ejecutarSalto(salto, varAux);
+						}
+						if ("^".equals(varAux)) {
+							String base = pilaCodigo.pop();
+							StringBuffer bs = new StringBuffer(base);
+							Simbolo aux = new Simbolo(bs, "ARRAY FLOAT");
+							aux = ts.existeSimbolo(aux);
+							int lim = Integer.valueOf(aux.getTamanio());
+							log.addLogger("limite" + limite + " DD " + lim);
+							pilaCodigo.add(base);
+							pilaCodigo.add("["+base+"]");
+						}
+						if ("&".equals(varAux)) {
+							String ofs = pilaCodigo.pop();
+							String nombre = pilaCodigo.pop();
+							
+							finArreglo(ofs,nombre);
+							limite++;
+							// finArreglo(pilaCodigo.pop(),"123");
+						}
+						if ("print".equals(varAux)) {
+							String base = pilaCodigo.pop();
+							imprimirCadena(base);
+						}
+						// Para todas las comparaciones
+						if ("=".equals(varAux) || "<".equals(varAux)
+								|| ">".equals(varAux) || ">=".equals(varAux)
+								|| "<=".equals(varAux) || "<>".equals(varAux)) {
+							String id1 = pilaCodigo.pop();
+							String id2 = pilaCodigo.pop();
+							ejecutarComparador(id1, id2);
+						}
+						if ("1".equals(varAux)){
+							pilaCodigo.push("uno");
+							
+						}
+						if ("4".equals(varAux)){
+							pilaCodigo.push("cuatro");
+						}	
+						
+					} else {
+						
+						Simbolo aux = ts.existeSimbolo(new Simbolo(
+								new StringBuffer(varAux), ""));
+						if (aux != null
+								&& aux.getTipoVariable().equals("NUMERO")) {
+							pilaCodigo.push("cte" + cte);// apilo;
+							log.addLogger("cte" + cte + " DD " + varAux);
+							cte++;
+						} else
+							pilaCodigo.push(varAux);// apilo;
 
-    }
+					}
+				}
+			}
+		}
+		assembler.add("JMP TERMINAR");
+		log.addLogger("overflow db \"hay overflow en la operacion \", 0");
+		log.addLogger("limite db \"fuera del limite del arreglo\", 0");
+		log.addLogger("division db \"division por cero\", 0");
+		log.addLogger("oversuper DD 3.40282347e+38");
+		log.addLogger("overinf DD 1.17549435e-38");
+		log.addLogger("cuatro DD 4");
+		log.addLogger("uno DD 1");
+		log.addLogger("cero DD 0");
+		log.addLogger(".code");
+		log.addLogger("start:");
+
+		assembler.add("ERROR_DIVISION:");
+		assembler
+				.add("invoke MessageBox, NULL, addr division, addr division, MB_OK");
+		assembler.add("JMP TERMINAR");
+		assembler.add("ERROR_LIMITE:");
+		assembler
+				.add("invoke MessageBox, NULL, addr limite, addr limite, MB_OK");
+		assembler.add("JMP TERMINAR");
+		assembler.add("ERROR_OVERFLOW:");
+		assembler
+				.add("invoke MessageBox, NULL, addr overflow, addr overflow, MB_OK");
+		assembler.add("JMP TERMINAR");
+
+		if (!posiciones.isEmpty() && posiciones.size() == 1)
+			assembler.add("Label" + posiciones.pop() + ": JMP TERMINAR");
+
+		assembler.add("TERMINAR:");
+		assembler.add("invoke ExitProcess, 0");
+		assembler.add("end start");
+
+		for (int j = 0; j < assembler.size(); j++) {
+			log.addLogger(assembler.get(j));
+		}
+
+	}
 
     public boolean esOperador(String varAux) {
         return (operadores.contains(varAux));
