@@ -44,7 +44,7 @@ variables: IDENTIFICADOR {lexico.getTabla().addTipo($1.sval,"FLOAT",logSintactic
   |  variables','IDENTIFICADOR
 ;
 
-arreglo: IDENTIFICADOR '['NUMERO']' { extraerExpresion($1.sval,$3.sval);}
+arreglo: IDENTIFICADOR '['NUMERO']' {lexico.getTabla().addTipo($1.sval,"ARRAY FLOAT",logSintactico,lexico.getLineas(),$3.sval);}
 ;
 
 
@@ -77,7 +77,7 @@ ELSE bloqueElse
 }
 ;
 
-comienzoif: IF '('condicion')' THEN
+comienzoif: IF '('condicion')' THEN 
 |IF '('condicion {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba un )");}
 |IF '('condicion')' {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba un THEN ");}
 |IF THEN {logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba una condicion");}
@@ -147,12 +147,12 @@ bloque_while: bloque {
         if (!pila.empty()){
             pos = (Integer) pila.pop(); 
             pi.add(String.valueOf(pos)); 
-            label.add(pos);
+            label.push(pos);
             pi.add("JMP");                
         
         }
         //label.add(pi.elementAt(pos));   
-        label.add(pi.size());   
+        label.push(pi.size());   
             
 }
 
@@ -172,22 +172,8 @@ cadena: '('CADENA')'';' {pi.add($2.sval); $$=$2; lexico.getTabla().addTipo($2.sv
 ;
 
 asignacion: iden ASIG expresion ';' {pi.add($2.sval); $$=$1;logSintactico.addLogger("Linea "+lexico.getLineas()+": asignacion");}
-  | IDENTIFICADOR {
-
- if (lexico.getTabla().existeTipoVariable($1.sval,"ARRAY FLOAT")){
-    pi.add($1.sval); pi.add("^"); pi.add("4"); $$=$1; entro1 = true;
-    }else
-        logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+" variable no declarada");
-    logSintactico.addLogger("Linea "+lexico.getLineas()+": asignacion");
-
-
-}'[' expresion ']'{ if (entro1){
-   pi.add("1"); pi.add("-"); pi.add("*"); pi.add("+");pi.add("&"); entro1=false;
-    } } ASIG expresion ';'   { pi.add($7.sval); $$=$1; logSintactico.addLogger("Linea "+lexico.getLineas()+": asignacion"); }
-                                                            
-  | iden ASIG';' { logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba una asignacion");} 
-  | ASIG expresion';' { logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba una asignacion");} 
-  | iden ASIG expresion  { logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba un punto y coma");} 
+  | IDENTIFICADOR '[' expresion ']' {pi.add("#"+$1.sval); pi.add("1"); pi.add("-"); pi.add("4"); pi.add("*"); pi.add($1.sval);
+  pi.add("^"); pi.add("+"); pi.add("&");} ASIG expresion ';' 
 ;
 
 iden: IDENTIFICADOR {if (lexico.getTabla().existeTipoVariable($1.sval,"FLOAT")){
@@ -221,17 +207,15 @@ if (lexico.getTabla().existeTipoVariable($1.sval,"FLOAT")){
 
 }
   |  num                
-  |  IDENTIFICADOR {
+  |  IDENTIFICADOR '[' expresion ']' {
 if (lexico.getTabla().existeTipoVariable($1.sval,"ARRAY FLOAT")){
-    pi.add($1.sval); pi.add("^"); pi.add("4"); entro2 = true;
+    pi.add("#"+$1.sval); pi.add("1"); pi.add("-"); pi.add("4"); pi.add("*"); pi.add($1.sval);
+  pi.add("^"); pi.add("+"); pi.add("&");
 }else
-    System.out.println("ERROR en linea "+lexico.getLineas()+": no se ecuentra declarada el arreglo");
+    System.out.println("ERROR en linea "+lexico.getLineas()+": no se ecuentra declarada la variable");
+                                                        
 
-} '[' expresion ']'   {
-    if (entro2){
-        pi.add("1"); pi.add("-"); pi.add("*"); pi.add("+");pi.add("&");
-        entro2 = false;
-    }
+
 }
 ;
 
@@ -295,11 +279,6 @@ public void imprimirPolacaInversa() {
 void imprimirLabels(){
     while(!label.empty())
         System.out.println(label.pop());
-}
-
-void extraerExpresion(String iden, String valor){
-    valor = valor.split("\\.")[0];
-    lexico.getTabla().addTipo(iden,"ARRAY FLOAT",logSintactico,lexico.getLineas(),valor);
 }
 
 public Stack<Integer> getLabels(){
