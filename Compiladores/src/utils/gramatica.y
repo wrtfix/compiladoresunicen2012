@@ -173,7 +173,7 @@ cadena: '('CADENA')'';' {pi.add($2.sval); $$=$2; lexico.getTabla().addTipo($2.sv
 
 asignacion: iden ASIG expresion ';' {pi.add($2.sval); $$=$1;logSintactico.addLogger("Linea "+lexico.getLineas()+": asignacion");}
   | IDENTIFICADOR '[' expresion ']' {pi.add("#"+$1.sval); pi.add("1"); pi.add("-"); pi.add("4"); pi.add("*"); pi.add($1.sval);
-  pi.add("^"); pi.add("+"); pi.add("&");} ASIG expresion ';' 
+  pi.add("^"); pi.add("+"); pi.add("&");} ASIG  expresion ';' {pi.add($6.sval);}
 ;
 
 iden: IDENTIFICADOR {if (lexico.getTabla().existeTipoVariable($1.sval,"FLOAT")){

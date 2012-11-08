@@ -25,6 +25,9 @@ public class Logger {
     public void addLogger(String linea) {
         lineas.add(linea);
     }
+    public boolean existe(String elem){
+        return lineas.contains(elem);
+    }
 
     public void imprimir() {
         // abrir el archivo

@@ -22,7 +22,7 @@ public class GeneradorCodigo {
     private Vector<String> assembler;
     private Stack<Integer> labels;
     private Stack<Integer> posiciones;
-    private Integer contaux;
+    private Integer contaux, contBase;
     private Integer numero;
     private Integer cte;
     private Integer limite;
@@ -76,6 +76,7 @@ public class GeneradorCodigo {
         operadores.put("4", "4");
         labels = l;
         contaux = 0;
+        contBase = 0;
     }
 
     public void imprimirCodigo() {
@@ -88,14 +89,25 @@ public class GeneradorCodigo {
 //    	assembler.add("FLD " + der +" ; carga el valor de la derecha en el st");
 //        assembler.add("FADD " + izq+" ; suma el valor del st con el valor de la izq");
 //        assembler.add("FST _aux"+contaux+" ; guarda el resultado");
-  	 	if (izq.contains("OFFSET")){ 
-    	assembler.add("PUSH "+izq);
-  	 	}else{
-  	 		assembler.add("FLD "+izq);
-  	 	}
-  	 		
-  	 	assembler.add("FADD "+der);
-  	 	 assembler.add("FSTP _aux"+contaux);
+//  	 	if (izq.contains("OFFSET")){ 
+//                        //assembler.add("PUSH "+izq);
+//                         assembler.add("MOV _base"+ contBase+", "+ izq);
+//                         log.addLogger("_base"+contBase+" DD ?");                 
+//                         assembler.add("FLD base "+contBase);
+//                         contBase++;                    
+//  	 	}else{
+//  	 		assembler.add("FLD "+izq);
+//  	 	}  	 		
+  	if (contBase>0){
+            assembler.add("FLD "+izq);
+            assembler.add("FADD "+der);
+            assembler.add("FISTP _aux"+contaux);
+            contBase--;
+        }else{
+            assembler.add("FLD "+izq);
+        assembler.add("FADD "+der);
+  	assembler.add("FSTP _aux"+contaux);
+        }
         pilaCodigo.push("_aux"+contaux);
         log.addLogger("_aux"+contaux+" DD ?");
         contaux++;
@@ -142,47 +154,28 @@ public class GeneradorCodigo {
 
 
     public void ejecutarAsignacion(String der, String izq) {
-//        if (!izq.equals("ebx")){
-//	    	assembler.add("FLD " + der + " ; carga el valor de der en el st"); //guardo en el registro st(0) el valor que voy a asignar
-//	        assembler.add("FST "+izq + " ; carga el valor de st en izq");
-//        }else{
-//        	assembler.add("MOV "+izq+", "+der);
-//        }
-////    	assembler.add( "MOV edx, "+ der);
-////    	assembler.add( "MOV dword ptr ["+izq+"], " +"edx");
+
     		assembler.add( "FLD "+der);
     		assembler.add( "FSTP "+izq);
     }
 
     public void ejecutarSalto(String salto, String tipo) {
-//    	if (!labels.isEmpty()){
-//	    	assembler.add(tipo +" Label"+labels.firstElement().toString());
-//	    	labels.remove(0);
-//    	}
+
     	assembler.add(tipo +" Label"+salto);
     }
     
     
     public void finArreglo(String ofs,String lim, String base){
-    	 assembler.add("FLD "+lim);
-   	 	 assembler.add("FMUL _cuatro");
-   	 	 log.addLogger("_aux"+contaux+" DD ?");
-   	 	 assembler.add("FST "+lim);
-   	 	 pilaCodigo.push("_aux"+contaux);
-   	 	 assembler.add("PUSH OFFSET "+base);
-    	 assembler.add("FADD _aux"+contaux);
-    	 assembler.add("FSTP _aux"+contaux);
-//    	 assembler.add("PUSH OFFSET "+ base);
-//    	 assembler.add("FADD "+ofs);
-//    	 assembler.add("FSTP "+ofs); 
-    	 assembler.add("FLD "+ofs);
-    	 assembler.add("FCOMP "+lim+"; compara el st con el valor de la derecha");
+    	 
+    }
+    public void  ejecutarControlArreglo(String indice, String lim){
+         assembler.add("FLD "+indice);
+    	 assembler.add("FCOMP "+ lim +"; compara el st con el valor de la derecha");
     	 assembler.add("FSTSW ax ; guarda el resultado de la operacion en el registro ax");
     	 assembler.add("SAHF ; toma los bits menos significativos del registro ax");
-    	 assembler.add("JNB ERROR_LIMITE");
-
+    	 assembler.add("JNBE ERROR_LIMITE");
     }
-
+    
     public void ejecutarComparador(String izq,String der){
     	assembler.add("FLD "+ der +" ; carga el el st el valor izq a comparar");
     	assembler.add("FCOMP "+ izq +" ; compara el st con el valor de la derecha");
@@ -195,6 +188,7 @@ public class GeneradorCodigo {
 		int i;
 		for (i = 0; i < polaca.size(); i++) {
 			float result = 0;
+                        //agregar esto porque rompe                                                    
 			if (!polaca.isEmpty()) {
 				String varAux = polaca.get(i);
 				if (!" ".equals(varAux)) {
@@ -208,103 +202,117 @@ public class GeneradorCodigo {
 							}
 						
 					}
-					if (esOperador(varAux)) {
+					if (esOperador(varAux) && !pilaCodigo.empty()) {
 						// sumo desapilando el ultimo y ante ultimo y el
 						// resultado se apila
-						if ("+".equals(varAux)) {
+                                            
+						if ("+".equals(varAux) && pilaCodigo.size()> 1 ) {
 							String id1 = pilaCodigo.pop();
 							String id2 = pilaCodigo.pop();
 							ejecutarSuma(id1, id2);
 						}
 						// resta desapilando el ultimo y ante ultimo y el
 						// resultado se apila
-						if ("-".equals(varAux)) {
+						if ("-".equals(varAux)&& pilaCodigo.size()> 1) {
 							String id1 = pilaCodigo.pop();
 							String id2 = pilaCodigo.pop();
 							ejecutarResta(id1, id2);
 						}
 						// multiplicar desapilando el ultimo y ante ultimo y el
 						// resultado se apila
-						if ("*".equals(varAux)) {
+						if ("*".equals(varAux)&& pilaCodigo.size()> 1) {
 							String id1 = pilaCodigo.pop();
 							String id2 = pilaCodigo.pop();
 							ejecutarMutiplicar(id1, id2);
 						}
 						// dividir desapilando el ultimo y ante ultimo y el
 						// resultado se apila
-						if ("/".equals(varAux)) {
+						if ("/".equals(varAux)&& pilaCodigo.size()> 1) {
 							String id1 = pilaCodigo.pop();
 							String id2 = pilaCodigo.pop();
 							ejecutarDividir(id1, id2);
 						}
-						if (":=".equals(varAux)) {
+						if (":=".equals(varAux)&& pilaCodigo.size()> 1) {
 							String id1 = pilaCodigo.pop();
 							String id2 = pilaCodigo.pop();
 							ejecutarAsignacion(id1, id2);
 						}
-						if ("JNB".equals(varAux)) {
+						if ("JNB".equals(varAux)&& pilaCodigo.size()> 0) {
 							String salto = pilaCodigo.pop();
 							ejecutarSalto(salto, varAux);
 						}
-						if ("JNA".equals(varAux)) {
+						if ("JNA".equals(varAux)&& pilaCodigo.size()> 0) {
 							String salto = pilaCodigo.pop();
 							ejecutarSalto(salto, varAux);
 						}
-						if ("JNE".equals(varAux)) {
+						if ("JNE".equals(varAux)&& pilaCodigo.size()> 0) {
 							String salto = pilaCodigo.pop();
 							ejecutarSalto(salto, varAux);
 						}
-						if ("JNBE".equals(varAux)) {
+						if ("JNBE".equals(varAux)&& pilaCodigo.size()> 0) {
 							String salto = pilaCodigo.pop();
 							ejecutarSalto(salto, varAux);
 						}
-						if ("JNGE".equals(varAux)) {
+						if ("JNGE".equals(varAux)&& pilaCodigo.size()> 0) {
 							String salto = pilaCodigo.pop();
 							ejecutarSalto(salto, varAux);
 						}
-						if ("JE".equals(varAux)) {
+						if ("JE".equals(varAux)&& pilaCodigo.size()> 0) {
 							String salto = pilaCodigo.pop();
 							ejecutarSalto(salto, varAux);
 						}
-						if ("JMP".equals(varAux)) {
+						if ("JMP".equals(varAux)&& pilaCodigo.size()> 0) {
 							String salto = pilaCodigo.pop();
 							ejecutarSalto(salto, varAux);
 						}
-						if ("^".equals(varAux)) {
-							String base = pilaCodigo.pop();
-							String res = base.split("_")[1];
-							StringBuffer bs = new StringBuffer(res);
-							Simbolo aux = new Simbolo(bs, "ARRAY FLOAT");
-							aux = ts.existeSimbolo(aux);
-							int lim = Integer.valueOf(aux.getTamanio());
-							log.addLogger("_limite" + limite + " DD " + lim+".");
-							pilaCodigo.push(base);
-							pilaCodigo.push("_limite" + limite);
-							pilaCodigo.push("OFFSET "+base);
+                                               
+						if ("^".equals(varAux)&& pilaCodigo.size()> 0) {
+                                                        contBase++;
+							String base = pilaCodigo.pop();// el nombre del arreglo
+                                                        assembler.add("MOV _base"+ base+", OFFSET "+ base);
+                                                        //log.addLogger("_base"+contBase+ " DD ?");                                                                         
+                                                        String decl = "_base"+base+ " DD ?";                 
+                                                        if(!log.existe(decl))
+                                                            log.addLogger(decl);
+                                                        //log.addLogger("_base"+base+ " DD ?");                 
+                                                        //assembler.add("FLD _base"+base);                                                                                                                   
+                                                        pilaCodigo.push("_base"+base);//guarda el offset
+                                                        //contBase++;     
+							//String res = base.split("_")[1];
+							//StringBuffer bs = new StringBuffer(res);
+							//Simbolo aux = new Simbolo(bs, "ARRAY FLOAT");
+							//aux = ts.existeSimbolo(aux);
+							//int lim = Integer.valueOf(aux.getTamanio());
+							//log.addLogger("_limite" + limite + " DD " + lim+".");
+//							pilaCodigo.push(base);
+//							pilaCodigo.push("_limite" + limite);
+//							pilaCodigo.push("OFFSET "+base);
 							
 							
 						}
-						if ("&".equals(varAux)) {
-							
-							String ofs = pilaCodigo.pop();
-							String lim = pilaCodigo.pop();
-							String base = pilaCodigo.pop();						
-							finArreglo(ofs,lim,base);
-							limite++;
-							pilaCodigo.add(" dword ptr [_aux"+contaux+"]");
-					    	contaux++;
+						if ("&".equals(varAux)&& pilaCodigo.size()> 0) {
+                                                    String aux = pilaCodigo.pop();// saca el resultado de offset + indice
+
+//							String ofs = pilaCodigo.pop();
+//							String lim = pilaCodigo.pop();
+//							String base = pilaCodigo.pop();						
+//							finArreglo(ofs,lim,base);
+//							limite++;
+							pilaCodigo.add(" dword ptr ["+aux+"]");
+//					    	contaux++;
 
 						}
-						if ("print".equals(varAux)) {
+						if ("print".equals(varAux)&& pilaCodigo.size()> 0) {
 							String base = pilaCodigo.pop();
 							imprimirCadena(base);
 						}
 						// Para todas las comparaciones
 						if ("=".equals(varAux) || "<".equals(varAux)
 								|| ">".equals(varAux) || ">=".equals(varAux)
-								|| "<=".equals(varAux) || "<>".equals(varAux)) {
-							
-							String l = labels.firstElement().toString();
+								|| "<=".equals(varAux) || "<>".equals(varAux)
+                                                        && pilaCodigo.size()> 1) {
+							if(!labels.empty()){
+                                                            String l = labels.firstElement().toString();
 							
 							String id1 = pilaCodigo.pop();
 							String id2 = pilaCodigo.pop();
@@ -312,7 +320,7 @@ public class GeneradorCodigo {
 							labels.remove(0);
 							ejecutarComparador(id1, id2);
 							//pilaCodigo.push("Label"+l);
-					
+                                                        }
 							
 						}
 						if ("1".equals(varAux)){
@@ -324,7 +332,20 @@ public class GeneradorCodigo {
 						}	
 						
 					} else {
-						
+						 if (varAux.contains("#")&& pilaCodigo.size()> 0) {
+							String indice = pilaCodigo.pop();// recupera el indice del arreglo
+							String res = varAux.split("#")[1];
+							StringBuffer bs = new StringBuffer(res);
+							Simbolo aux = new Simbolo(bs, "ARRAY FLOAT");
+							aux = ts.existeSimbolo(aux);
+							Integer lim = Integer.valueOf(aux.getTamanio().split("\\.")[0]);                                                        
+                                                        String decl = "_limite_" + res + " DD " + lim+".";
+                                                        if(!log.existe(decl))
+                                                            log.addLogger(decl);
+                                                        ejecutarControlArreglo(indice, "_limite_"+ res);
+                                                        pilaCodigo.push(indice);
+                                                        limite++;
+						}else{
 						Simbolo aux = ts.existeSimbolo(new Simbolo(
 								new StringBuffer(varAux), ""));
 						if (aux != null
@@ -334,7 +355,7 @@ public class GeneradorCodigo {
 							cte++;
 						} else
 							pilaCodigo.push("_"+varAux);// apilo;
-
+                                                 }
 					}
 				}
 			}
@@ -392,7 +413,7 @@ public class GeneradorCodigo {
                 log.addLogger("_"+elem.get(i).getValor().toString() + " DD " + "?");
             }
             if (tipo.equals("ARRAY FLOAT")) {
-                log.addLogger("_"+elem.get(i).getValor().toString() +" DD "+ elem.get(i).getTamanio() + " DUP(?)");
+                log.addLogger("_"+elem.get(i).getValor().toString() +" DD "+ elem.get(i).getTamanio().split("\\.")[0] + " DUP(?)");
             }
 
             if (tipo.equals("STRING")) {
