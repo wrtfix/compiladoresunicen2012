@@ -17,6 +17,7 @@ public class Logger {
     private String direccion;
 
     public Logger(String dir) {
+        
         lineas = new ArrayList<String>();
         direccion = dir;
 
