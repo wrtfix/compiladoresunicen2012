@@ -837,8 +837,8 @@ case 56:
 break;
 case 57:
 //#line 175 "gramatica.y"
-{pi.add("#"+val_peek(3).sval); pi.add("1"); pi.add("-"); pi.add("4"); pi.add("*"); pi.add(val_peek(3).sval);
-  pi.add("^"); pi.add("+"); pi.add("&");}
+{pi.add("#"+val_peek(3).sval); pi.add("1"); pi.add("-i"); pi.add("4"); pi.add("*i"); pi.add(val_peek(3).sval);
+  pi.add("^"); pi.add("+i"); pi.add("&");}
 break;
 case 58:
 //#line 176 "gramatica.y"
@@ -892,8 +892,8 @@ case 70:
 //#line 210 "gramatica.y"
 {
 if (lexico.getTabla().existeTipoVariable(val_peek(3).sval,"ARRAY FLOAT")){
-    pi.add("#"+val_peek(3).sval); pi.add("1"); pi.add("-"); pi.add("4"); pi.add("*"); pi.add(val_peek(3).sval);
-  pi.add("^"); pi.add("+"); pi.add("&");
+    pi.add("#"+val_peek(3).sval); pi.add("1"); pi.add("-i"); pi.add("4"); pi.add("*i"); pi.add(val_peek(3).sval);
+  pi.add("^"); pi.add("+i"); pi.add("&");
 }else
     System.out.println("ERROR en linea "+lexico.getLineas()+": no se ecuentra declarada la variable");
                                                         

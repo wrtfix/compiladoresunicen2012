@@ -54,6 +54,9 @@ public class GeneradorCodigo {
         operadores.put("+", "+");
         operadores.put("-", "-");
         operadores.put("*", "*");
+        operadores.put("+i", "+i");
+        operadores.put("-i", "-i");
+        operadores.put("*i", "*i");
         operadores.put("/", "/");
         operadores.put("=", "=");
         operadores.put("<=", "<=");
@@ -98,23 +101,27 @@ public class GeneradorCodigo {
 //  	 	}else{
 //  	 		assembler.add("FLD "+izq);
 //  	 	}  	 		
-  	if (contBase>0){
-            assembler.add("FLD "+izq);
-            assembler.add("FADD "+der);
-            assembler.add("FISTP _aux"+contaux);
-            contBase--;
-        }else{
+//  	if (contBase>0){
+//            assembler.add("FLD "+izq);
+//            assembler.add("FADD "+der);
+//            assembler.add("FSTP _aux"+contaux);
+//            contBase--;
+//        }else{
             assembler.add("FLD "+izq);
         assembler.add("FADD "+der);
   	assembler.add("FSTP _aux"+contaux);
-        }
+        
         pilaCodigo.push("_aux"+contaux);
         log.addLogger("_aux"+contaux+" DD ?");
         contaux++;
 
       	
     }
-    
+    public void ejecutarSumaEntera(String izq) {        
+        assembler.add("MOV ebx,"+ izq);    
+        assembler.add("ADD ebx, eax");        
+        pilaCodigo.push("ebx");
+    }
     public void ejecutarResta(String der, String izq) {
         assembler.add("FLD " + izq +" ; carga el valor de la derecha en el st");
         assembler.add("FSUB " + der +" ; resta el valor del st con el valor de la izq");
@@ -123,7 +130,10 @@ public class GeneradorCodigo {
         log.addLogger("_aux"+contaux+" DD ?");
         contaux++;
     }
-    
+    public void ejecutarRestaEntera(String der, String izq) {
+        assembler.add("MOV eax, "+ izq);
+        assembler.add("SUB eax, "+ der);
+    }
     public void ejecutarMutiplicar(String der, String izq) {
         assembler.add("FLD " + izq +" ; carga el valor de la izq en el st");
         assembler.add("FMUL " + der +" ; multiplica el valor del st con el valor de la der y se guarda en st");
@@ -135,6 +145,10 @@ public class GeneradorCodigo {
     	pilaCodigo.push("_aux"+contaux);
         log.addLogger("_aux"+contaux+" DD ?");
         contaux++;
+    }
+    public void ejecutarMultEntera(String izq) {        
+        assembler.add("MOV ecx,"+ izq);    
+        assembler.add("MUL ecx");
     }
     public void ejecutarDividir(String der, String izq) {
     	assembler.add("FLD "+ der +" ; carga el el st el valor izq a comparar");
@@ -169,11 +183,21 @@ public class GeneradorCodigo {
     	 
     }
     public void  ejecutarControlArreglo(String indice, String lim){
+         //Realizamos una conversion de flotante a entero
          assembler.add("FLD "+indice);
-    	 assembler.add("FCOMP "+ lim +"; compara el st con el valor de la derecha");
-    	 assembler.add("FSTSW ax ; guarda el resultado de la operacion en el registro ax");
-    	 assembler.add("SAHF ; toma los bits menos significativos del registro ax");
-    	 assembler.add("JNBE ERROR_LIMITE");
+         assembler.add("FIST "+indice);
+         // Verifico los limites 
+         assembler.add("MOV eax, "+ indice);
+         assembler.add("CMP eax, " + lim);
+         assembler.add("JG ERROR_LIMITE");
+         assembler.add("CMP eax, 1");         
+         assembler.add("JL ERROR_LIMITE");
+
+
+//    	 assembler.add("FCOMP "+ lim +"; compara el st con el valor de la derecha");
+//    	 assembler.add("FSTSW ax ; guarda el resultado de la operacion en el registro ax");
+//    	 assembler.add("SAHF ; toma los bits menos significativos del registro ax");
+//    	 assembler.add("JNBE ERROR_LIMITE");
     }
     
     public void ejecutarComparador(String izq,String der){
@@ -211,6 +235,10 @@ public class GeneradorCodigo {
 							String id2 = pilaCodigo.pop();
 							ejecutarSuma(id1, id2);
 						}
+                                                if ("+i".equals(varAux) && pilaCodigo.size()> 1 ) {
+							String id1 = pilaCodigo.pop();							
+							ejecutarSumaEntera(id1);
+						}
 						// resta desapilando el ultimo y ante ultimo y el
 						// resultado se apila
 						if ("-".equals(varAux)&& pilaCodigo.size()> 1) {
@@ -218,12 +246,21 @@ public class GeneradorCodigo {
 							String id2 = pilaCodigo.pop();
 							ejecutarResta(id1, id2);
 						}
+                                                if ("-i".equals(varAux)&& pilaCodigo.size()> 1) {
+							String id1 = pilaCodigo.pop();
+							String id2 = pilaCodigo.pop();
+							ejecutarRestaEntera(id1, id2);
+						}
 						// multiplicar desapilando el ultimo y ante ultimo y el
 						// resultado se apila
 						if ("*".equals(varAux)&& pilaCodigo.size()> 1) {
 							String id1 = pilaCodigo.pop();
 							String id2 = pilaCodigo.pop();
 							ejecutarMutiplicar(id1, id2);
+						}
+                                                if ("*i".equals(varAux)&& pilaCodigo.size()> 1) {
+							String id1 = pilaCodigo.pop();							
+							ejecutarMultEntera(id1);
 						}
 						// dividir desapilando el ultimo y ante ultimo y el
 						// resultado se apila
@@ -293,13 +330,8 @@ public class GeneradorCodigo {
 						if ("&".equals(varAux)&& pilaCodigo.size()> 0) {
                                                     String aux = pilaCodigo.pop();// saca el resultado de offset + indice
 
-//							String ofs = pilaCodigo.pop();
-//							String lim = pilaCodigo.pop();
-//							String base = pilaCodigo.pop();						
-//							finArreglo(ofs,lim,base);
-//							limite++;
 							pilaCodigo.add(" dword ptr ["+aux+"]");
-//					    	contaux++;
+
 
 						}
 						if ("print".equals(varAux)&& pilaCodigo.size()> 0) {
@@ -339,7 +371,7 @@ public class GeneradorCodigo {
 							Simbolo aux = new Simbolo(bs, "ARRAY FLOAT");
 							aux = ts.existeSimbolo(aux);
 							Integer lim = Integer.valueOf(aux.getTamanio().split("\\.")[0]);                                                        
-                                                        String decl = "_limite_" + res + " DD " + lim+".";
+                                                        String decl = "_limite_" + res + " DD " + lim;
                                                         if(!log.existe(decl))
                                                             log.addLogger(decl);
                                                         ejecutarControlArreglo(indice, "_limite_"+ res);
@@ -366,8 +398,8 @@ public class GeneradorCodigo {
 		log.addLogger("_division db \"division por cero\", 0");
 		log.addLogger("_oversuper DD 3.40282347e+38");
 		log.addLogger("_overinf DD 1.17549435e-38");
-		log.addLogger("_cuatro DD 4.");
-		log.addLogger("_uno DD 1.");
+		log.addLogger("_cuatro DD 4");
+		log.addLogger("_uno DD 1");
 		log.addLogger("_cero DD 0");
 		log.addLogger(".code");
 		log.addLogger("start:");
