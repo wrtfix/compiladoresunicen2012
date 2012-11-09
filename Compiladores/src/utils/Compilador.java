@@ -48,7 +48,7 @@ public class Compilador {
         System.out.println("ERRORES LEXICOS");
         analizadorL.imprimitErrores();*/
         
-        GeneradorCodigo c = new GeneradorCodigo(analizadorL.getTabla(), p.getLabels());
+        GeneradorCodigo c = new GeneradorCodigo(analizadorL.getTabla(), p.getLabels(),args[0]);
         
         c.addTablaSimbolo();
         c.recorrerPolaca(p.getPolaca());

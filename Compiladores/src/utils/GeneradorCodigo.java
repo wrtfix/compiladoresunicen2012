@@ -28,9 +28,10 @@ public class GeneradorCodigo {
     private Integer limite;
     
     private boolean arreglo=false;
-    public GeneradorCodigo(TablaSimbolo tabla, Stack<Integer> l) {
+    public GeneradorCodigo(TablaSimbolo tabla, Stack<Integer> l, String nombre) {
         pilaCodigo = new Stack<String>();
-        log = new Logger("codigo.asm");
+        String nArchivo = nombre.split(".txt")[0] +".asm";
+        log = new Logger(nArchivo);                
         assembler = new Vector<String>();
         numero = 0;
         cte = 0;
@@ -218,6 +219,7 @@ public class GeneradorCodigo {
     	assembler.add("FCOMP "+ izq +" ; compara el st con el valor de la derecha");
     	assembler.add("FSTSW ax ; guarda el resultado de la operacion en el registro ax");
     	assembler.add("SAHF ; toma los bits menos significativos del registro ax");
+        
     }
     
     
