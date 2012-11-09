@@ -117,10 +117,14 @@ public class GeneradorCodigo {
 
       	
     }
-    public void ejecutarSumaEntera(String izq) {        
+    public void ejecutarSumaEntera(String izq, String der) {        
+        assembler.add("MOV eax,"+ der);    
         assembler.add("MOV ebx,"+ izq);    
-        assembler.add("ADD ebx, eax");        
-        pilaCodigo.push("ebx");
+        assembler.add("ADD ebx, eax");             
+        assembler.add("MOV _aux"+contaux +", ebx");             
+        pilaCodigo.push("_aux"+contaux);
+        log.addLogger("_aux"+contaux+" DD ?");
+        contaux++;
     }
     public void ejecutarResta(String der, String izq) {
         assembler.add("FLD " + izq +" ; carga el valor de la derecha en el st");
@@ -133,6 +137,10 @@ public class GeneradorCodigo {
     public void ejecutarRestaEntera(String der, String izq) {
         assembler.add("MOV eax, "+ izq);
         assembler.add("SUB eax, "+ der);
+        assembler.add("MOV _aux"+contaux+", eax");
+        pilaCodigo.push("_aux"+contaux);
+        log.addLogger("_aux"+contaux+" DD ?");
+        contaux++;
     }
     public void ejecutarMutiplicar(String der, String izq) {
         assembler.add("FLD " + izq +" ; carga el valor de la izq en el st");
@@ -146,9 +154,14 @@ public class GeneradorCodigo {
         log.addLogger("_aux"+contaux+" DD ?");
         contaux++;
     }
-    public void ejecutarMultEntera(String izq) {        
+    public void ejecutarMultEntera(String izq, String der) {        
+        assembler.add("MOV eax,"+ der);    
         assembler.add("MOV ecx,"+ izq);    
         assembler.add("MUL ecx");
+        assembler.add("MOV _aux"+contaux+", eax");
+        pilaCodigo.push("_aux"+contaux);
+        log.addLogger("_aux"+contaux+" DD ?");
+        contaux++;
     }
     public void ejecutarDividir(String der, String izq) {
     	assembler.add("FLD "+ der +" ; carga el el st el valor izq a comparar");
@@ -201,7 +214,7 @@ public class GeneradorCodigo {
     }
     
     public void ejecutarComparador(String izq,String der){
-    	assembler.add("FLD "+ der +" ; carga el el st el valor izq a comparar");
+        assembler.add("FLD "+ der +" ; carga el el st el valor izq a comparar");
     	assembler.add("FCOMP "+ izq +" ; compara el st con el valor de la derecha");
     	assembler.add("FSTSW ax ; guarda el resultado de la operacion en el registro ax");
     	assembler.add("SAHF ; toma los bits menos significativos del registro ax");
@@ -237,7 +250,8 @@ public class GeneradorCodigo {
 						}
                                                 if ("+i".equals(varAux) && pilaCodigo.size()> 1 ) {
 							String id1 = pilaCodigo.pop();							
-							ejecutarSumaEntera(id1);
+                                                        String id2 = pilaCodigo.pop();		
+							ejecutarSumaEntera(id1,id2);
 						}
 						// resta desapilando el ultimo y ante ultimo y el
 						// resultado se apila
@@ -259,8 +273,9 @@ public class GeneradorCodigo {
 							ejecutarMutiplicar(id1, id2);
 						}
                                                 if ("*i".equals(varAux)&& pilaCodigo.size()> 1) {
-							String id1 = pilaCodigo.pop();							
-							ejecutarMultEntera(id1);
+							String id1 = pilaCodigo.pop();	
+                                                        String id2 = pilaCodigo.pop();		
+							ejecutarMultEntera(id1,id2);
 						}
 						// dividir desapilando el ultimo y ante ultimo y el
 						// resultado se apila
@@ -311,26 +326,16 @@ public class GeneradorCodigo {
                                                         String decl = "_base"+base+ " DD ?";                 
                                                         if(!log.existe(decl))
                                                             log.addLogger(decl);
-                                                        //log.addLogger("_base"+base+ " DD ?");                 
-                                                        //assembler.add("FLD _base"+base);                                                                                                                   
+                                                        
                                                         pilaCodigo.push("_base"+base);//guarda el offset
-                                                        //contBase++;     
-							//String res = base.split("_")[1];
-							//StringBuffer bs = new StringBuffer(res);
-							//Simbolo aux = new Simbolo(bs, "ARRAY FLOAT");
-							//aux = ts.existeSimbolo(aux);
-							//int lim = Integer.valueOf(aux.getTamanio());
-							//log.addLogger("_limite" + limite + " DD " + lim+".");
-//							pilaCodigo.push(base);
-//							pilaCodigo.push("_limite" + limite);
-//							pilaCodigo.push("OFFSET "+base);
+                                                        
 							
 							
 						}
 						if ("&".equals(varAux)&& pilaCodigo.size()> 0) {
                                                     String aux = pilaCodigo.pop();// saca el resultado de offset + indice
-
-							pilaCodigo.add(" dword ptr ["+aux+"]");
+                                                        assembler.add("MOV ebx, "+aux);
+							pilaCodigo.add("dword ptr [ebx]");
 
 
 						}
