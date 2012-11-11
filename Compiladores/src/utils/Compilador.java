@@ -6,7 +6,6 @@ package utils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 
 
 /**
@@ -32,11 +31,7 @@ public class Compilador {
         PolacaInversa pi = new PolacaInversa();
         Parser p = new Parser(analizadorL);
         p.run();
-
-        p.imprimirSintactico();
-
-        p.imprimirPolacaInversa();
-
+        
         //p.imprimirLabels();
         System.out.println("");
         /*System.out.println("TOKENS");
@@ -47,12 +42,22 @@ public class Compilador {
         /*System.out.println("");
         System.out.println("ERRORES LEXICOS");
         analizadorL.imprimitErrores();*/
-        
-        GeneradorCodigo c = new GeneradorCodigo(analizadorL.getTabla(), p.getLabels(),args[0]);
-        
-        c.addTablaSimbolo();
-        c.recorrerPolaca(p.getPolaca());
-        c.imprimir();
+        if (!p.hayErrores()){
+            
+            p.imprimirPolacaInversa();
+            p.imprimirSintactico();
+            GeneradorCodigo c = new GeneradorCodigo(analizadorL.getTabla(), p.getLabels(),args[0]);
+
+            c.addTablaSimbolo();
+            c.recorrerPolaca(p.getPolaca());
+            c.imprimir();
+        }else
+        {
+            System.out.println("");
+            System.out.println("Su codigo posee errores");
+            System.out.println("");
+            p.imprimirErroresSintactico();
+        }
       
     }
 }

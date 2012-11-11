@@ -23,18 +23,15 @@ public class GeneradorCodigo {
 	private Vector<String> assembler;
 	private Stack<Integer> labels;
 	private Stack<Integer> posiciones;
-	private Integer contaux, contBase;
-	private Integer numero;
+	private Integer contaux;
 	private Integer cte;
 	private Integer limite;
 
-	private boolean arreglo = false;
-
-	public GeneradorCodigo(TablaSimbolo tabla, Stack<Integer> l) {
+	public GeneradorCodigo(TablaSimbolo tabla, Stack<Integer> l,String path) {
 		pilaCodigo = new Stack<String>();
-		log = new Logger("codigo.asm");
+		log = new Logger(path.split("\\.")[0]+".asm");
 		assembler = new Vector<String>();
-		numero = 0;
+
 		cte = 0;
 		ts = tabla;
 		limite = 0;
@@ -80,7 +77,7 @@ public class GeneradorCodigo {
 		operadores.put("4", "4");
 		labels = l;
 		contaux = 0;
-		contBase = 0;
+
 	}
 
 	public void imprimirCodigo() {
@@ -120,10 +117,17 @@ public class GeneradorCodigo {
 	}
 
 	public void ejecutarResta(String der, String izq) {
-		assembler
-				.add("FLD " + izq + " ; carga el valor de la derecha en el st");
-		assembler.add("FSUB " + der
-				+ " ; resta el valor del st con el valor de la izq");
+		if (izq.contains("dword")){
+			assembler.add("MOV ebx, "+izq.split("\\[")[1].split("\\]")[0]);
+			izq = "dword ptr [ebx]";
+		}
+		if (der.contains("dword")){
+			assembler.add("MOV ecx, "+der.split("\\[")[1].split("\\]")[0]);
+			der = "dword ptr [ecx]";
+		}
+				
+		assembler.add("FLD " + izq );
+		assembler.add("FSUB " + der);
 		assembler.add("FST _aux" + contaux + " ; guarda el resultado");
 		pilaCodigo.push("_aux" + contaux);
 		log.addLogger("_aux" + contaux + " DD ?");
@@ -144,24 +148,21 @@ public class GeneradorCodigo {
 	}
 
 	public void ejecutarMutiplicar(String der, String izq) {
-		assembler.add("FLD " + izq + " ; carga el valor de la izq en el st");
-		assembler
-				.add("FMUL "
-						+ der
-						+ " ; multiplica el valor del st con el valor de la der y se guarda en st");
-		assembler
-				.add("FST "
-						+ "_aux"
-						+ contaux
-						+ " ; multiplica el valor del st con el valor de la der y se guarda en st");
-		assembler
-				.add("FCOMP _oversuper ; compara el resultado de la operacion con over");
-		assembler
-				.add("FSTSW ax ; guarda el resultado de la operacion en el registro ax");
-		assembler
-				.add("SAHF ; toma los bits menos significativos del registro ax");
-		assembler
-				.add("JNBE ERROR_OVERFLOW; toma los bits menos significativos del registro ax");
+            	if (izq.contains("dword")){
+			assembler.add("MOV ebx, "+izq.split("\\[")[1].split("\\]")[0]);
+			izq = "dword ptr [ebx]";
+		}
+		if (der.contains("dword")){
+			assembler.add("MOV ecx, "+der.split("\\[")[1].split("\\]")[0]);
+			der = "dword ptr [ecx]";
+		}
+		assembler.add("FLD " + izq );
+		assembler.add("FMUL "+ der);
+		assembler.add("FST "+ "_aux"+ contaux);
+		assembler.add("FCOMP _oversuper");
+		assembler.add("FSTSW ax");
+		assembler.add("SAHF");
+		assembler.add("JNBE ERROR_OVERFLOW");
 		pilaCodigo.push("_aux" + contaux);
 		log.addLogger("_aux" + contaux + " DD ?");
 		contaux++;
@@ -177,75 +178,17 @@ public class GeneradorCodigo {
 		contaux++;
 		
 	}
-    private Stack<String> pilaCodigo;
-    private Logger log;
-    private TablaSimbolo ts;
-    private Hashtable<String, String> operadores = new Hashtable();
-    private Vector<String> assembler;
-    private Stack<Integer> labels;
-    private Stack<Integer> posiciones;
-    private Integer contaux, contBase;
-    private Integer numero;
-    private Integer cte;
-    private Integer limite;
-    
-    private boolean arreglo=false;
-    public GeneradorCodigo(TablaSimbolo tabla, Stack<Integer> l, String nombre) {
-        pilaCodigo = new Stack<String>();
-        String nArchivo = nombre.split(".txt")[0] +".asm";
-        log = new Logger(nArchivo);                
-        assembler = new Vector<String>();
-        numero = 0;
-        cte = 0;
-        ts = tabla;
-        limite=0;
-        posiciones = new Stack<Integer>();
-        for (int i=0; i<l.size();i++){
-        	System.out.println(l.get(i));
-        	posiciones.add(l.get(i));
-        }
-        
-        
-        log.addLogger(".386");
-        log.addLogger(".model flat, stdcall");
-        log.addLogger("option casemap :none");
-        log.addLogger("include \\masm32\\include\\windows.inc");
-        log.addLogger("include \\masm32\\include\\kernel32.inc");
-        log.addLogger("include \\masm32\\include\\user32.inc");
-        log.addLogger("includelib \\masm32\\lib\\kernel32.lib");
-        log.addLogger("includelib \\masm32\\lib\\user32.lib");
-        operadores.put("+", "+");
-        operadores.put("-", "-");
-        operadores.put("*", "*");
-        operadores.put("+i", "+i");
-        operadores.put("-i", "-i");
-        operadores.put("*i", "*i");
-        operadores.put("/", "/");
-        operadores.put("=", "=");
-        operadores.put("<=", "<=");
-        operadores.put(">=", ">=");
-        operadores.put("<", "<");
-        operadores.put(">", ">");
-        operadores.put("<>", "<>");
-        operadores.put(":=", ":=");
-        operadores.put("&", "&");
-        operadores.put("^", "^");
-        operadores.put("JMP", "JMP");
-        operadores.put("JNB", "JNB");
-        operadores.put("JNA", "JNA");
-        operadores.put("JNE", "JNE");
-        operadores.put("JNBE", "JNBE");
-        operadores.put("JNGE", "JNGE");
-        operadores.put("JE", "JE");
-        operadores.put("print", "print");
-        operadores.put("1", "1");
-        operadores.put("4", "4");
-        labels = l;
-        contaux = 0;
-        contBase = 0;
-    }
 
 	public void ejecutarDividir(String der, String izq) {
+		if (izq.contains("dword")){
+			assembler.add("MOV ebx, "+izq.split("\\[")[1].split("\\]")[0]);
+			izq = "dword ptr [ebx]";
+		}
+		if (der.contains("dword")){
+			assembler.add("MOV ecx, "+der.split("\\[")[1].split("\\]")[0]);
+			der = "dword ptr [ecx]";
+		}
+		
 		assembler.add("FLD " + der
 				+ " ; carga el el st el valor izq a comparar");
 		// assembler.add("FADD cero ; compara el st con el valor de la derecha");
@@ -268,9 +211,18 @@ public class GeneradorCodigo {
 	public void ejecutarAsignacion(String der, String izq) {
 		if (izq.contains("dword")){
 			assembler.add("MOV ebx, "+izq.split("\\[")[1].split("\\]")[0]);
-			assembler.add("FLD " + der);
-			assembler.add("FSTP dword ptr [ebx] " );
 			
+			if (der.contains("dword")){
+				assembler.add("MOV eax, "+der.split("\\[")[1].split("\\]")[0]);
+				assembler.add("FLD dword ptr [eax]");
+				assembler.add("FSTP dword ptr [ebx]");
+				
+				
+			}else{
+				izq = "dword ptr[ebx]";
+				assembler.add("FLD " + der);
+				assembler.add("FSTP " + izq);
+			}
 
 		}else{
 			if (der.contains("dword")){
@@ -280,8 +232,13 @@ public class GeneradorCodigo {
 				
 				
 			}else{
-				assembler.add("FLD " + izq);
-				assembler.add("FSTP " + der);
+				if(der.contains("cte")){
+					assembler.add("FLD " + der);
+					assembler.add("FSTP " + izq);
+				}else{
+					assembler.add("FLD " + der);
+					assembler.add("FSTP " + izq);
+				}
 			}
 			
 		}
@@ -290,10 +247,6 @@ public class GeneradorCodigo {
 	public void ejecutarSalto(String salto, String tipo) {
 
 		assembler.add(tipo + " Label" + salto);
-	}
-
-	public void finArreglo(String ofs, String lim, String base) {
-
 	}
 
 	public void ejecutarControlArreglo(String indice, String lim) {
@@ -307,9 +260,10 @@ public class GeneradorCodigo {
 			assembler.add("MOV eax, _aux"+contaux);
 			contaux++;
 			assembler.add("CMP eax, " + lim);
-			assembler.add("JG ERROR_LIMITE");
-			assembler.add("CMP eax, 1");
-			assembler.add("JL ERROR_LIMITE");
+			assembler.add("JG ERROR_LIMITESUP");
+			assembler.add("MOV eax, "+indice);
+                        assembler.add("CMP eax, 1");
+			assembler.add("JL ERROR_LIMITEINF");
 		}else
 		{
 		// Realizamos una conversion de flotante a entero
@@ -318,10 +272,10 @@ public class GeneradorCodigo {
 				// Verifico los limites
 				assembler.add("MOV eax, " + indice);
 				assembler.add("CMP eax, " + lim);
-				assembler.add("JG ERROR_LIMITE");
+				assembler.add("JG ERROR_LIMITESUP");
 				assembler.add("MOV eax, "+indice);
 				assembler.add("CMP eax, 1");
-				assembler.add("JL ERROR_LIMITE");
+				assembler.add("JL ERROR_LIMITEINF");
 		}
 	}
 
@@ -329,39 +283,41 @@ public class GeneradorCodigo {
 
 		if (izq.contains("dword")) {
 				if (der.contains("dword")){			
-					assembler.add("MOV ebx, "+izq.split("\\[")[1].split("\\]")[0]);
-					assembler.add("FLD dword ptr [ebx] ; carga el el st el valor izq a comparar");
-					assembler.add("MOV eax, "+der.split("\\[")[1].split("\\]")[0]);
-					assembler.add("FCOMP dword ptr[eax] ");
-					assembler.add("FSTSW ax ; guarda el resultado de la operacion en el registro ax");
-					assembler.add("SAHF ; toma los bits menos significativos del registro ax");
+        				assembler.add("MOV eax, "+der.split("\\[")[1].split("\\]")[0]);
+                                        assembler.add("FLD dword ptr [eax]");
+                                        assembler.add("MOV ebx, "+izq.split("\\[")[1].split("\\]")[0]);
+					assembler.add("FLD dword ptr [ebx]");
+					assembler.add("FCOMP");
+					assembler.add("FSTSW ax");
+					assembler.add("SAHF");
 				}
 				else
 				{
-					assembler.add("MOV ebx, "+izq.split("\\[")[1].split("\\]")[0]);
-					assembler.add("FLD dword ptr [ebx] ; carga el el st el valor izq a comparar");
-					assembler.add("FLD "+der);
+					assembler.add("FLD "+der);	
+                                        assembler.add("MOV ebx, "+izq.split("\\[")[1].split("\\]")[0]);
+					assembler.add("FLD dword ptr [ebx] ");
 					assembler.add("FCOMP");
-					assembler.add("FSTSW ax ; guarda el resultado de la operacion en el registro ax");
-					assembler.add("SAHF ; toma los bits menos significativos del registro ax");
+					assembler.add("FSTSW ax");
+					assembler.add("SAHF");
 				}
 				contaux++;
 			}else{
 				
 				if (der.contains("dword")){	
-					assembler.add("FLD "+izq);	
 					assembler.add("MOV ebx, "+der.split("\\[")[1].split("\\]")[0]);
-					assembler.add("FLD dword ptr [ebx] ; carga el el st el valor izq a comparar");
+					assembler.add("FLD dword ptr [ebx] ");
+                                        assembler.add("FLD "+izq);	
 					assembler.add("FCOMP");
-					assembler.add("FSTSW ax ; guarda el resultado de la operacion en el registro ax");
-					assembler.add("SAHF ; toma los bits menos significativos del registro ax");
+					assembler.add("FSTSW ax ");
+					assembler.add("SAHF ");
 				}
 				else
 				{
+					assembler.add("FLD "+der);	
 					assembler.add("FLD "+izq);	
-					assembler.add("FCOM "+der+" ; compara el st con el valor de la derecha");
-					assembler.add("FSTSW ax ; guarda el resultado de la operacion en el registro ax");
-					assembler.add("SAHF ; toma los bits menos significativos del registro ax");
+                                        assembler.add("FCOMP ");
+					assembler.add("FSTSW ax ");
+					assembler.add("SAHF ");
 				}
 			}
 		
@@ -377,12 +333,15 @@ public class GeneradorCodigo {
 				if (!" ".equals(varAux)) {
 					// realizo el etiquetado de saltos
 					if (!posiciones.isEmpty() && posiciones.contains(i)) {
-						assembler.add("Label_" + posiciones.firstElement()
-								+ ":");
+						assembler.add("");
+                                                assembler.add("Label_" +i+ ":");
+                                                
+                                                
 						for (int j = 0; j < posiciones.size(); j++)
 							if (posiciones.get(j).equals(i)) {
 								posiciones.remove(j);
 							}
+                                                
 
 					}
 					if (esOperador(varAux) && !pilaCodigo.empty()) {
@@ -462,6 +421,7 @@ public class GeneradorCodigo {
 						if ("JMP".equals(varAux) && pilaCodigo.size() > 0) {
 							String salto = pilaCodigo.pop();
 							ejecutarSalto(salto, varAux);
+                                                        
 						}
 
 						if ("^".equals(varAux) && pilaCodigo.size() > 0) {
@@ -473,13 +433,14 @@ public class GeneradorCodigo {
 								log.addLogger(decl);
 							pilaCodigo.push("_base" + base);
 							
-
+                                                        assembler.add(""); 
 
 						}
 						if ("&".equals(varAux) && pilaCodigo.size() > 0) {
 							String aux = pilaCodigo.pop();// saca el resultado
 															// de offset +
 															// indice
+							
 
 							pilaCodigo.add(" dword ptr [" + aux + "]");
 							assembler.add("");
@@ -496,14 +457,11 @@ public class GeneradorCodigo {
 								|| "<=".equals(varAux) || "<>".equals(varAux)
 								&& pilaCodigo.size() > 1) {
 							if (!labels.empty()) {
-								String l = labels.firstElement().toString();
-
+								//String l = labels.firstElement().toString();
 								String id1 = pilaCodigo.pop();
 								String id2 = pilaCodigo.pop();
-								// assembler.add("Label_"+l+":");
-								labels.remove(0);
+								//labels.remove(0);
 								ejecutarComparador(id1, id2);
-								// pilaCodigo.push("Label"+l);
 								assembler.add("");
 							}
 
@@ -518,9 +476,7 @@ public class GeneradorCodigo {
 
 					} else {
 						if (varAux.contains("#") && pilaCodigo.size() > 0) {
-							String indice = pilaCodigo.pop();// recupera el
-																// indice del
-																// arreglo
+							String indice = pilaCodigo.pop();
 							String res = varAux.split("#")[1];
 							StringBuffer bs = new StringBuffer(res);
 							Simbolo aux = new Simbolo(bs, "ARRAY FLOAT");
@@ -551,7 +507,8 @@ public class GeneradorCodigo {
 		}
 		assembler.add("JMP TERMINAR");
 		log.addLogger("_overflow db \"hay overflow en la operacion \", 0");
-		log.addLogger("_limite db \"fuera del limite del arreglo\", 0");
+		log.addLogger("_limitesup db \"fuera del limite superior del arreglo\", 0");
+                log.addLogger("_limiteinf db \"fuera del limite inferior del arreglo\", 0");
 		log.addLogger("_division db \"division por cero\", 0");
 		log.addLogger("_oversuper DD 3.40282347e+38");
 		log.addLogger("_overinf DD 1.17549435e-38");
@@ -565,11 +522,15 @@ public class GeneradorCodigo {
 		assembler
 				.add("invoke MessageBox, NULL, addr _division, addr _division, MB_OK");
 		assembler.add("JMP TERMINAR");
-		assembler.add("ERROR_LIMITE:");
+		assembler.add("ERROR_LIMITESUP:");
 		assembler
-				.add("invoke MessageBox, NULL, addr _limite, addr _limite, MB_OK");
+				.add("invoke MessageBox, NULL, addr _limitesup, addr _limitesup, MB_OK");
 		assembler.add("JMP TERMINAR");
-		assembler.add("ERROR_OVERFLOW:");
+		assembler.add("ERROR_LIMITEINF:");
+		assembler
+				.add("invoke MessageBox, NULL, addr _limiteinf, addr _limiteinf, MB_OK");
+		assembler.add("JMP TERMINAR");
+                assembler.add("ERROR_OVERFLOW:");
 		assembler
 				.add("invoke MessageBox, NULL, addr _overflow, addr _overflow, MB_OK");
 		assembler.add("JMP TERMINAR");
@@ -622,15 +583,6 @@ public class GeneradorCodigo {
 
 	public void imprimir() {
 		log.imprimir();
-	}
-
-	private void consumirArreglo(String base) {
-		assembler.add("MOV ax, 3");
-		assembler.add("SUB ax, 1");
-		assembler.add("MUL ax, 4");
-		assembler.add("MOV ebx, dword prt [base]");
-		assembler.add("ADD ax, dword prt [base]");
-
 	}
 
 	private void imprimirCadena(String cadena) {

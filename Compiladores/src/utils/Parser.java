@@ -424,6 +424,7 @@ final static String yyrule[] = {
 
 //#line 223 "gramatica.y"
   private Logger logSintactico = new Logger("sintactico.log");
+  private Logger ErrorSintactico = new Logger("errorsintactico.log");
   private AnalizadorLexico lexico;
   private Vector<String> pi;
   private Stack<Integer> pila;
@@ -471,7 +472,13 @@ public void putNegativo(String valor){
 public void imprimirSintactico(){
     logSintactico.imprimir();
 }
-
+public void imprimirErroresSintactico(){
+    ErrorSintactico.imprimir();
+}
+public boolean hayErrores()
+{
+    return !(ErrorSintactico.estaVacio());
+}
         
 public void imprimirPolacaInversa() {
     for (int i = 0; i < pi.size(); i++) {
@@ -490,7 +497,7 @@ public Stack<Integer> getLabels(){
 public Vector<String> getPolaca(){
     return pi;
 }
-//#line 422 "Parser.java"
+//#line 429 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -661,7 +668,7 @@ case 10:
 break;
 case 13:
 //#line 34 "gramatica.y"
-{logSintactico.addLogger("Error sintactico en linea "+lexico.getLineas()+": sentencia no permitida");}
+{ErrorSintactico.addLogger("ERROR sintactico en linea "+lexico.getLineas()+": sentencia no permitida");}
 break;
 case 14:
 //#line 37 "gramatica.y"
@@ -673,11 +680,11 @@ case 15:
 break;
 case 16:
 //#line 39 "gramatica.y"
-{logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": declaracion de variables");}
+{ErrorSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": declaracion de variables");}
 break;
 case 17:
 //#line 40 "gramatica.y"
-{logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": declaracion de variables");}
+{ErrorSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": declaracion de variables");}
 break;
 case 18:
 //#line 43 "gramatica.y"
@@ -722,15 +729,15 @@ case 23:
 break;
 case 25:
 //#line 81 "gramatica.y"
-{logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba un )");}
+{ErrorSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": se esperaba un )");}
 break;
 case 26:
 //#line 82 "gramatica.y"
-{logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba un THEN ");}
+{ErrorSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": se esperaba un THEN ");}
 break;
 case 27:
 //#line 83 "gramatica.y"
-{logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba una condicion");}
+{ErrorSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": se esperaba una condicion");}
 break;
 case 30:
 //#line 95 "gramatica.y"
@@ -758,11 +765,11 @@ if ( val_peek(1).sval.equals("<>")){
 break;
 case 31:
 //#line 116 "gramatica.y"
-{logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": condicion no valida se esperaba un argumento");}
+{ErrorSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": condicion no valida se esperaba un argumento");}
 break;
 case 32:
 //#line 117 "gramatica.y"
-{logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": condicion no valida se esperaba un argumento");}
+{ErrorSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": condicion no valida se esperaba un argumento");}
 break;
 case 40:
 //#line 130 "gramatica.y"
@@ -813,23 +820,23 @@ case 50:
 break;
 case 51:
 //#line 167 "gramatica.y"
-{logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba un punto y coma");}
+{ErrorSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": se esperaba un punto y coma");}
 break;
 case 52:
 //#line 168 "gramatica.y"
-{logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba un );");}
+{ErrorSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": se esperaba un );");}
 break;
 case 53:
 //#line 169 "gramatica.y"
-{logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba una cadena");}
+{ErrorSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": se esperaba una cadena");}
 break;
 case 54:
 //#line 170 "gramatica.y"
-{logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba una ('cadena')");}
+{ErrorSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": se esperaba una ('cadena')");}
 break;
 case 55:
 //#line 171 "gramatica.y"
-{logSintactico.addLogger("Error sintactico en la linea "+lexico.getLineas()+": se esperaba una cadena");}
+{ErrorSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": se esperaba una cadena");}
 break;
 case 56:
 //#line 174 "gramatica.y"
@@ -849,7 +856,7 @@ case 59:
 {if (lexico.getTabla().existeTipoVariable(val_peek(0).sval,"FLOAT")){
 pi.add(val_peek(0).sval); yyval=val_peek(0);
 }else
-    logSintactico.addLogger("Error sintactico en linea: "+lexico.getLineas()+" no se encuentra declarada la variable");
+    ErrorSintactico.addLogger("ERROR sintactico en linea: "+lexico.getLineas()+" no se encuentra declarada la variable");
 }
 break;
 case 60:
@@ -882,7 +889,7 @@ case 68:
 if (lexico.getTabla().existeTipoVariable(val_peek(0).sval,"FLOAT")){
     pi.add(val_peek(0).sval); yyval=val_peek(0);
 }else
-    System.out.println("ERROR en linea "+lexico.getLineas()+": no se ecuentra declarada la variable");
+    ErrorSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": no se ecuentra declarada la variable");
                                                         
 
 
@@ -895,13 +902,13 @@ if (lexico.getTabla().existeTipoVariable(val_peek(3).sval,"ARRAY FLOAT")){
     pi.add("#"+val_peek(3).sval); pi.add("1"); pi.add("-i"); pi.add("4"); pi.add("*i"); pi.add(val_peek(3).sval);
   pi.add("^"); pi.add("+i"); pi.add("&");
 }else
-    System.out.println("ERROR en linea "+lexico.getLineas()+": no se ecuentra declarada la variable");
+    ErrorSintactico.addLogger("ERROR en linea "+lexico.getLineas()+": no se ecuentra declarada la variable");
                                                         
 
 
 }
 break;
-//#line 828 "Parser.java"
+//#line 835 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

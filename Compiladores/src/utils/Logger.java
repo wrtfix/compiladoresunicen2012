@@ -49,4 +49,7 @@ public class Logger {
         }
 
     }
+    public boolean estaVacio(){
+        return lineas.isEmpty();
+    }
 }
