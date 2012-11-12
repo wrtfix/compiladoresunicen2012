@@ -773,11 +773,11 @@ case 32:
 break;
 case 40:
 //#line 130 "gramatica.y"
-{logSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": se esperaba una condicion");}
+{ErrorSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": se esperaba una condicion");}
 break;
 case 41:
 //#line 131 "gramatica.y"
-{logSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": se esperaba un WHILE");}
+{ErrorSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": se esperaba un WHILE");}
 break;
 case 42:
 //#line 134 "gramatica.y"
@@ -785,11 +785,11 @@ case 42:
 break;
 case 45:
 //#line 138 "gramatica.y"
-{logSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": se esperaba un DO ");}
+{ErrorSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": se esperaba un DO ");}
 break;
 case 46:
 //#line 139 "gramatica.y"
-{logSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": se esperaba una sentencia");}
+{ErrorSintactico.addLogger("ERROR sintactico en la linea "+lexico.getLineas()+": se esperaba una sentencia");}
 break;
 case 47:
 //#line 142 "gramatica.y"

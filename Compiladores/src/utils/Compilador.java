@@ -32,16 +32,10 @@ public class Compilador {
         Parser p = new Parser(analizadorL);
         p.run();
         
-        //p.imprimirLabels();
-        System.out.println("");
-        /*System.out.println("TOKENS");
-        System.out.println("<Tipo,Valor>");
-        analizadorL.imprimirToken();
-        System.out.println("");*/
+        analizadorL.generarToken();
+        
         analizadorL.getTabla().imprimirTabla();
-        /*System.out.println("");
-        System.out.println("ERRORES LEXICOS");
-        analizadorL.imprimitErrores();*/
+        analizadorL.generarLexico();
         if (!p.hayErrores()){
             
             p.imprimirPolacaInversa();

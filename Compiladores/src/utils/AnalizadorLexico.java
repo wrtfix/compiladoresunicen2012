@@ -752,4 +752,12 @@ public class AnalizadorLexico {
     public void imprimitErrores(){
         logError.imprimir();
     }
+
+    void generarLexico() {
+        logError.generar();
+    }
+
+    void generarToken() {
+        logToken.generar();
+    }
 }

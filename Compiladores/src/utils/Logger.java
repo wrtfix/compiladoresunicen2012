@@ -55,6 +55,23 @@ public class Logger {
     public String getUltimo(){
         return lineas.get(lineas.size()-1);
     }
+    public void generar(){
+              // abrir el archivo
+        System.out.println("Se encontraron "+lineas.size()+" entradas");
+        try {
+            FileWriter fichero = new FileWriter(direccion);
+            
+            String resultado;
+            for (int i = 0; i < lineas.size(); i++) {
+                resultado = lineas.get(i);
+                fichero.write(resultado + "\r\n");
+            }
+            fichero.close();
 
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }
  
 }

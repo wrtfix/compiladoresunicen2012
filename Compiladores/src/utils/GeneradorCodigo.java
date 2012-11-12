@@ -189,59 +189,20 @@ public class GeneradorCodigo {
 			der = "dword ptr [ecx]";
 		}
 		
-		assembler.add("FLD " + der
-				+ " ; carga el el st el valor izq a comparar");
-		// assembler.add("FADD cero ; compara el st con el valor de la derecha");
-		assembler.add("FCOMP _cero ; compara el st con el valor de la derecha");
-		assembler
-				.add("FSTSW ax ; guarda el resultado de la operacion en el registro ax");
-		assembler
-				.add("SAHF ; toma los bits menos significativos del registro ax");
+		assembler.add("FLD " + der);
+		
+		assembler.add("FCOMP _cero");
+		assembler.add("FSTSW ax ");
+		assembler.add("SAHF");
 		assembler.add("JE ERROR_DIVISION");
-		// assembler.add("FLD "+ der
-		// +" ; carga el el st el valor izq a comparar");
-		assembler.add("FDIV " + izq
-				+ " ; resta el valor del st con el valor de la izq");
-		assembler.add("FST _aux" + contaux + " ; guarda el resultado");
+		assembler.add("FDIV " + izq);
+		assembler.add("FST _aux" + contaux);
 		pilaCodigo.push("_aux" + contaux);
 		log.addLogger("_aux" + contaux + " DD ?");
 		contaux++;
 	}
 
 	public void ejecutarAsignacion(String der, String izq) {
-//		if (izq.contains("dword")){
-//			assembler.add("MOV ebx, "+izq.split("\\[")[1].split("\\]")[0]);
-//			
-//			if (der.contains("dword")){
-//				assembler.add("MOV eax, "+der.split("\\[")[1].split("\\]")[0]);
-//				assembler.add("FLD dword ptr [eax]");
-//				assembler.add("FSTP dword ptr [ebx]");
-//				
-//				
-//			}else{
-//				izq = "dword ptr[ebx]";
-//				assembler.add("FLD " + der);
-//				assembler.add("FSTP " + izq);
-//			}
-//
-//		}else{
-//			if (der.contains("dword")){
-//				assembler.add("MOV ebx, "+der.split("\\[")[1].split("\\]")[0]);	
-//				assembler.add("FLD dword ptr [ebx] " );
-//				assembler.add("FSTP " + izq);
-//				
-//				
-//			}else{
-//				if(der.contains("cte")){
-//					assembler.add("FLD " + der);
-//					assembler.add("FSTP " + izq);
-//				}else{
-//					assembler.add("FLD " + der);
-//					assembler.add("FSTP " + izq);
-//				}
-//			}
-//			
-//		}
                if (izq.contains("dword")){
                         assembler.add("MOV ebx, "+izq.split("\\[")[1].split("\\]")[0]);
                         izq = "dword ptr[ebx]";                        
@@ -267,12 +228,9 @@ public class GeneradorCodigo {
 	public void ejecutarControlArreglo(String indice, String lim, boolean con) {
 		if (indice.contains("dword")){
 			assembler.add("MOV ebx, "+indice.split("\\[")[1].split("\\]")[0]);
-//			if (con ){
                         assembler.add(0,"FLD dword ptr [ebx]");
 			assembler.add(1,"FISTP _aux"+contaux);
 			log.addLogger("_aux" + contaux + " DD ?");
-                        
-//                        }
 			
 			// Verifico los limites
                         assembler.add("XOR eax, eax");
@@ -287,13 +245,14 @@ public class GeneradorCodigo {
 			assembler.add("JL ERROR_LIMITEINF");
 		}else
 		{
-		// Realizamos una conversion de flotante a entero
-//				if (con){
-                                assembler.add(0,"FLD " + indice);
-				assembler.add(1,"FISTP " + indice);
-                                
-//                                }
-				// Verifico los limites
+                                if (indice.contains("aux")){
+                                    assembler.add("FLD " + indice);
+                                    assembler.add("FISTP " + indice);
+                                }else{
+                                    assembler.add(0,"FLD " + indice);
+                                    assembler.add(1,"FISTP " + indice);
+                                }
+
                                 assembler.add("XOR eax, eax");
 				assembler.add("MOV eax, " + indice);
 				if (lim.contains("dword")){
@@ -309,7 +268,9 @@ public class GeneradorCodigo {
 				assembler.add("JL ERROR_LIMITEINF");
 		}
 	}
-
+        /*
+         * Realiza las instrucciones necesarias para generar el assembler de una comparacion
+         */
 	public void ejecutarComparador(String der,String izq) {
 
 		if (izq.contains("dword")) {
@@ -353,7 +314,9 @@ public class GeneradorCodigo {
 			}
 		
 	}
-
+        /*
+         * Recorre la polaca inversa y genera el assembler de los elementos que va encontrando
+         */
 	public void recorrerPolaca(Vector<String> polaca) {
 		int i;
 		for (i = 0; i < polaca.size(); i++) {
@@ -487,10 +450,8 @@ public class GeneradorCodigo {
 								|| "<=".equals(varAux) || "<>".equals(varAux)
 								&& pilaCodigo.size() > 1) {
 							if (!labels.empty()) {
-								//String l = labels.firstElement().toString();
 								String id1 = pilaCodigo.pop();
 								String id2 = pilaCodigo.pop();
-								//labels.remove(0);
 								ejecutarComparador(id1, id2);
 								assembler.add("");
 							}
@@ -517,11 +478,6 @@ public class GeneradorCodigo {
 							if (!log.existe(decl))
 								log.addLogger(decl);
 							boolean con=true;
-//                                                        if (assembler.get(assembler.size()-1).contains("Label")){
-//                                                            con=false;
-//                                                            assembler.add(assembler.size()-2,"FLD "+indice);
-//                                                            assembler.add(assembler.size()-2,"FISTP "+indice);
-//                                                        }
 //                                                        
                                                         ejecutarControlArreglo(indice, "_limite_" + res, con);
 							pilaCodigo.push(indice);
@@ -587,7 +543,9 @@ public class GeneradorCodigo {
 	public boolean esOperador(String varAux) {
 		return (operadores.contains(varAux));
 	}
-
+        /*
+         * Recorre la tabla de simbolos con el fin de declararla en assembler en el .data
+         */
 	public void addTablaSimbolo() {
 		ArrayList<Simbolo> elem = ts.getTabla();
 		log.addLogger(".data");
@@ -617,11 +575,15 @@ public class GeneradorCodigo {
 		}
 
 	}
-
+        /*
+         * Genera el archivo .asm
+         */
 	public void imprimir() {
 		log.imprimir();
 	}
-
+        /*
+         * Realiza la instruccion assembler necesaria para imprimir un cartel por pantalla.
+         */
 	private void imprimirCadena(String cadena) {
 		cadena = cadena.replace(",", "");
 		cadena = cadena.replace(" ", "");
